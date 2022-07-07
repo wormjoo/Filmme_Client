@@ -20,30 +20,30 @@ export default function App() {
           tabBarShowLabel: false,
           headerShown: false,
           tabBarStyle: {
-            height: 70,
+            height: 65,
           },
 
           tabBarIcon: ({ focused, size, colour }) => {
             let iconName;
             if (route.name === "PhotoStory") {
               iconName = "picture";
-              size = focused ? size + 4 : size + 2;
+              size = focused ? 25 : 22;
               colour = focused ? "#505050" : "#C8C8C8";
             } else if (route.name === "Pose") {
               iconName = "angelist";
-              size = focused ? size + 4 : size + 2;
+              size = focused ? 25 : 22;
               colour = focused ? "#505050" : "#C8C8C8";
             } else if (route.name === "TakePic") {
               iconName = "camera";
-              size = focused ? size + 4 : size + 2;
+              size = focused ? 25 : 22;
               colour = focused ? "#505050" : "#C8C8C8";
             } else if (route.name === "Location") {
               iconName = "map-marker-alt";
-              size = focused ? size + 4 : size + 2;
+              size = focused ? 25 : 22;
               colour = focused ? "#505050" : "#C8C8C8";
             } else if (route.name === "MyPage") {
               iconName = "person";
-              size = focused ? size + 4 : size + 2;
+              size = focused ? 25 : 22;
               colour = focused ? "#505050" : "#C8C8C8";
             }
 
