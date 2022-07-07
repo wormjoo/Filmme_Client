@@ -1,20 +1,71 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Fontisto from "react-native-vector-icons/Fontisto";
+import PhotoStory from './src/screens/PhotoStory';
+import Pose from './src/screens/Pose';
+import TakePic from './src/screens/TakePic';
+import Location from './src/screens/Location';
+import MyPage from './src/screens/MyPage';
 
 export default function App() {
+
+  const Stack = createNativeStackNavigator();
+  const Tab = createBottomTabNavigator();
+
+  const BottomTabScreen = () => {
+    return (
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarShowLabel: false,
+          headerShown: false,
+          tabBarStyle: {
+            height: 70,
+          },
+
+          tabBarIcon: ({ focused, size, colour }) => {
+            let iconName;
+            if (route.name === "PhotoStory") {
+              iconName = "picture";
+              size = focused ? size + 4 : size + 2;
+              colour = focused ? "#505050" : "#C8C8C8";
+            } else if (route.name === "Pose") {
+              iconName = "angelist";
+              size = focused ? size + 4 : size + 2;
+              colour = focused ? "#505050" : "#C8C8C8";
+            } else if (route.name === "TakePic") {
+              iconName = "camera";
+              size = focused ? size + 4 : size + 2;
+              colour = focused ? "#505050" : "#C8C8C8";
+            } else if (route.name === "Location") {
+              iconName = "map-marker-alt";
+              size = focused ? size + 4 : size + 2;
+              colour = focused ? "#505050" : "#C8C8C8";
+            } else if (route.name === "MyPage") {
+              iconName = "person";
+              size = focused ? size + 4 : size + 2;
+              colour = focused ? "#505050" : "#C8C8C8";
+            }
+
+            return <Fontisto name={iconName} size={size} color={colour} />;
+          },
+
+        })}
+      >
+        <Tab.Screen name="PhotoStory" component={PhotoStory} />
+        <Tab.Screen name="Pose" component={Pose} />
+        <Tab.Screen name="TakePic" component={TakePic} />
+        <Tab.Screen name="Location" component={Location} />
+        <Tab.Screen name="MyPage" component={MyPage} />
+      </Tab.Navigator>
+    );
+  };
+  
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app! </Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Bottom" component={BottomTabScreen}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
