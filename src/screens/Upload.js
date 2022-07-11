@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, StatusBar, TouchableOpacity, ImageB
 import * as ImagePicker from "expo-image-picker";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionic from "react-native-vector-icons/Ionicons";
-import Entypo from "react-native-vector-icons/Entypo";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function Upload () {
 
@@ -14,7 +14,7 @@ export default function Upload () {
   const [modalVisible, setModalVisible] = useState(false);
   const devHeight = Dimensions.get("window").height;
 
-  //업로드 이미지
+  //업로드 이미지@
   const [image, setImage] = useState(null);
 
   //이미지 가져오는 함수
@@ -24,7 +24,6 @@ export default function Upload () {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 4],
       quality: 1,
     });
 
@@ -42,7 +41,6 @@ export default function Upload () {
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 4],
       quality: 1,
     });
 
@@ -59,12 +57,32 @@ export default function Upload () {
     setupload(false);
   };
 
-  //메모 내용 
+  //메모 내용@
   const [content, setContent] = useState("");
 
   //메모 입력 함수
   const _handleContent = (content) => {
     setContent(content);
+  };
+
+  //달력
+  const [date, setDate] = useState(new Date()); //날짜@
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
   };
 
   return (
@@ -89,7 +107,7 @@ export default function Upload () {
           { image && (
               <ImageBackground
                 source={{ uri: image }}
-                style={{ width: 315, height: 315, borderRadius: 10 }}
+                style={{ width: 330, height: 400, borderRadius: 10 }}
               >
                 { upload ? (
                 <TouchableOpacity onPress={delete_image}>
@@ -111,7 +129,7 @@ export default function Upload () {
 
       <View style={styles.memoSection}>
         <Text style={{alignSelf:'flex-start', marginLeft:15, color:'#505050'}}>
-            memo
+            Memo
         </Text>
         <View style={styles.memoBox}>
           <TextInput
@@ -121,6 +139,27 @@ export default function Upload () {
             numberOfLines={8}
             onChangeText={_handleContent}
           />
+        </View>
+      </View>
+
+      <View style={styles.dateSection}>
+        <Text style={{alignSelf:'flex-start', marginLeft:15, color:'#505050'}}>
+            Date
+        </Text>
+        <View style={styles.dateBox}>
+          <Text style={{fontSize:15}}>{date.toLocaleDateString("ko-KR")}</Text>
+          <TouchableOpacity onPress={showDatepicker}>
+            <AntDesign name='down' style={{fontSize:15, padding:3, paddingLeft:5}}/>
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                onChange={onChange}
+              />
+            )}
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -245,7 +284,7 @@ const styles = StyleSheet.create({
     },
     photoBox: {
         width: 350,
-        height: 350,
+        height: 420,
         backgroundColor: "#E8E8E8",
         borderRadius: 10,
         alignItems: "center",
@@ -258,12 +297,21 @@ const styles = StyleSheet.create({
     },
     memoBox: {
         width: 350,
-        height: 150,
+        height: 80,
         backgroundColor: "#E8E8E8",
         borderRadius: 10,
     },
-    ButtonSection: {
+    dateSection: {
         margin: 10,
+    },
+    dateBox: {
+        margin:5, 
+        marginLeft:17, 
+        flexDirection:'row',
+    },
+    ButtonSection: {
+        marginBottom: 10,
+        marginRight: 15,
         alignSelf: "flex-end",
     },
     ButtonBox: {
@@ -273,5 +321,5 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: "center",
         justifyContent: "center", 
-    }
+    },
   });
