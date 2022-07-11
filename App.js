@@ -7,6 +7,7 @@ import Pose from './src/screens/Pose';
 import TakePic from './src/screens/TakePic';
 import Location from './src/screens/Location';
 import MyPage from './src/screens/MyPage';
+import Upload from "./src/screens/Upload";
 
 export default function App() {
 
@@ -65,6 +66,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Bottom" component={BottomTabScreen}/>
+        <Stack.Screen name="Upload" component={Upload}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
