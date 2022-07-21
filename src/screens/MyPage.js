@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ImageBackground, Modal, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ImageBackground, Modal, Dimensions, TextInput } from 'react-native';
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
@@ -59,6 +59,12 @@ export default function MyPage() {
     setModalVisible(!modalVisible);
   };
 
+  //닉네임 편집 버튼 클릭 여부
+  const [editName, setEditName] = useState(false);
+
+  //닉네임
+  const [nickname, setNickname] = useState('User_1');
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='white' barStyle='dark-content' />
@@ -82,11 +88,28 @@ export default function MyPage() {
           </TouchableOpacity>
         </ImageBackground>
         <View style={styles.nickname}>
-          <Text style={{ fontSize: 22, color: "#505050", fontWeight: 'bold' }}>
-            닉네임
-          </Text>
-          <TouchableOpacity style={styles.editIcon}>
-            <Feather name="edit-2" style={{ fontSize: 12, color: "#505050" }} />
+          {editName ? (
+            <View style={{ borderBottomColor: "#C8C8C8", borderBottomWidth: 2 }}>
+              <TextInput
+                value={nickname}
+                onChangeText={(text) => { setNickname(text); }}
+                placeholder="닉네임"
+                placeholderTextColor="#C8C8C8"
+                autoCorrect={false}
+                style={{ fontSize: 22, color: "#505050", fontWeight: 'bold' }}
+              />
+            </View>
+          ) : (
+            <View>
+              <Text style={{ fontSize: 22, color: "#505050", fontWeight: 'bold' }}>
+                {nickname}
+              </Text>
+            </View>
+          )}
+          <TouchableOpacity onPress={() => setEditName(!editName)} style={styles.editIcon}>
+            {editName ?
+              <Feather name="check" style={{ fontSize: 12, color: "#505050" }} />
+              : <Feather name="edit-2" style={{ fontSize: 12, color: "#505050" }} />}
           </TouchableOpacity>
         </View>
       </View>
@@ -126,7 +149,7 @@ export default function MyPage() {
           <AntDesign name="questioncircleo" style={styles.menuFont} />
           <Text style={styles.menuFont}> 문의하기</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ margin: 5 }}>
+        <TouchableOpacity style={{ margin: 10 }}>
           <Text style={{ fontSize: 13, color: '#A8A8A8' }}>로그아웃</Text>
         </TouchableOpacity>
       </View>
