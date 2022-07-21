@@ -1,10 +1,64 @@
-import React from 'react';
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ImageBackground, Modal, Dimensions } from 'react-native';
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
+import Ionic from "react-native-vector-icons/Ionicons";
+import * as ImagePicker from "expo-image-picker";
 
 export default function MyPage() {
+
+  //이미지 업로드 여부
+  const [upload, setupload] = useState(false);
+
+  //modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const devHeight = Dimensions.get("window").height;
+
+  //업로드 이미지@
+  const [image, setImage] = useState(null);
+
+  //이미지 가져오는 함수
+  const pickImage = async () => {
+    setupload(true);
+    setModalVisible(!modalVisible);
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    } else if (result.cancelled) {
+      setupload(false);
+    }
+  };
+
+  //카메라 함수
+  const camera = async () => {
+    setupload(true);
+    setModalVisible(!modalVisible);
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    } else if (result.cancelled) {
+      setupload(false);
+    }
+  };
+
+  //이미지 삭제 함수
+  const delete_image = async () => {
+    setImage(null);
+    setupload(false);
+    setModalVisible(!modalVisible);
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='white' barStyle='dark-content' />
@@ -19,11 +73,11 @@ export default function MyPage() {
 
       <View style={styles.profileSection}>
         <ImageBackground
-          source={require("../../storage/images/basic-profile-img.png")}
+          source={image ? { uri: image } : require("../../storage/images/basic-profile-img.png")}
           style={{ height: 120, width: 120 }}
           imageStyle={{ borderRadius: 100 }}
         >
-          <TouchableOpacity style={styles.cameraIcon}>
+          <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={styles.cameraIcon}>
             <AntDesign name='camerao' style={{ fontSize: 22, color: "#505050" }} />
           </TouchableOpacity>
         </ImageBackground>
@@ -72,10 +126,116 @@ export default function MyPage() {
           <AntDesign name="questioncircleo" style={styles.menuFont} />
           <Text style={styles.menuFont}> 문의하기</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{margin:5}}>
-          <Text style={{fontSize:13, color:'#A8A8A8'}}>로그아웃</Text>
+        <TouchableOpacity style={{ margin: 5 }}>
+          <Text style={{ fontSize: 13, color: '#A8A8A8' }}>로그아웃</Text>
         </TouchableOpacity>
       </View>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "#000000AA",
+            justifyContent: "flex-end",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              width: "100%",
+              borderTopRightRadius: 15,
+              borderTopLeftRadius: 15,
+              paddingHorizontal: 10,
+              maxHeight: devHeight * 0.4,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginHorizontal: 10,
+                marginVertical: 10,
+              }}
+            >
+              <Text
+                style={{ fontSize: 18, fontWeight: "600", color: "#505050" }}
+              >
+                프로필 사진 변경
+              </Text>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <Ionic
+                  name="close"
+                  style={{ fontSize: 20, color: "#505050", textAlign: "right" }}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "center",
+                marginHorizontal: 10,
+                marginVertical: 20,
+              }}
+            >
+              <TouchableOpacity onPress={pickImage}>
+                <AntDesign
+                  name="picture"
+                  style={{ fontSize: 65, color: "#505050" }}
+                />
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 15,
+                    color: "#505050",
+                  }}
+                >
+                  갤러리
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={camera}>
+                <AntDesign
+                  name="camerao"
+                  style={{ fontSize: 65, color: "#505050" }}
+                />
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 15,
+                    color: "#505050",
+                  }}
+                >
+                  카메라
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={delete_image}>
+                <Feather
+                  name="trash-2"
+                  style={{ fontSize: 60, color: "#505050" }}
+                />
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 15,
+                    color: "#505050",
+                  }}
+                >
+                  사진 삭제
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
     </View>
   );
