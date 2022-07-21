@@ -4,10 +4,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import PhotoStory from './src/screens/PhotoStory';
 import Pose from './src/screens/Pose';
-import TakePic from './src/screens/TakePic';
+import SelectFrame from './src/screens/SelectFrame';
 import Location from './src/screens/Location';
 import MyPage from './src/screens/MyPage';
 import Upload from "./src/screens/Upload";
+import TakePic from './src/screens/TakePic';
 
 export default function App() {
 
@@ -34,7 +35,7 @@ export default function App() {
               iconName = "angelist";
               size = focused ? 25 : 22;
               colour = focused ? "#505050" : "#C8C8C8";
-            } else if (route.name === "TakePic") {
+            } else if (route.name === "SelectFrame") {
               iconName = "camera";
               size = focused ? 25 : 22;
               colour = focused ? "#505050" : "#C8C8C8";
@@ -55,7 +56,7 @@ export default function App() {
       >
         <Tab.Screen name="PhotoStory" component={PhotoStory} />
         <Tab.Screen name="Pose" component={Pose} />
-        <Tab.Screen name="TakePic" component={TakePic} />
+        <Tab.Screen name="SelectFrame" component={SelectFrame} />
         <Tab.Screen name="Location" component={Location} />
         <Tab.Screen name="MyPage" component={MyPage} />
       </Tab.Navigator>
@@ -67,6 +68,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Bottom" component={BottomTabScreen}/>
         <Stack.Screen name="Upload" component={Upload}/>
+        <Stack.Screen name="TakePic" component={TakePic}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
