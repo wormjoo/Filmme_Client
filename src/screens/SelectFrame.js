@@ -42,12 +42,10 @@ const Item = ({ frame, chk }) => {
   return (
     <View style={{ margin: 10 }}>
       <ImageBackground source={frame} style={styles.frame}>
-        <TouchableOpacity
-          style={{ alignItems: 'flex-end', padding: 5 }}
-          onPress={() => setCheck(!check)}>
+        <TouchableOpacity onPress={() => setCheck(!check)} style={styles.chkIcon}>
           <AntDesign
             name={check ? "checkcircle" : "checkcircleo"}
-            style={styles.chkIcon} />
+            style={{ fontSize: 25, color: "#505050", }} />
         </TouchableOpacity>
       </ImageBackground>
     </View>
@@ -122,8 +120,11 @@ const styles = StyleSheet.create({
     height: 300,
   },
   chkIcon: {
-    fontSize: 20,
-    fontWeight: 700,
-    color: "rgba(90,90,90,0.8)",
+    margin: 5,
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "rgba(200,200,200,0.85)",
+    borderRadius: 100,
   },
 });
