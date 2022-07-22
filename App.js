@@ -9,6 +9,7 @@ import Location from './src/screens/Location';
 import MyPage from './src/screens/MyPage';
 import Upload from "./src/screens/Upload";
 import TakePic from './src/screens/TakePic';
+import Login from "./src/screens/Login";
 
 export default function App() {
 
@@ -66,6 +67,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={Login}/>
         <Stack.Screen name="Bottom" component={BottomTabScreen}/>
         <Stack.Screen name="Upload" component={Upload}/>
         <Stack.Screen name="TakePic" component={TakePic}/>
