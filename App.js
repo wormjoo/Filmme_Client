@@ -10,6 +10,7 @@ import MyPage from './src/screens/MyPage';
 import Upload from "./src/screens/Upload";
 import TakePic from './src/screens/TakePic';
 import Login from "./src/screens/Login";
+import Signup from "./src/screens/Signup";
 
 export default function App() {
 
@@ -63,14 +64,20 @@ export default function App() {
       </Tab.Navigator>
     );
   };
-  
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={Login}/>
-        <Stack.Screen name="Bottom" component={BottomTabScreen}/>
-        <Stack.Screen name="Upload" component={Upload}/>
-        <Stack.Screen name="TakePic" component={TakePic}/>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Signup" component={Signup}
+          options={({ }) => ({
+            title: "회원가입",
+            headerShown: true,
+            headerBackTitleVisible: false,
+          })} />
+        <Stack.Screen name="Bottom" component={BottomTabScreen} />
+        <Stack.Screen name="Upload" component={Upload} />
+        <Stack.Screen name="TakePic" component={TakePic} />
       </Stack.Navigator>
     </NavigationContainer>
   );
