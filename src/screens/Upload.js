@@ -5,7 +5,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionic from "react-native-vector-icons/Ionicons";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function Upload () {
+export default function Upload({ navigation }) {
 
   //이미지 업로드 여부
   const [upload, setupload] = useState(false);
@@ -22,23 +22,6 @@ export default function Upload () {
     setupload(true);
     setModalVisible(!modalVisible);
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-    } else if (result.cancelled) {
-      setupload(false);
-    }
-  };
-
-  //카메라 함수
-  const camera = async () => {
-    setupload(true);
-    setModalVisible(!modalVisible);
-    let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       quality: 1,
@@ -87,29 +70,29 @@ export default function Upload () {
 
   return (
     <ScrollView style={styles.container}>
-      <StatusBar backgroundColor='white' barStyle='dark-content'/>
+      <StatusBar backgroundColor='white' barStyle='dark-content' />
 
       <View style={styles.header}>
-        <Text style={{fontSize:22, fontWeight:'bold'}}>New Photo</Text>
+        <Text style={{ fontSize: 22, fontWeight: 'bold' }}>New Photo</Text>
       </View>
 
       <View style={styles.photoSection}>
         <View style={styles.photoBox}>
-          { upload ?
-          null : (
-          <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
-            <AntDesign
-              name="camerao"
-              style={{ fontSize: 30, color: "#505050" }}
-            />
-          </TouchableOpacity> )
+          {upload ?
+            null : (
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <AntDesign
+                  name="camerao"
+                  style={{ fontSize: 30, color: "#505050" }}
+                />
+              </TouchableOpacity>)
           }
-          { image && (
-              <ImageBackground
-                source={{ uri: image }}
-                style={{ width: 330, height: 400, borderRadius: 10 }}
-              >
-                { upload ? (
+          {image && (
+            <ImageBackground
+              source={{ uri: image }}
+              style={{ width: 330, height: 400, borderRadius: 10 }}
+            >
+              {upload ? (
                 <TouchableOpacity onPress={delete_image}>
                   <AntDesign
                     name="minuscircle"
@@ -120,20 +103,20 @@ export default function Upload () {
                       padding: 5,
                     }}
                   />
-                </TouchableOpacity> ) : null
-                }
-              </ImageBackground> )
+                </TouchableOpacity>) : null
+              }
+            </ImageBackground>)
           }
         </View>
       </View>
 
       <View style={styles.memoSection}>
-        <Text style={{alignSelf:'flex-start', marginLeft:15, color:'#505050'}}>
-            Memo
+        <Text style={{ alignSelf: 'flex-start', marginLeft: 15, color: '#505050' }}>
+          Memo
         </Text>
         <View style={styles.memoBox}>
           <TextInput
-            style={{width:'95%', margin:10}}
+            style={{ width: '95%', margin: 10 }}
             value={content}
             multiline
             numberOfLines={8}
@@ -143,13 +126,13 @@ export default function Upload () {
       </View>
 
       <View style={styles.dateSection}>
-        <Text style={{alignSelf:'flex-start', marginLeft:15, color:'#505050'}}>
-            Date
+        <Text style={{ alignSelf: 'flex-start', marginLeft: 15, color: '#505050' }}>
+          Date
         </Text>
         <View style={styles.dateBox}>
-          <Text style={{fontSize:15}}>{date.toLocaleDateString("ko-KR")}</Text>
+          <Text style={{ fontSize: 15 }}>{date.toLocaleDateString("ko-KR")}</Text>
           <TouchableOpacity onPress={showDatepicker}>
-            <AntDesign name='down' style={{fontSize:15, padding:3, paddingLeft:5}}/>
+            <AntDesign name='down' style={{ fontSize: 15, padding: 3, paddingLeft: 5 }} />
             {show && (
               <DateTimePicker
                 testID="dateTimePicker"
@@ -165,7 +148,7 @@ export default function Upload () {
 
       <View style={styles.ButtonSection}>
         <TouchableOpacity style={styles.ButtonBox}>
-          <Text style={{fontSize:15, color:"#505050"}}>
+          <Text style={{ fontSize: 15, color: "#505050" }}>
             업로드
           </Text>
         </TouchableOpacity>
@@ -242,7 +225,7 @@ export default function Upload () {
                   갤러리
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={camera}>
+              <TouchableOpacity onPress={() => navigation.navigate("SelectFrame")}>
                 <AntDesign
                   name="camerao"
                   style={{ fontSize: 65, color: "#505050" }}
@@ -267,59 +250,59 @@ export default function Upload () {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    header: {
-        width: '100%',
-        height: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-    photoSection: {
-        margin: 10,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    photoBox: {
-        width: 350,
-        height: 420,
-        backgroundColor: "#E8E8E8",
-        borderRadius: 10,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    memoSection: {
-        margin: 10,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    memoBox: {
-        width: 350,
-        height: 80,
-        backgroundColor: "#E8E8E8",
-        borderRadius: 10,
-    },
-    dateSection: {
-        margin: 10,
-    },
-    dateBox: {
-        margin:5, 
-        marginLeft:17, 
-        flexDirection:'row',
-    },
-    ButtonSection: {
-        marginBottom: 10,
-        marginRight: 15,
-        alignSelf: "flex-end",
-    },
-    ButtonBox: {
-        width: 75,
-        height: 35,
-        backgroundColor: "#E8E8E8",
-        borderRadius: 10,
-        alignItems: "center",
-        justifyContent: "center", 
-    },
-  });
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    width: '100%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  photoSection: {
+    margin: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  photoBox: {
+    width: 350,
+    height: 420,
+    backgroundColor: "#E8E8E8",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  memoSection: {
+    margin: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  memoBox: {
+    width: 350,
+    height: 80,
+    backgroundColor: "#E8E8E8",
+    borderRadius: 10,
+  },
+  dateSection: {
+    margin: 10,
+  },
+  dateBox: {
+    margin: 5,
+    marginLeft: 17,
+    flexDirection: 'row',
+  },
+  ButtonSection: {
+    marginBottom: 10,
+    marginRight: 15,
+    alignSelf: "flex-end",
+  },
+  ButtonBox: {
+    width: 75,
+    height: 35,
+    backgroundColor: "#E8E8E8",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

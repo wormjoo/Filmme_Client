@@ -3,15 +3,15 @@ import { StyleSheet, Text, View, StatusBar, TouchableOpacity } from 'react-nativ
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-export default function Pose() {
+export default function Pose({ navigation }) {
 
   const Tab = createMaterialTopTabNavigator();
 
   const PopularPose = () => {
     return (
       <View style={styles.content}>
-        <AntDesign name='camerao' style={{fontSize:85}}/>
-        <Text style={{fontSize:22}}>사진 없음</Text>
+        <AntDesign name='camerao' style={{ fontSize: 85 }} />
+        <Text style={{ fontSize: 22 }}>사진 없음</Text>
       </View>
     );
   };
@@ -19,8 +19,8 @@ export default function Pose() {
   const RecentPose = () => {
     return (
       <View style={styles.content}>
-        <AntDesign name='camerao' style={{fontSize:85}}/>
-        <Text style={{fontSize:22}}>사진 없음</Text>
+        <AntDesign name='camerao' style={{ fontSize: 85 }} />
+        <Text style={{ fontSize: 22 }}>사진 없음</Text>
       </View>
     );
   };
