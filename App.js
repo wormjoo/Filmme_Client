@@ -12,6 +12,7 @@ import TakePic from './src/screens/TakePic';
 import Login from "./src/screens/Login";
 import Signup from "./src/screens/Signup";
 import Detail_PhotoStory from "./src/screens/Detail_PhotoStory";
+import Detail_Pose from "./src/screens/Detail_Pose";
 
 export default function App() {
 
@@ -80,6 +81,7 @@ export default function App() {
         <Stack.Screen name="Upload" component={Upload} />
         <Stack.Screen name="TakePic" component={TakePic} />
         <Stack.Screen name="Detail_PhotoStory" component={Detail_PhotoStory} />
+        <Stack.Screen name="Detail_Pose" component={Detail_Pose} />
       </Stack.Navigator>
     </NavigationContainer>
   );
