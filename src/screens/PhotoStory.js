@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, FlatList, Dimensions, Image } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, FlatList, Dimensions, Image, Modal } from 'react-native';
 import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionic from "react-native-vector-icons/Ionicons";
+import Feather from "react-native-vector-icons/Feather";
 
 const Images = [
   {
@@ -28,6 +30,10 @@ export default function PhotoStory({ navigation }) {
   //사진 있는지 여부
   const [hasImg, setHasImg] = useState(true);
 
+  //modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const devHeight = Dimensions.get("window").height;
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='white' barStyle='dark-content' />
@@ -46,9 +52,13 @@ export default function PhotoStory({ navigation }) {
             data={Images}
             keyExtractor={item => item.id}
             renderItem={({ item }) => (
-              <View style={{ margin: 1 }}>
+              <TouchableOpacity
+                style={{ margin: 1 }}
+                onPress={() => navigation.navigate("Detail_PhotoStory")}
+                onLongPress={() => setModalVisible(!modalVisible)}
+              >
                 <Image source={item.img} style={styles.img} />
-              </View>
+              </TouchableOpacity>
             )}
             numColumns={3}
             showsVerticalScrollIndicator={false}
@@ -60,6 +70,97 @@ export default function PhotoStory({ navigation }) {
           <Text style={{ fontSize: 22 }}>사진 없음</Text>
         </View>
       )}
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "#000000AA",
+            justifyContent: "flex-end",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              width: "100%",
+              borderTopRightRadius: 15,
+              borderTopLeftRadius: 15,
+              paddingHorizontal: 10,
+              maxHeight: devHeight * 0.4,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginHorizontal: 10,
+                marginVertical: 10,
+              }}
+            >
+              <Text
+                style={{ fontSize: 18, fontWeight: "600", color: "#505050" }}
+              >
+                수정/삭제
+              </Text>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <Ionic
+                  name="close"
+                  style={{ fontSize: 20, color: "#505050", textAlign: "right" }}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "center",
+                marginHorizontal: 10,
+                marginVertical: 20,
+              }}
+            >
+              <TouchableOpacity>
+                <Feather
+                  name="edit-2"
+                  style={{ fontSize: 60, color: "#505050" }}
+                />
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 15,
+                    color: "#505050",
+                  }}
+                >
+                  수정
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Feather
+                  name="trash-2"
+                  style={{ fontSize: 60, color: "#505050" }}
+                />
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 15,
+                    color: "#505050",
+                  }}
+                >
+                  삭제
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
     </View>
   );

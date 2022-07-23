@@ -11,6 +11,7 @@ import Upload from "./src/screens/Upload";
 import TakePic from './src/screens/TakePic';
 import Login from "./src/screens/Login";
 import Signup from "./src/screens/Signup";
+import Detail_PhotoStory from "./src/screens/Detail_PhotoStory";
 
 export default function App() {
 
@@ -78,6 +79,7 @@ export default function App() {
         <Stack.Screen name="Bottom" component={BottomTabScreen} />
         <Stack.Screen name="Upload" component={Upload} />
         <Stack.Screen name="TakePic" component={TakePic} />
+        <Stack.Screen name="Detail_PhotoStory" component={Detail_PhotoStory} />
       </Stack.Navigator>
     </NavigationContainer>
   );
