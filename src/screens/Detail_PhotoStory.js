@@ -29,7 +29,7 @@ export default function Detail_PhotoStory({ route, navigation }) {
           style={{ height: devHeight - 60, width: devWidth - 30, alignItems: 'center', justifyContent: 'center' }}>
           <Image source={img} style={styles.img} />
           <View style={{ height: 70 }}></View>
-          <Text>{memo}</Text>
+          <Text style={{ color: '#505050' }}>{memo}</Text>
         </ImageBackground>
       </View>
 

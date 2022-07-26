@@ -46,7 +46,9 @@ export default function Pose({ navigation }) {
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={{ margin: 1 }}
-                    onPress={() => navigation.navigate("Detail_Pose")}
+                    onPress={() => navigation.navigate("Detail_Pose", {
+                      img: item.img
+                    })}
                     onLongPress={popup}
                   >
                     <Image source={item.img} style={styles.img} />
@@ -69,7 +71,7 @@ export default function Pose({ navigation }) {
 
   const RecentPose = () => {
     //사진 있는지 여부
-    const [hasImg, setHasImg] = useState(false);
+    const [hasImg, setHasImg] = useState(true);
     return (
       <View>
         {
@@ -81,7 +83,9 @@ export default function Pose({ navigation }) {
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={{ margin: 1 }}
-                    onPress={() => navigation.navigate("Detail_Pose")}
+                    onPress={() => navigation.navigate("Detail_Pose", {
+                      img: item.img
+                    })}
                     onLongPress={popup}
                   >
                     <Image source={item.img} style={styles.img} />
