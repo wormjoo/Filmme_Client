@@ -25,6 +25,7 @@ const Images = [
 
 const devWidth = Dimensions.get("window").width;
 
+
 export default function PhotoStory({ navigation }) {
 
   //사진 있는지 여부
@@ -54,7 +55,7 @@ export default function PhotoStory({ navigation }) {
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={{ margin: 1 }}
-                onPress={() => navigation.navigate("Detail_PhotoStory")}
+                onPress={() => navigation.navigate("Detail_PhotoStory", { img: item.img })}
                 onLongPress={() => setModalVisible(!modalVisible)}
               >
                 <Image source={item.img} style={styles.img} />

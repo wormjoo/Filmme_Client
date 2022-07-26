@@ -1,8 +1,11 @@
 import React from 'react';
 import {StyleSheet, Text, View, StatusBar, TouchableOpacity, Alert, ImageBackground, Image} from 'react-native';
 import {Camera} from 'expo-camera';
+
 let camera = Camera;
+
 export default function TakePic() {
+  
   const [startCamera, setStartCamera] = React.useState(false)
   const [previewVisible, setPreviewVisible] = React.useState(false)
   const [capturedImage, setCapturedImage] = React.useState(null)

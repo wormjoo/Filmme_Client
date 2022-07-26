@@ -70,13 +70,13 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={Login} />
+        {/* <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup}
           options={({ }) => ({
             title: "회원가입",
             headerShown: true,
             headerBackTitleVisible: false,
-          })} />
+          })} /> */}
         <Stack.Screen name="Bottom" component={BottomTabScreen} />
         <Stack.Screen name="Upload" component={Upload} />
         <Stack.Screen name="TakePic" component={TakePic} />
