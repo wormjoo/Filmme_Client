@@ -39,7 +39,11 @@ export default function TakePic({ route }) {
     setCapturedImage(photo)
   }
   const __savePhoto = () => {
-    
+    //console.log('savephoto',photo,frame)
+    navigation.navigate("Photo", {
+      photo: capturedImage.uri,
+      frame: frame,
+    })
    }
   const __retakePicture = () => {
     setCapturedImage(null)

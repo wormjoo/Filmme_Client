@@ -13,14 +13,14 @@ const Images = [
     id: '2',
     img: require("../../storage/images/photo-2.png"),
   },
-  {
-    id: '3',
-    img: require("../../storage/images/photo-3.png"),
-  },
-  {
-    id: '4',
-    img: require("../../storage/images/photo-4.png"),
-  },
+  // {
+  //   id: '3',
+  //   img: require("../../storage/images/photo-3.png"),
+  // },
+  // {
+  //   id: '4',
+  //   img: require("../../storage/images/photo-4.png"),
+  // },
 ];
 
 const devWidth = Dimensions.get("window").width;
@@ -48,23 +48,21 @@ export default function PhotoStory({ navigation }) {
       </View>
 
       {hasImg ? (
-        <View style={styles.content_hasImg}>
-          <FlatList
-            data={Images}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={{ margin: 1 }}
-                onPress={() => navigation.navigate("Detail_PhotoStory", { img: item.img })}
-                onLongPress={() => setModalVisible(!modalVisible)}
-              >
-                <Image source={item.img} style={styles.img} />
-              </TouchableOpacity>
-            )}
-            numColumns={3}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
+        <FlatList
+          data={Images}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={{ margin: 1 }}
+              onPress={() => navigation.navigate("Detail_PhotoStory", { img: item.img })}
+              onLongPress={() => setModalVisible(!modalVisible)}
+            >
+              <Image source={item.img} style={styles.img} />
+            </TouchableOpacity>
+          )}
+          numColumns={3}
+          showsVerticalScrollIndicator={false}
+        />
       ) : (
         <View style={styles.content_noImg}>
           <AntDesign name='camerao' style={{ fontSize: 85 }} />
@@ -186,10 +184,5 @@ const styles = StyleSheet.create({
   img: {
     width: devWidth / 3.1,
     height: 150,
-  },
-  content_noImg: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
