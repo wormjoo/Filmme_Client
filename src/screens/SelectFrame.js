@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity, FlatList, ImageBackground, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import AntDesign from "react-native-vector-icons/AntDesign";
 
 const Frames = [
@@ -38,11 +39,16 @@ const Frames = [
 const Item = ({ frame, chk }) => {
 
   const [check, setCheck] = useState(chk);
+  const navigation = useNavigation();
 
   return (
     <View style={{ margin: 10 }}>
       <ImageBackground source={frame} style={styles.frame}>
-        <TouchableOpacity onPress={() => setCheck(!check)} style={styles.chkIcon}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("TakePic", {
+            frame: frame
+          })}
+          style={styles.chkIcon}>
           <AntDesign
             name={check ? "checkcircle" : "checkcircleo"}
             style={{ fontSize: 25, color: "#505050", }} />
@@ -54,7 +60,9 @@ const Item = ({ frame, chk }) => {
 
 const devWidth = Dimensions.get("window").width;
 
-export default function SelectFrame({ navigation }) {
+export default function SelectFrame({ navigation, route }) {
+
+  //const { photo } = route.params.photo;
 
   const renderItem = ({ item }) => (
     <Item frame={item.frame} chk={item.chk} />
@@ -65,11 +73,7 @@ export default function SelectFrame({ navigation }) {
       <StatusBar backgroundColor='white' barStyle='dark-content' />
 
       <View style={styles.header}>
-        <View style={{ width: 40 }}></View>
         <Text style={{ fontSize: 22, fontWeight: 'bold' }}>프레임 선택</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("TakePic")}>
-          <Text style={{ fontSize: 18, color: '#505050', marginRight: 15 }}>완료</Text>
-        </TouchableOpacity>
       </View>
 
       <View style={styles.content}>
@@ -108,8 +112,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    justifyContent: 'center',
   },
   content: {
     alignItems: 'center',
@@ -117,7 +120,7 @@ const styles = StyleSheet.create({
   },
   frame: {
     width: devWidth / 2.2,
-    height: 300,
+    height: 250,
   },
   chkIcon: {
     margin: 5,

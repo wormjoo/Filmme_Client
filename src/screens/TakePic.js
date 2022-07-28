@@ -1,16 +1,24 @@
 import React from 'react';
-import {StyleSheet, Text, View, StatusBar, TouchableOpacity, Alert, ImageBackground, Image} from 'react-native';
-import {Camera} from 'expo-camera';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Alert, ImageBackground, Image, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Camera } from 'expo-camera';
 
 let camera = Camera;
 
-export default function TakePic() {
-  
+export default function TakePic({ route }) {
+
+  const { frame } = route.params;
+
+  const devWidth = Dimensions.get("window").width;
+  const devHeight = Dimensions.get("window").height;
+
   const [startCamera, setStartCamera] = React.useState(false)
   const [previewVisible, setPreviewVisible] = React.useState(false)
   const [capturedImage, setCapturedImage] = React.useState(null)
   const [cameraType, setCameraType] = React.useState(Camera.Constants.Type.back)
   const [flashMode, setFlashMode] = React.useState('off')
+
+  const navigation = useNavigation();
 
   const __startCamera = async () => {
     setStartCamera(true)
@@ -25,11 +33,14 @@ export default function TakePic() {
   const __takePicture = async () => {
     const photo = await camera.takePictureAsync()
     console.log(photo)
+    console.log(photo.uri)
     setPreviewVisible(true)
     //setStartCamera(false)
     setCapturedImage(photo)
   }
-  const __savePhoto = () => {}
+  const __savePhoto = () => {
+    
+   }
   const __retakePicture = () => {
     setCapturedImage(null)
     setPreviewVisible(false)
@@ -51,8 +62,9 @@ export default function TakePic() {
       setCameraType('back')
     }
   }
+
   return (
-    <View style={styles.container}>      
+    <View style={styles.container}>
       {startCamera ? (
         <View
           style={{
@@ -61,12 +73,14 @@ export default function TakePic() {
           }}
         >
           {previewVisible && capturedImage ? (
+            //사진 찍은 후 화면
             <CameraPreview photo={capturedImage} savePhoto={__savePhoto} retakePicture={__retakePicture} />
           ) : (
+            //카메라 화면
             <Camera
               type={cameraType}
               flashMode={flashMode}
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               ref={(r) => {
                 camera = r
               }}
@@ -92,7 +106,7 @@ export default function TakePic() {
                     onPress={__handleFlashMode}
                     style={{
                       backgroundColor: flashMode === 'off' ? '#000' : '#fff',
-                      //borderRadius: '50%',
+                      borderRadius: 100,
                       height: 25,
                       width: 25
                     }}
@@ -131,14 +145,15 @@ export default function TakePic() {
                     flex: 1,
                     width: '100%',
                     padding: 20,
-                    justifyContent: 'space-between'
+                    justifyContent: 'space-between',
+                    backgroundColor: '#C8C8C8'
                   }}
                 >
                   <View
                     style={{
                       alignSelf: 'center',
                       flex: 1,
-                      alignItems: 'center'
+                      alignItems: 'center', 
                     }}
                   >
                     <TouchableOpacity
@@ -147,7 +162,7 @@ export default function TakePic() {
                         width: 70,
                         height: 70,
                         bottom: 0,
-                        //borderRadius: 50,
+                        borderRadius: 50,
                         backgroundColor: '#fff'
                       }}
                     />
@@ -158,40 +173,51 @@ export default function TakePic() {
           )}
         </View>
       ) : (
+        // 첫 화면(사진 찍기 전)
         <View
           style={{
             flex: 1,
             backgroundColor: '#fff',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
+          <View style={styles.header}>
+            <Text style={{ fontSize: 22, fontWeight: 'bold' }}>사진 촬영</Text>
+          </View>
+
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Image source={frame} style={{ width: devWidth, height: devHeight - 160 }} />
+          </View>
+          
           <TouchableOpacity
             onPress={__startCamera}
             style={{
-              width: 130,
-              //borderRadius: 4,
-              backgroundColor: '#14274e',
-              flexDirection: 'row',
+              width: devWidth,
+              borderRadius: 10,
+              backgroundColor: '#E8E8E8',
+              //flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
-              height: 40
+              height: 50,
             }}
           >
             <Text
               style={{
-                color: '#fff',
+                color: '#505050',
                 fontWeight: 'bold',
+                fontSize: 20,
                 textAlign: 'center'
               }}
             >
-              Take picture
+              사진 찍기
             </Text>
           </TouchableOpacity>
+          
         </View>
       )}
 
-      <StatusBar backgroundColor='white' barStyle='dark-content'/>
+      <StatusBar backgroundColor='white' barStyle='dark-content' />
     </View>
   )
 }
@@ -202,10 +228,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
+  header: {
+    width: '100%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 })
 
-const CameraPreview = ({photo, retakePicture, savePhoto}) => {
+//사진 찍은 후 화면
+const CameraPreview = ({ photo, retakePicture, savePhoto }) => {
   console.log('sdsfds', photo)
   return (
     <View
@@ -217,7 +250,7 @@ const CameraPreview = ({photo, retakePicture, savePhoto}) => {
       }}
     >
       <ImageBackground
-        source={{uri: photo && photo.uri}}
+        source={{ uri: photo && photo.uri }}
         style={{
           flex: 1
         }}
@@ -252,7 +285,7 @@ const CameraPreview = ({photo, retakePicture, savePhoto}) => {
                   fontSize: 20
                 }}
               >
-                Re-take
+                다시 촬영
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -271,7 +304,7 @@ const CameraPreview = ({photo, retakePicture, savePhoto}) => {
                   fontSize: 20
                 }}
               >
-                save photo
+                저장하기
               </Text>
             </TouchableOpacity>
           </View>
