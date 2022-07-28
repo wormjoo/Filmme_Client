@@ -1,33 +1,23 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, FlatList, Dimensions, Image, Modal } from 'react-native';
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+  Image,
+  Modal,
+} from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionic from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
-
-const Images = [
-  {
-    id: '1',
-    img: require("../../storage/images/photo-1.png"),
-  },
-  {
-    id: '2',
-    img: require("../../storage/images/photo-2.png"),
-  },
-  // {
-  //   id: '3',
-  //   img: require("../../storage/images/photo-3.png"),
-  // },
-  // {
-  //   id: '4',
-  //   img: require("../../storage/images/photo-4.png"),
-  // },
-];
+import axios from "axios";
 
 const devWidth = Dimensions.get("window").width;
 
-
 export default function PhotoStory({ navigation }) {
-
   //사진 있는지 여부
   const [hasImg, setHasImg] = useState(true);
 
@@ -35,29 +25,63 @@ export default function PhotoStory({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const devHeight = Dimensions.get("window").height;
 
+  const [story, setStory] = useState([]);
+
+  useEffect(() => {
+    try {
+      axios({
+        method: "get",
+        url: "http://13.125.249.247/filme/story",
+      })
+        .then(function (response) {
+          const result = response.data;
+          const list = [];
+          for (let i = 0; i < result.length; i++) {
+            list.push({
+              id: result[i].idx,
+              img: result[i].imageURL,
+            });
+          }
+          setStory(list);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert("Error", e);
+    } finally {
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor='white' barStyle='dark-content' />
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
 
       <View style={styles.header}>
         <View style={{ width: 40 }}></View>
-        <Text style={{ fontSize: 22, fontWeight: 'bold' }}>포토스토리</Text>
+        <Text style={{ fontSize: 22, fontWeight: "bold" }}>포토스토리</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Upload")}>
-          <AntDesign name='plussquareo' style={{ fontSize: 22, marginRight: 15 }} />
+          <AntDesign
+            name="plussquareo"
+            style={{ fontSize: 22, marginRight: 15 }}
+          />
         </TouchableOpacity>
       </View>
 
       {hasImg ? (
         <FlatList
-          data={Images}
-          keyExtractor={item => item.id}
+          data={story}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={{ margin: 1 }}
-              onPress={() => navigation.navigate("Detail_PhotoStory", { img: item.img })}
+              onPress={() =>
+                navigation.navigate("Detail_PhotoStory", { idx: item.id })
+              }
               onLongPress={() => setModalVisible(!modalVisible)}
             >
-              <Image source={item.img} style={styles.img} />
+              <Image source={{ url: item.img }} style={styles.img} />
             </TouchableOpacity>
           )}
           numColumns={3}
@@ -65,7 +89,7 @@ export default function PhotoStory({ navigation }) {
         />
       ) : (
         <View style={styles.content_noImg}>
-          <AntDesign name='camerao' style={{ fontSize: 85 }} />
+          <AntDesign name="camerao" style={{ fontSize: 85 }} />
           <Text style={{ fontSize: 22 }}>사진 없음</Text>
         </View>
       )}
@@ -160,25 +184,24 @@ export default function PhotoStory({ navigation }) {
           </View>
         </View>
       </Modal>
-
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   header: {
-    width: '100%',
+    width: "100%",
     height: 50,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
   },
   content_hasImg: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 65,
   },
   img: {
