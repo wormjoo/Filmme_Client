@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ImageBackground, Modal, Dimensions, TextInput } from 'react-native';
+import React, { useState, useContext } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  TouchableOpacity,
+  ImageBackground,
+  Modal,
+  Dimensions,
+  TextInput,
+} from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import Ionic from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
+import { UserContext } from "../contexts";
 
-export default function MyPage() {
-
+export default function MyPage({ navigation }) {
   //이미지 업로드 여부
   const [upload, setupload] = useState(false);
 
@@ -17,6 +27,13 @@ export default function MyPage() {
 
   //업로드 이미지@
   const [image, setImage] = useState(null);
+
+  // 로그아웃
+  const { dispatch } = useContext(UserContext);
+  const _handleLogoutButtonPress = async () => {
+    dispatch({});
+    navigation.navigate("Login");
+  };
 
   //이미지 가져오는 함수
   const pickImage = async () => {
@@ -63,53 +80,80 @@ export default function MyPage() {
   const [editName, setEditName] = useState(false);
 
   //닉네임
-  const [nickname, setNickname] = useState('User_1');
+  const [nickname, setNickname] = useState("User_1");
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor='white' barStyle='dark-content' />
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
 
       <View style={styles.header}>
         <View style={{ width: 40 }}></View>
-        <Text style={{ fontSize: 22, fontWeight: 'bold' }}>마이페이지</Text>
+        <Text style={{ fontSize: 22, fontWeight: "bold" }}>마이페이지</Text>
         <TouchableOpacity>
-          <Feather name='menu' style={{ fontSize: 22, marginRight: 15 }} />
+          <Feather name="menu" style={{ fontSize: 22, marginRight: 15 }} />
         </TouchableOpacity>
       </View>
 
       <View style={styles.profileSection}>
         <ImageBackground
-          source={image ? { uri: image } : require("../../storage/images/basic-profile-img.png")}
+          source={
+            image
+              ? { uri: image }
+              : require("../../storage/images/basic-profile-img.png")
+          }
           style={{ height: 120, width: 120 }}
           imageStyle={{ borderRadius: 100 }}
         >
-          <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={styles.cameraIcon}>
-            <AntDesign name='camerao' style={{ fontSize: 22, color: "#505050" }} />
+          <TouchableOpacity
+            onPress={() => setModalVisible(!modalVisible)}
+            style={styles.cameraIcon}
+          >
+            <AntDesign
+              name="camerao"
+              style={{ fontSize: 22, color: "#505050" }}
+            />
           </TouchableOpacity>
         </ImageBackground>
         <View style={styles.nickname}>
           {editName ? (
-            <View style={{ borderBottomColor: "#C8C8C8", borderBottomWidth: 2 }}>
+            <View
+              style={{ borderBottomColor: "#C8C8C8", borderBottomWidth: 2 }}
+            >
               <TextInput
                 value={nickname}
-                onChangeText={(text) => { setNickname(text); }}
+                onChangeText={(text) => {
+                  setNickname(text);
+                }}
                 placeholder="닉네임"
                 placeholderTextColor="#C8C8C8"
                 autoCorrect={false}
-                style={{ fontSize: 22, color: "#505050", fontWeight: 'bold' }}
+                style={{ fontSize: 22, color: "#505050", fontWeight: "bold" }}
               />
             </View>
           ) : (
             <View>
-              <Text style={{ fontSize: 22, color: "#505050", fontWeight: 'bold' }}>
+              <Text
+                style={{ fontSize: 22, color: "#505050", fontWeight: "bold" }}
+              >
                 {nickname}
               </Text>
             </View>
           )}
-          <TouchableOpacity onPress={() => setEditName(!editName)} style={styles.editIcon}>
-            {editName ?
-              <Feather name="check" style={{ fontSize: 12, color: "#505050" }} />
-              : <Feather name="edit-2" style={{ fontSize: 12, color: "#505050" }} />}
+          <TouchableOpacity
+            onPress={() => setEditName(!editName)}
+            style={styles.editIcon}
+          >
+            {editName ? (
+              <Feather
+                name="check"
+                style={{ fontSize: 12, color: "#505050" }}
+              />
+            ) : (
+              <Feather
+                name="edit-2"
+                style={{ fontSize: 12, color: "#505050" }}
+              />
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -119,12 +163,13 @@ export default function MyPage() {
           <View style={styles.levelText}>
             <Text style={{ fontSize: 15 }}>
               6{" "}
-              <AntDesign name='camera' style={{ fontSize: 17, color: "#505050" }} />
-              {" "}until next Level
+              <AntDesign
+                name="camera"
+                style={{ fontSize: 17, color: "#505050" }}
+              />{" "}
+              until next Level
             </Text>
-            <Text>
-              Level 1
-            </Text>
+            <Text>Level 1</Text>
           </View>
           <View style={styles.levelBar}>
             <View style={styles.level}></View>
@@ -134,8 +179,11 @@ export default function MyPage() {
 
       <View style={styles.menuSection}>
         <TouchableOpacity style={styles.menuItem}>
-          <Fontisto name="angelist" style={[styles.menuFont, { fontSize: 21 }]} />
-          <Text style={styles.menuFont}>  내가 자랑한 포즈</Text>
+          <Fontisto
+            name="angelist"
+            style={[styles.menuFont, { fontSize: 21 }]}
+          />
+          <Text style={styles.menuFont}> 내가 자랑한 포즈</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.menuItem}>
           <Fontisto name="heart-alt" style={styles.menuFont} />
@@ -149,8 +197,11 @@ export default function MyPage() {
           <AntDesign name="questioncircleo" style={styles.menuFont} />
           <Text style={styles.menuFont}> 문의하기</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ margin: 10 }}>
-          <Text style={{ fontSize: 13, color: '#A8A8A8' }}>로그아웃</Text>
+        <TouchableOpacity
+          onPress={_handleLogoutButtonPress}
+          style={{ margin: 10 }}
+        >
+          <Text style={{ fontSize: 13, color: "#A8A8A8" }}>로그아웃</Text>
         </TouchableOpacity>
       </View>
 
@@ -259,44 +310,43 @@ export default function MyPage() {
           </View>
         </View>
       </Modal>
-
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   header: {
-    width: '100%',
+    width: "100%",
     height: 50,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
   },
   profileSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     margin: 30,
   },
   cameraIcon: {
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignSelf: "flex-end",
+    alignItems: "center",
+    justifyContent: "center",
     width: 30,
     height: 30,
     backgroundColor: "rgba(200,200,200,0.85)",
     borderRadius: 100,
   },
   nickname: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginVertical: 10,
   },
   editIcon: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     width: 20,
     height: 20,
     marginLeft: 2,
@@ -315,13 +365,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   levelText: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginHorizontal: 15,
     marginTop: 15,
   },
   levelBar: {
-    alignSelf: 'center',
+    alignSelf: "center",
     width: 320,
     height: 10,
     margin: 5,
@@ -340,12 +390,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   menuItem: {
-    alignItems: 'center',
+    alignItems: "center",
     width: 350,
     padding: 15,
     borderBottomColor: "#E8E8E8",
     borderBottomWidth: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   menuFont: {
     fontSize: 18,

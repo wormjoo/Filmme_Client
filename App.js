@@ -2,13 +2,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Fontisto from "react-native-vector-icons/Fontisto";
-import PhotoStory from './src/screens/PhotoStory';
-import Pose from './src/screens/Pose';
-import SelectFrame from './src/screens/SelectFrame';
-import Location from './src/screens/Location';
-import MyPage from './src/screens/MyPage';
+import PhotoStory from "./src/screens/PhotoStory";
+import Pose from "./src/screens/Pose";
+import SelectFrame from "./src/screens/SelectFrame";
+import Location from "./src/screens/Location";
+import MyPage from "./src/screens/MyPage";
 import Upload from "./src/screens/Upload";
-import TakePic from './src/screens/TakePic';
+import TakePic from "./src/screens/TakePic";
 import Login from "./src/screens/Login";
 import Signup from "./src/screens/Signup";
 import Detail_PhotoStory from "./src/screens/Detail_PhotoStory";
@@ -16,7 +16,6 @@ import Detail_Pose from "./src/screens/Detail_Pose";
 import Photo from "./src/screens/Photo";
 
 export default function App() {
-
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
 
@@ -56,7 +55,6 @@ export default function App() {
 
             return <Fontisto name={iconName} size={size} color={colour} />;
           },
-
         })}
       >
         <Tab.Screen name="PhotoStory" component={PhotoStory} />
@@ -71,13 +69,16 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Signup" component={Signup}
-          options={({ }) => ({
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen
+          name="Signup"
+          component={Signup}
+          options={({}) => ({
             title: "회원가입",
             headerShown: true,
             headerBackTitleVisible: false,
-          })} /> */}
+          })}
+        />
         <Stack.Screen name="Bottom" component={BottomTabScreen} />
         <Stack.Screen name="Upload" component={Upload} />
         <Stack.Screen name="TakePic" component={TakePic} />
