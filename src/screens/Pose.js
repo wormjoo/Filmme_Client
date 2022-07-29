@@ -14,14 +14,14 @@ const Images = [
     id: '2',
     img: require("../../storage/images/photo-2.png"),
   },
-  {
-    id: '3',
-    img: require("../../storage/images/photo-3.png"),
-  },
-  {
-    id: '4',
-    img: require("../../storage/images/photo-4.png"),
-  },
+  // {
+  //   id: '3',
+  //   img: require("../../storage/images/photo-3.png"),
+  // },
+  // {
+  //   id: '4',
+  //   img: require("../../storage/images/photo-4.png"),
+  // },
 ];
 
 const devWidth = Dimensions.get("window").width;
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
   content_hasImg: {
     height: '100%',
     backgroundColor: '#fff',
-    alignItems: 'center',
+    //alignItems: 'center',
     marginBottom: 65,
   },
   img: {
