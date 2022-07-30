@@ -1,22 +1,49 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Image, ImageBackground, Dimensions } from 'react-native';
 import AntDesign from "react-native-vector-icons/AntDesign";
+import axios from "axios";
 
 export default function Detail_Pose({ route }) {
-
-  const nickname = '닉네임';
 
   const devWidth = Dimensions.get("window").width;
   const devHeight = Dimensions.get("window").height;
 
-  const { img } = route.params;
+  const { idx } = route.params;
+  const [userIdx, setUserIdx] = useState();
+  const [profile, setProfile] = useState();
+  const [nickname, setNickname] = useState();
+  const [img, setImg] = useState();
+  const [likeCnt, setLikeCnt] = useState();
+  const [views, setViews] = useState();
+  const [isLike, setIsLike] = useState(false);
 
-  //좋아요 클릭 여부
-  const [likes, setLikes] = useState(false);
-  //좋아요 수
-  const num_of_likes = 0;
-  //조회수
-  const views = 123;
+  useEffect(() => {
+    try {
+      axios({
+        method: "get",
+        url: `http://13.125.249.247/filme/pose/${idx}`,
+      })
+          .then(function (response) {
+            const result = response.data;
+
+            setUserIdx(result[0].idx);
+            setProfile(result[0].profileURL);
+            setNickname(result[0].name);
+            setImg(result[0].imageURL);
+            setLikeCnt(result[0].likeCnt);
+            setViews(result[0].views);
+            setIsLike(result[0].isLike);
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    } catch (e) {
+      console.log(e);
+      alert("Error", e);
+    } finally {
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -29,7 +56,7 @@ export default function Detail_Pose({ route }) {
       <View style={styles.profileSection}>
         <TouchableOpacity>
           <Image
-            source={require("../../storage/images/basic-profile-img.png")}
+            source={{uri: `${profile}`}}
             style={styles.profile} />
         </TouchableOpacity>
         <Text style={styles.nickname}>{nickname}</Text>
@@ -39,18 +66,18 @@ export default function Detail_Pose({ route }) {
         <ImageBackground
           source={require("../../storage/images/detail-pose.png")}
           style={{ height: devHeight - 270, width: devWidth - 20, alignItems: 'center', justifyContent: 'center' }}>
-          <Image source={img} style={styles.img} />
+          <Image source={{uri: img}} style={styles.img} />
         </ImageBackground>
       </View>
 
       <View style={styles.likesSection}>
         <View style={{ flexDirection: 'row' }}>
-          <TouchableOpacity onPress={() => setLikes(!likes)}>
+          <TouchableOpacity onPress={() => setIsLike(!isLike)}>
             <AntDesign
-              name={likes ? "heart" : "hearto"}
-              style={[{ color: likes ? 'tomato' : 'black' }, styles.heart]} />
+              name={isLike ? "heart" : "hearto"}
+              style={[{ color: isLike ? 'tomato' : 'black' }, styles.heart]} />
           </TouchableOpacity>
-          <Text>{likes ? num_of_likes + 1 : num_of_likes}개</Text>
+          <Text>{isLike ? likeCnt + 1 : likeCnt}개</Text>
         </View>
         <Text>조회수 {views}회</Text>
       </View>
