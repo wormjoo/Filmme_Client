@@ -17,6 +17,8 @@ import Ionic from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
 import { UserContext } from "../contexts";
 
+const devWidth = Dimensions.get("window").width;
+
 export default function MyPage({ navigation }) {
   //이미지 업로드 여부
   const [upload, setupload] = useState(false);
@@ -178,7 +180,9 @@ export default function MyPage({ navigation }) {
       </View>
 
       <View style={styles.menuSection}>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate("MyPage_ProudPose")}>
           <Fontisto
             name="angelist"
             style={[styles.menuFont, { fontSize: 21 }]}
@@ -359,7 +363,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   levelBox: {
-    width: 350,
+    width: devWidth - 60, //350,
     height: 70,
     backgroundColor: "#E8E8E8",
     borderRadius: 20,
@@ -372,14 +376,14 @@ const styles = StyleSheet.create({
   },
   levelBar: {
     alignSelf: "center",
-    width: 320,
+    width: devWidth - 90, //320,
     height: 10,
     margin: 5,
     backgroundColor: "#FFFFFF",
     borderRadius: 20,
   },
   level: {
-    width: 120,
+    width: 120, //
     height: 10,
     backgroundColor: "#C8C8C8",
     borderRadius: 20,
@@ -391,7 +395,7 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     alignItems: "center",
-    width: 350,
+    width: devWidth - 60, //350,
     padding: 15,
     borderBottomColor: "#E8E8E8",
     borderBottomWidth: 1,

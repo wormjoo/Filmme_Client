@@ -184,6 +184,7 @@ export default function PhotoStory({ navigation }) {
           </View>
         </View>
       </Modal>
+      
     </View>
   );
 }
@@ -208,4 +209,10 @@ const styles = StyleSheet.create({
     width: devWidth / 3.1,
     height: 150,
   },
+  content_noImg: {
+    height: '100%',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+},
 });
