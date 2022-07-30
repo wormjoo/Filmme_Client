@@ -189,7 +189,10 @@ export default function MyPage({ navigation }) {
           />
           <Text style={styles.menuFont}> 내가 자랑한 포즈</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate("MyPage_LikedPose")}
+        >
           <Fontisto name="heart-alt" style={styles.menuFont} />
           <Text style={styles.menuFont}> 좋아요한 포즈</Text>
         </TouchableOpacity>

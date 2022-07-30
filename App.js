@@ -15,6 +15,7 @@ import Detail_PhotoStory from "./src/screens/Detail_PhotoStory";
 import Detail_Pose from "./src/screens/Detail_Pose";
 import Photo from "./src/screens/Photo";
 import MyPage_ProudPose from "./src/screens/MyPage_ProudPose";
+import MyPage_LikedPose from "./src/screens/MyPage_LikedPose";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -70,7 +71,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen
           name="Signup"
           component={Signup}
@@ -79,7 +80,7 @@ export default function App() {
             headerShown: true,
             headerBackTitleVisible: false,
           })}
-        /> */}
+        />
         <Stack.Screen name="Bottom" component={BottomTabScreen} />
         <Stack.Screen name="Upload" component={Upload} />
         <Stack.Screen name="TakePic" component={TakePic} />
@@ -87,6 +88,7 @@ export default function App() {
         <Stack.Screen name="Detail_Pose" component={Detail_Pose} />
         <Stack.Screen name="Photo" component={Photo} />
         <Stack.Screen name="MyPage_ProudPose" component={MyPage_ProudPose} />
+        <Stack.Screen name="MyPage_LikedPose" component={MyPage_LikedPose} />
       </Stack.Navigator>
     </NavigationContainer>
   );
