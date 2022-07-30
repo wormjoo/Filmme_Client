@@ -1,24 +1,29 @@
-import React from 'react';
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Alert, ImageBackground, Image, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, ImageBackground, Image, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Camera } from 'expo-camera';
 
 let camera = Camera;
 
-export default function TakePic({ route }) {
+const TakePic = ({ route }) => {
 
   const { frame } = route.params;
 
   const devWidth = Dimensions.get("window").width;
-  const devHeight = Dimensions.get("window").height;
 
-  const [startCamera, setStartCamera] = React.useState(false)
-  const [previewVisible, setPreviewVisible] = React.useState(false)
-  const [capturedImage, setCapturedImage] = React.useState(null)
-  const [cameraType, setCameraType] = React.useState(Camera.Constants.Type.back)
-  const [flashMode, setFlashMode] = React.useState('off')
+  const [startCamera, setStartCamera] = React.useState(false);
+  const [previewVisible, setPreviewVisible] = React.useState(false);
+  const [capturedImage, setCapturedImage] = React.useState(null);
+  const [cameraType, setCameraType] = React.useState(Camera.Constants.Type.back);
+  const [flashMode, setFlashMode] = React.useState('off');
 
-  const navigation = useNavigation();
+  //네컷
+  let [count, setCount] = useState(0);
+  const [fin, setFin] = React.useState(false);
+  const [oneCut, setOneCut] = React.useState(null);
+  const [twoCut, setTwoCut] = React.useState(null);
+  const [threeCut, setThreeCut] = React.useState(null);
+  const [fourCut, setFourCut] = React.useState(null);
 
   const __startCamera = async () => {
     setStartCamera(true)
@@ -32,23 +37,47 @@ export default function TakePic({ route }) {
   }
   const __takePicture = async () => {
     const photo = await camera.takePictureAsync()
-    console.log(photo)
-    console.log(photo.uri)
+    console.log("포토", photo)
     setPreviewVisible(true)
     //setStartCamera(false)
-    setCapturedImage(photo)
+    setCapturedImage(photo);
+    setCount(++count);
+    console.log("사진 찍을때 카운트", count);
+    //console.log("캡처", capturedImage);
   }
   const __savePhoto = () => {
-    //console.log('savephoto',photo,frame)
-    navigation.navigate("Photo", {
-      photo: capturedImage.uri,
-      frame: frame,
-    })
-   }
+    if (count === 1) {
+      setOneCut(capturedImage);
+      console.log("원컷", oneCut);
+      setPreviewVisible(false);
+      __startCamera();
+    }
+    else if (count === 2) {
+      setTwoCut(capturedImage);
+      console.log(twoCut);
+      setPreviewVisible(false);
+      __startCamera();
+    }
+    else if (count === 3) {
+      setThreeCut(capturedImage);
+      console.log(threeCut);
+      setPreviewVisible(false);
+      __startCamera();
+    }
+    else {
+      setFourCut(capturedImage);
+      count = 0;
+      setFin(true);
+      console.log(fourCut, "카운트", count, "피니시", fin);
+    }
+  }
   const __retakePicture = () => {
-    setCapturedImage(null)
-    setPreviewVisible(false)
-    __startCamera()
+    //console.log('다시찍을때 카운트 전',count);
+    setCount(--count);
+    //console.log('다시찍을때 카운트 후',count);
+    setCapturedImage(null);
+    setPreviewVisible(false);
+    __startCamera();
   }
   const __handleFlashMode = () => {
     if (flashMode === 'on') {
@@ -78,7 +107,17 @@ export default function TakePic({ route }) {
         >
           {previewVisible && capturedImage ? (
             //사진 찍은 후 화면
-            <CameraPreview photo={capturedImage} savePhoto={__savePhoto} retakePicture={__retakePicture} />
+            <CameraPreview
+              frame={frame}
+              photo={capturedImage}
+              savePhoto={__savePhoto}
+              retakePicture={__retakePicture}
+              fin={fin}
+              oneCut={oneCut}
+              twoCut={twoCut}
+              threeCut={threeCut}
+              fourCut={fourCut}
+              count={count} />
           ) : (
             //카메라 화면
             <Camera
@@ -97,6 +136,16 @@ export default function TakePic({ route }) {
                   flexDirection: 'row'
                 }}
               >
+                <View style={{ width: '100%' }}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontSize: 18,
+                      color: 'rgba(255,255,255,0.8)'
+                    }}>
+                    {count + 1}번째 컷
+                  </Text>
+                </View>
                 <View
                   style={{
                     position: 'absolute',
@@ -127,7 +176,6 @@ export default function TakePic({ route }) {
                     onPress={__switchCamera}
                     style={{
                       marginTop: 20,
-                      //borderRadius: '50%',
                       height: 25,
                       width: 25
                     }}
@@ -150,14 +198,14 @@ export default function TakePic({ route }) {
                     width: '100%',
                     padding: 20,
                     justifyContent: 'space-between',
-                    backgroundColor: '#C8C8C8'
+                    backgroundColor: 'rgba(150,150,150,0.5)'
                   }}
                 >
                   <View
                     style={{
                       alignSelf: 'center',
                       flex: 1,
-                      alignItems: 'center', 
+                      alignItems: 'center',
                     }}
                   >
                     <TouchableOpacity
@@ -191,9 +239,9 @@ export default function TakePic({ route }) {
           </View>
 
           <View style={{ flex: 1, justifyContent: 'center' }}>
-            <Image source={frame} style={{ width: devWidth, height: devHeight - 160 }} />
+            <Image source={frame} style={{ width: devWidth, height: devWidth * 1.5 }} />
           </View>
-          
+
           <TouchableOpacity
             onPress={__startCamera}
             style={{
@@ -217,14 +265,14 @@ export default function TakePic({ route }) {
               사진 찍기
             </Text>
           </TouchableOpacity>
-          
+
         </View>
       )}
-
       <StatusBar backgroundColor='white' barStyle='dark-content' />
     </View>
   )
 }
+export default TakePic;
 
 const styles = StyleSheet.create({
   container: {
@@ -242,8 +290,9 @@ const styles = StyleSheet.create({
 })
 
 //사진 찍은 후 화면
-const CameraPreview = ({ photo, retakePicture, savePhoto }) => {
-  console.log('sdsfds', photo)
+const CameraPreview = ({ frame, photo, retakePicture, savePhoto, fin, oneCut, twoCut, threeCut, fourCut, count }) => {
+  const navigation = useNavigation();
+  //console.log('sdsfds', photo);
   return (
     <View
       style={{
@@ -259,6 +308,16 @@ const CameraPreview = ({ photo, retakePicture, savePhoto }) => {
           flex: 1
         }}
       >
+        <View style={{ width: '100%' }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 18,
+              color: 'rgba(255,255,255,0.8)'
+            }}>
+            {count}번째 컷
+          </Text>
+        </View>
         <View
           style={{
             flex: 1,
@@ -278,28 +337,31 @@ const CameraPreview = ({ photo, retakePicture, savePhoto }) => {
               style={{
                 width: 130,
                 height: 40,
-
                 alignItems: 'center',
-                //borderRadius: 4
               }}
             >
               <Text
                 style={{
                   color: '#fff',
-                  fontSize: 20
+                  fontSize: 20,
                 }}
               >
                 다시 촬영
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={savePhoto}
+              onPress={fin ? () => navigation.navigate("Photo", {
+                //photo: capturedImage.uri,
+                frame: frame,
+                oneCut: oneCut,
+                twoCut: twoCut,
+                threeCut: threeCut,
+                fourCut, fourCut,
+              }) : savePhoto}
               style={{
                 width: 130,
                 height: 40,
-
                 alignItems: 'center',
-                //borderRadius: 4
               }}
             >
               <Text
@@ -308,7 +370,7 @@ const CameraPreview = ({ photo, retakePicture, savePhoto }) => {
                   fontSize: 20
                 }}
               >
-                저장하기
+                {fin ? '완료하기' : '계속 찍기'}
               </Text>
             </TouchableOpacity>
           </View>

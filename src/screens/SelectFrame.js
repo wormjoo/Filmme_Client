@@ -60,9 +60,7 @@ const Item = ({ frame, chk }) => {
 
 const devWidth = Dimensions.get("window").width;
 
-export default function SelectFrame({ navigation, route }) {
-
-  //const { photo } = route.params.photo;
+export default function SelectFrame() {
 
   const renderItem = ({ item }) => (
     <Item frame={item.frame} chk={item.chk} />
@@ -119,8 +117,8 @@ const styles = StyleSheet.create({
     marginBottom: 65,
   },
   frame: {
-    width: devWidth / 2.2,
-    height: 250,
+    width: 180,
+    height: 270,
   },
   chkIcon: {
     margin: 5,

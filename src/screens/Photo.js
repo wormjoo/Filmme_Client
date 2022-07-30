@@ -1,41 +1,173 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { StyleSheet, Text, View, StatusBar, ImageBackground, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, ImageBackground, Image, Dimensions, TouchableOpacity } from 'react-native';
+// PermissionsAndroid, Platform 
 import ViewShot from "react-native-view-shot";
+//import * as MediaLibrary from 'expo-media-library';
+import Feather from "react-native-vector-icons/Feather";
+//import RNFetchBlob from 'rn-fetch-blob'
 
 export default function Photo({ route }) {
-    const { photo, frame } = route.params;
-    //const {frame} = route.params.frame;
-    //console.log(frame, photo.uri)
+
+    const { frame, oneCut, twoCut, threeCut, fourCut } = route.params;
+    console.log("!!!!", frame, oneCut, twoCut, threeCut, fourCut);
 
     const devWidth = Dimensions.get("window").width;
-    const devHeight = Dimensions.get("window").height;
 
+    //캡처
+    const [capImg, setCapImg] = useState(null);
     const ref = useRef();
-    const [capImg,setCapImg]=useState(null);
-
     const onCapture = useCallback(uri => {
         console.log("do something with ", uri);
         setCapImg(uri);
-        setCap(true);
+
     }, []);
+    console.log('캡쳐이미지 최종', capImg);
 
-    const [cap, setCap] = useState(false);
+    //갤러리 저장
+    // const checkPermision = async () => {
+    //     if (Platform.OS === 'ios') {
+    //         downloadImage()
+    //     } else {
+    //         try {
+    //             const granted = await PermissionsAndroid.request(
+    //                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    //                 {
+    //                     title: 'Storage Permission Required',
+    //                     message: 'App needs access to your storage to download Photos'
+    //                 }
+    //             )
+    //             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    //                 console.log('Storage Permission Granted.')
+    //                 downloadImage()
+    //             } else {
+    //                 alert('Storage Permission Not Granted')
+    //             }
+    //         } catch (error) {
 
+    //         }
+    //     }
+    // }
+    // const downloadImage = () => {
+    //     let date = new Date()
+    //     let image_URL = IMAGE_PATH
+    //     let ext = getExtention(image_URL)
+    //     ext = '.' + ext[0]
+    //     //
+    //     const {config, fs} = RNFetchBlob
+    //     let PictureDir = fs.dirs.PictureDir
+    //     let options = {
+    //         fileCache: true,
+    //         addAndroidDownloads: {
+    //             useDownloadManager: true,
+    //             notification: true,
+    //             path: PictureDir + '/image_' + 
+    //             Math.floor(date.getTime() + date.getSeconds() /2 ) + ext,
+    //             description: 'Image'
+    //         }
+    //     }
+    //     config(options)
+    //     .fetch('GET', image_URL)
+    //     .then(res => {
+    //         console.log('res -> ', JSON.stringify(res))
+    //         alert('Image Downloaded Successfully!')
+    //     })
+    // }
+    // const getExtention = filename => {
+    //     return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined
+    // }
+    //---------------------------------
+    // MediaLibrary.requestPermissionsAsync();
+    // const [status, requestPermission] = MediaLibrary.usePermissions();
+    // const onSave = async () => {
+    //     try {
+    //         //let uri = await getPhotoUri();
+    //         let uri = capImg
+    //         console.log('~~',uri);
+    //         setFinish(true);
+    //         console.log(status);
+
+    //         MediaLibrary.getPermissionsAsync().then((data) => {
+    //             MediaLibrary.saveToLibraryAsync(uri);
+    //                 console.log("갤러리 저장에 성공함!");
+    //             if (data.status === 'granted') {
+    //                 MediaLibrary.saveToLibraryAsync(uri);
+    //                 console.log("갤러리 저장에 성공함!");
+    //             }
+    //         });
+
+    //     } catch (err) {
+    //         console.log("갤러리에 저장하는데에 실패함!");
+    //     }
+    // };
 
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor='white' barStyle='dark-content' />
 
-            {cap ? (
-                <ImageBackground source={{ uri:capImg }} style={{ width: devWidth, height: devHeight }}></ImageBackground>
-            ) : (
-                <ViewShot onCapture={onCapture} captureMode="mount">
-                    <ImageBackground source={frame} style={{ width: devWidth, height: devHeight - 160 }}>
-                        <Image source={{ uri: photo }} style={{ width: 100, height: 100 }} />
-                    </ImageBackground>
-                </ViewShot>
-            )}
+            <ViewShot onCapture={onCapture} captureMode="mount">
+                <ImageBackground
+                    source={frame}
+                    style={{ width: 350, height: 525 }}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Image
+                            source={{ uri: oneCut.uri }}
+                            style={{ width: 153, height: 106, top: 40, left: 11 }} />
+                        <Image
+                            source={{ uri: oneCut.uri }}
+                            style={{ width: 153, height: 106, top: 56.3, left: 34 }} />
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Image
+                            source={{ uri: twoCut.uri }}
+                            style={{ width: 153, height: 106, top: 47.3, left: 11 }} />
+                        <Image
+                            source={{ uri: twoCut.uri }}
+                            style={{ width: 153, height: 106, top: 63.3, left: 34 }} />
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Image
+                            source={{ uri: threeCut.uri }}
+                            style={{ width: 153, height: 106, top: 54, left: 11 }} />
+                        <Image
+                            source={{ uri: threeCut.uri }}
+                            style={{ width: 153, height: 106, top: 69.8, left: 34 }} />
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Image
+                            source={{ uri: fourCut.uri }}
+                            style={{ width: 153, height: 106, top: 61, left: 11 }} />
+                        <Image
+                            source={{ uri: fourCut.uri }}
+                            style={{ width: 153, height: 106, top: 76.8, left: 34 }} />
+                    </View>
+                </ImageBackground>
+            </ViewShot>
 
+            <TouchableOpacity
+                style={{
+                    backgroundColor: '#E8E8E8',
+                    borderRadius: 20,
+                    width: devWidth - 30,
+                    height: 50,
+                    margin: 10,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'row'
+                }}>
+                <Feather
+                    name='download'
+                    style={{
+                        fontSize: 25,
+                        fontWeight: 'bold',
+                        color: '#505050'
+                    }} />
+                <Text
+                    style={{
+                        fontSize: 22,
+                        fontWeight: 'bold',
+                        color: '#505050'
+                    }}>  다운로드</Text>
+            </TouchableOpacity>
 
         </View>
     );
