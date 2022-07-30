@@ -165,7 +165,7 @@ export default function Pose({ navigation }) {
             <View style={styles.header}>
                 <View style={{ width: 40 }}></View>
                 <Text style={{ fontSize: 22, fontWeight: 'bold' }}>포즈자랑</Text>
-                <TouchableOpacity onPress={() => navigation.navigate("Upload")}>
+                <TouchableOpacity onPress={() => navigation.navigate("UploadPose")}>
                     <AntDesign name='plussquareo' style={{ fontSize: 22, marginRight: 15 }} />
                 </TouchableOpacity>
             </View>

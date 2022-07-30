@@ -16,6 +16,7 @@ import Detail_Pose from "./src/screens/Detail_Pose";
 import Photo from "./src/screens/Photo";
 import MyPage_ProudPose from "./src/screens/MyPage_ProudPose";
 import MyPage_LikedPose from "./src/screens/MyPage_LikedPose";
+import UploadPose from "./src/screens/UploadPose";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -89,6 +90,7 @@ export default function App() {
         <Stack.Screen name="Photo" component={Photo} />
         <Stack.Screen name="MyPage_ProudPose" component={MyPage_ProudPose} />
         <Stack.Screen name="MyPage_LikedPose" component={MyPage_LikedPose} />
+        <Stack.Screen name="UploadPose" component={UploadPose} />
       </Stack.Navigator>
     </NavigationContainer>
   );
