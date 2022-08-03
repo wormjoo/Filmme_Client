@@ -64,17 +64,6 @@ export default function PhotoStory({ navigation }) {
     <View style={styles.container}>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
 
-      <View style={styles.header}>
-        <View style={{ width: 40 }}></View>
-        <Text style={{ fontSize: 22, fontWeight: "bold" }}>포토스토리</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Upload")}>
-          <AntDesign
-            name="plussquareo"
-            style={{ fontSize: 22, marginRight: 15 }}
-          />
-        </TouchableOpacity>
-      </View>
-
       {hasImg ? (
         <FlatList
           data={story}
@@ -198,21 +187,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-  header: {
-    width: "100%",
-    height: 50,
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexDirection: "row",
+    padding: 10,
   },
   content_hasImg: {
     alignItems: "center",
     marginBottom: 65,
   },
   img: {
-    width: devWidth / 3.1,
-    height: 150,
+    flex: 1,
+    resizeMode: "cover",
+    width: devWidth / 3.2,
+    height: devWidth / 3.2,
+    position: "relative",
   },
   content_noImg: {
     height: "100%",

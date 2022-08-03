@@ -9,6 +9,7 @@ import {
   Modal,
   Dimensions,
   TextInput,
+  ScrollView,
 } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -16,8 +17,7 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import Ionic from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
 import { UserContext } from "../contexts/User";
-import axios from 'axios';
-
+import axios from "axios";
 
 const devWidth = Dimensions.get("window").width;
 
@@ -84,29 +84,29 @@ export default function MyPage({ navigation }) {
 
   //닉네임
   const [nickname, setNickname] = useState("");
-  const [level,setLevel] = useState("");
-  
+  const [level, setLevel] = useState("");
+
   const { dispatch, user } = useContext(UserContext);
 
   useEffect(() => {
     try {
       axios({
-        method: 'get',
-        url: 'http://13.125.249.247/filme/mypage/myinfo',
+        method: "get",
+        url: "http://13.125.249.247/filme/mypage/myinfo",
         headers: {
-          'x-access-token': `${user?.token}`,
+          "x-access-token": `${user?.token}`,
         },
       })
         .then(function (response) {
           const result = response.data[0];
-          
+
           setNickname(result.nickname);
           setImage(result.profileURL);
-          setLevel (result.level);
+          setLevel(result.level);
         })
         .catch(function (error) {
           console.log(error);
-          alert( error);
+          alert(error);
         });
     } catch (e) {
       console.log(e);
@@ -116,16 +116,8 @@ export default function MyPage({ navigation }) {
   }, [user]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
-
-      <View style={styles.header}>
-        <View style={{ width: 40 }}></View>
-        <Text style={{ fontSize: 22, fontWeight: "bold" }}>마이페이지</Text>
-        <TouchableOpacity>
-          <Feather name="menu" style={{ fontSize: 22, marginRight: 15 }} />
-        </TouchableOpacity>
-      </View>
 
       <View style={styles.profileSection}>
         <ImageBackground
@@ -349,7 +341,7 @@ export default function MyPage({ navigation }) {
           </View>
         </View>
       </Modal>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -357,18 +349,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-  header: {
-    width: "100%",
-    height: 50,
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexDirection: "row",
+    padding: 10,
   },
   profileSection: {
     alignItems: "center",
     justifyContent: "center",
-    margin: 30,
+    margin: 10,
   },
   cameraIcon: {
     alignSelf: "flex-end",
@@ -381,7 +367,7 @@ const styles = StyleSheet.create({
   },
   nickname: {
     flexDirection: "row",
-    marginVertical: 10,
+    marginTop: 10,
   },
   editIcon: {
     alignItems: "center",

@@ -1,8 +1,11 @@
 import React, { useContext } from "react";
+import { TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Fontisto from "react-native-vector-icons/Fontisto";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Feather from "react-native-vector-icons/Feather";
 import PhotoStory from "./src/screens/PhotoStory";
 import Pose from "./src/screens/Pose";
 import SelectFrame from "./src/screens/SelectFrame";
@@ -24,7 +27,7 @@ export default function App() {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
 
-  const BottomTabScreen = () => {
+  const BottomTabScreen = ({ navigation }) => {
     return (
       <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -38,23 +41,23 @@ export default function App() {
             let iconName;
             if (route.name === "PhotoStory") {
               iconName = "picture";
-              size = focused ? 25 : 22;
+              size = focused ? 15 : 18;
               colour = focused ? "#505050" : "#C8C8C8";
             } else if (route.name === "Pose") {
               iconName = "angelist";
-              size = focused ? 25 : 22;
+              size = focused ? 19 : 22;
               colour = focused ? "#505050" : "#C8C8C8";
             } else if (route.name === "SelectFrame") {
               iconName = "camera";
-              size = focused ? 25 : 22;
+              size = focused ? 16 : 19;
               colour = focused ? "#505050" : "#C8C8C8";
             } else if (route.name === "Location") {
               iconName = "map-marker-alt";
-              size = focused ? 25 : 22;
+              size = focused ? 17 : 20;
               colour = focused ? "#505050" : "#C8C8C8";
             } else if (route.name === "MyPage") {
               iconName = "person";
-              size = focused ? 25 : 22;
+              size = focused ? 17 : 20;
               colour = focused ? "#505050" : "#C8C8C8";
             }
 
@@ -62,11 +65,88 @@ export default function App() {
           },
         })}
       >
-        <Tab.Screen name="PhotoStory" component={PhotoStory} />
-        <Tab.Screen name="Pose" component={Pose} />
-        <Tab.Screen name="SelectFrame" component={SelectFrame} />
-        <Tab.Screen name="Location" component={Location} />
-        <Tab.Screen name="MyPage" component={MyPage} />
+        <Tab.Screen
+          name="PhotoStory"
+          component={PhotoStory}
+          options={{
+            title: "포토스토리",
+            headerShown: true,
+            headerTitleStyle: {
+              fontSize: 17,
+            },
+            headerRight: () => (
+              <TouchableOpacity onPress={() => navigation.navigate("Upload")}>
+                <AntDesign
+                  name="plussquareo"
+                  style={{ fontSize: 22, marginRight: 15 }}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Pose"
+          component={Pose}
+          options={{
+            title: "포즈자랑",
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTitleStyle: {
+              fontSize: 17,
+            },
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("UploadPose")}
+              >
+                <AntDesign
+                  name="plussquareo"
+                  style={{ fontSize: 22, marginRight: 15 }}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="SelectFrame"
+          component={SelectFrame}
+          options={{
+            title: "프레임선택",
+            headerShown: true,
+            headerTitleStyle: {
+              fontSize: 17,
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Location"
+          component={Location}
+          options={{
+            title: "포토부스위치",
+            headerShown: true,
+            headerTitleStyle: {
+              fontSize: 17,
+            },
+          }}
+        />
+        <Tab.Screen
+          name="MyPage"
+          component={MyPage}
+          options={{
+            title: "마이페이지",
+            headerShown: true,
+            headerTitleStyle: {
+              fontSize: 17,
+            },
+            headerRight: () => (
+              <TouchableOpacity>
+                <Feather
+                  name="menu"
+                  style={{ fontSize: 22, marginRight: 15 }}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
       </Tab.Navigator>
     );
   };
@@ -76,15 +156,29 @@ export default function App() {
     <UserProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              title: "로그인",
+              headerShown: true,
+              headerBackTitleVisible: false,
+              headerTitleStyle: {
+                fontSize: 17,
+              },
+            }}
+          />
           <Stack.Screen
             name="Signup"
             component={Signup}
-            options={({}) => ({
+            options={{
               title: "회원가입",
               headerShown: true,
               headerBackTitleVisible: false,
-            })}
+              headerTitleStyle: {
+                fontSize: 17,
+              },
+            }}
           />
           <Stack.Screen name="Bottom" component={BottomTabScreen} />
           <Stack.Screen name="Upload" component={Upload} />
