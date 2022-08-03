@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,6 +13,7 @@ import {
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionic from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
+import { UserContext } from "../contexts/User";
 import axios from "axios";
 
 const devWidth = Dimensions.get("window").width;
@@ -26,14 +27,19 @@ export default function PhotoStory({ navigation }) {
   const devHeight = Dimensions.get("window").height;
 
   const [story, setStory] = useState([]);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     try {
       axios({
         method: "get",
         url: "http://13.125.249.247/filme/story",
+        headers: {
+          "x-access-token": `${user?.token}`,
+        },
       })
         .then(function (response) {
+          console.log(response.data);
           const result = response.data;
           const list = [];
           for (let i = 0; i < result.length; i++) {
@@ -52,7 +58,7 @@ export default function PhotoStory({ navigation }) {
       alert("Error", e);
     } finally {
     }
-  }, []);
+  }, [user]);
 
   return (
     <View style={styles.container}>
@@ -184,7 +190,6 @@ export default function PhotoStory({ navigation }) {
           </View>
         </View>
       </Modal>
-      
     </View>
   );
 }
@@ -210,9 +215,9 @@ const styles = StyleSheet.create({
     height: 150,
   },
   content_noImg: {
-    height: '100%',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-},
+    height: "100%",
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

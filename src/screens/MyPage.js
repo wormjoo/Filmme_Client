@@ -15,7 +15,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import Ionic from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
-import { UserContext } from "../contexts";
+import { UserContext } from "../contexts/User";
 
 const devWidth = Dimensions.get("window").width;
 
@@ -182,7 +182,8 @@ export default function MyPage({ navigation }) {
       <View style={styles.menuSection}>
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => navigation.navigate("MyPage_ProudPose")}>
+          onPress={() => navigation.navigate("MyPage_ProudPose")}
+        >
           <Fontisto
             name="angelist"
             style={[styles.menuFont, { fontSize: 21 }]}

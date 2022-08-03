@@ -1,3 +1,4 @@
+import React, { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -17,6 +18,7 @@ import Photo from "./src/screens/Photo";
 import MyPage_ProudPose from "./src/screens/MyPage_ProudPose";
 import MyPage_LikedPose from "./src/screens/MyPage_LikedPose";
 import UploadPose from "./src/screens/UploadPose";
+import { UserContext, UserProvider } from "./src/contexts/User";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -69,29 +71,35 @@ export default function App() {
     );
   };
 
+  const { user } = useContext(UserContext);
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen
-          name="Signup"
-          component={Signup}
-          options={({}) => ({
-            title: "회원가입",
-            headerShown: true,
-            headerBackTitleVisible: false,
-          })}
-        />
-        <Stack.Screen name="Bottom" component={BottomTabScreen} />
-        <Stack.Screen name="Upload" component={Upload} />
-        <Stack.Screen name="TakePic" component={TakePic} />
-        <Stack.Screen name="Detail_PhotoStory" component={Detail_PhotoStory} />
-        <Stack.Screen name="Detail_Pose" component={Detail_Pose} />
-        <Stack.Screen name="Photo" component={Photo} />
-        <Stack.Screen name="MyPage_ProudPose" component={MyPage_ProudPose} />
-        <Stack.Screen name="MyPage_LikedPose" component={MyPage_LikedPose} />
-        <Stack.Screen name="UploadPose" component={UploadPose} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <UserProvider>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen
+            name="Signup"
+            component={Signup}
+            options={({}) => ({
+              title: "회원가입",
+              headerShown: true,
+              headerBackTitleVisible: false,
+            })}
+          />
+          <Stack.Screen name="Bottom" component={BottomTabScreen} />
+          <Stack.Screen name="Upload" component={Upload} />
+          <Stack.Screen name="TakePic" component={TakePic} />
+          <Stack.Screen
+            name="Detail_PhotoStory"
+            component={Detail_PhotoStory}
+          />
+          <Stack.Screen name="Detail_Pose" component={Detail_Pose} />
+          <Stack.Screen name="Photo" component={Photo} />
+          <Stack.Screen name="MyPage_ProudPose" component={MyPage_ProudPose} />
+          <Stack.Screen name="MyPage_LikedPose" component={MyPage_LikedPose} />
+          <Stack.Screen name="UploadPose" component={UploadPose} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </UserProvider>
   );
 }
