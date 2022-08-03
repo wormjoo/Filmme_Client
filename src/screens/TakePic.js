@@ -26,14 +26,14 @@ const TakePic = ({ route }) => {
   const [fourCut, setFourCut] = React.useState(null);
 
   const __startCamera = async () => {
-    setStartCamera(true)
-    // const {status} = await Camera.requestPermissionsAsync()
-    // console.log(status)
-    // if (status === 'granted') {
-    //   setStartCamera(true)
-    // } else {
-    //   Alert.alert('Access denied')
-    // }
+    //setStartCamera(true)
+    const {status} = await Camera.requestCameraPermissionsAsync()
+    console.log(status)
+    if (status === 'granted') {
+      setStartCamera(true)
+    } else {
+      Alert.alert('Access denied')
+    }
   }
   const __takePicture = async () => {
     const photo = await camera.takePictureAsync()
