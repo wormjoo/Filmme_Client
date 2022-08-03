@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -16,6 +16,8 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import Ionic from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
 import { UserContext } from "../contexts/User";
+import axios from 'axios';
+
 
 const devWidth = Dimensions.get("window").width;
 
@@ -31,7 +33,6 @@ export default function MyPage({ navigation }) {
   const [image, setImage] = useState(null);
 
   // 로그아웃
-  const { dispatch } = useContext(UserContext);
   const _handleLogoutButtonPress = async () => {
     dispatch({});
     navigation.navigate("Login");
@@ -82,7 +83,37 @@ export default function MyPage({ navigation }) {
   const [editName, setEditName] = useState(false);
 
   //닉네임
-  const [nickname, setNickname] = useState("User_1");
+  const [nickname, setNickname] = useState("");
+  const [level,setLevel] = useState("");
+  
+  const { dispatch, user } = useContext(UserContext);
+
+  useEffect(() => {
+    try {
+      axios({
+        method: 'get',
+        url: 'http://13.125.249.247/filme/mypage/myinfo',
+        headers: {
+          'x-access-token': `${user?.token}`,
+        },
+      })
+        .then(function (response) {
+          const result = response.data[0];
+          
+          setNickname(result.nickname);
+          setImage(result.profileURL);
+          setLevel (result.level);
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert( error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+    }
+  }, [user]);
 
   return (
     <View style={styles.container}>
@@ -171,7 +202,7 @@ export default function MyPage({ navigation }) {
               />{" "}
               until next Level
             </Text>
-            <Text>Level 1</Text>
+            <Text>Level {level}</Text>
           </View>
           <View style={styles.levelBar}>
             <View style={styles.level}></View>
