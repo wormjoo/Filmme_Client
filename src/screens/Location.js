@@ -13,6 +13,7 @@ export default function App() {
   const [disabled, setDisabled] = useState(true);
   const [address, setAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
+  const [locList, setLocList] = useState([]);
 
   const _handleDetailAddressChange = (address) => {
     setDetailAddress(address);
@@ -37,29 +38,39 @@ export default function App() {
       setLocation(location);
       setLatitude(Number(location.coords.latitude));
       setLongitude(Number(location.coords.longitude));
-      console.log(latitude);
     })();
     try {
       axios({
-        method: "fetch",
+        method: "get",
         url:
-          "https://maps.googleapis.com/maps/api/geocode/json?address=" +
-          latitude +
-          "," +
-          longitude +
-          "&key=" +
+          "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
+          "key=" +
           mApiKey +
-          "&language=ko",
-        params: {},
-        headers: {},
+          "&location=" +
+          "37.5653102" +
+          "," +
+          "126.921972" +
+          "&radius=5000" +
+          "&name=인생네컷",
       })
-        .then((response) => response.json())
-        .then((responseJson) => {
-          console.log(
-            "udonPeople " + responseJson.results[0].formatted_address
-          );
+        .then(function (response) {
+          console.log(response.data.results[0].geometry.location.lat);
+          const result = response.data.results;
+          const list = [];
+          for (let i = 0; i < result.length; i++) {
+            list.push({
+              lat: result[i].geometry.location.lat,
+              lng: result[i].geometry.location.lng,
+            });
+          }
+          setLocList(list);
         })
-        .catch((err) => console.log("udonPeople error : " + err));
+        .catch(function (error) {
+          console.log(error);
+          alert(error);
+        });
+    } catch (e) {
+      alert(e);
     } finally {
     }
   }, []);
@@ -70,6 +81,14 @@ export default function App() {
   } else if (location) {
     text = JSON.stringify(location);
   }
+  const mark = (locList) => {
+    for (let i = 0; i < locList.length; i++) {
+      <Marker
+        pinColor="#1E90FF"
+        coordinate={{ latitude: locList[i].lat, longitude: locList[i].lng }}
+      />;
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -83,10 +102,15 @@ export default function App() {
           longitudeDelta: 0.001, //경도 확대
         }}
       >
-        <Marker
-          pinColor="#1E90FF"
-          coordinate={{ latitude: latitude, longitude: longitude }}
-        />
+        {locList.map((data, index) => {
+          return (
+            <Marker
+              key={index}
+              pinColor="#1E90FF"
+              coordinate={{ latitude: data.lat, longitude: data.lng }}
+            />
+          );
+        })}
       </MapView>
     </View>
   );
@@ -102,7 +126,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   map: {
-    flex: 0.6,
+    flex: 1,
     top: 20,
     width: "100%",
     height: "100%",
