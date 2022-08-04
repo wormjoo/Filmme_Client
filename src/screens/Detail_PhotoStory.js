@@ -9,7 +9,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Feather from "react-native-vector-icons/Feather";
 import axios from "axios";
 
 export default function Detail_PhotoStory({ route, navigation }) {
@@ -51,12 +51,20 @@ export default function Detail_PhotoStory({ route, navigation }) {
       <View style={styles.header}>
         <View style={{ width: 40 }}></View>
         <Text style={{ fontSize: 22, fontWeight: "bold" }}>{date}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Upload")}>
-          <FontAwesome
-            name="pencil"
-            style={{ fontSize: 22, marginRight: 15, color: "#505050" }}
-          />
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity onPress={() => navigation.navigate("Upload")}>
+            <Feather
+              name="edit-2"
+              style={{ fontSize: 22, marginRight: 15, color: "#505050" }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Feather
+              name="trash-2"
+              style={{ fontSize: 22, marginRight: 15, color: "#505050" }}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.content}>
