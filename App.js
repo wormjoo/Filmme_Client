@@ -21,6 +21,7 @@ import Photo from "./src/screens/Photo";
 import MyPage_ProudPose from "./src/screens/MyPage_ProudPose";
 import MyPage_LikedPose from "./src/screens/MyPage_LikedPose";
 import UploadPose from "./src/screens/UploadPose";
+import SelectPhotoStory from "./src/screens/SelectPhotoStory";
 import { UserContext, UserProvider } from "./src/contexts/User";
 
 export default function App() {
@@ -192,6 +193,7 @@ export default function App() {
           <Stack.Screen name="MyPage_ProudPose" component={MyPage_ProudPose} />
           <Stack.Screen name="MyPage_LikedPose" component={MyPage_LikedPose} />
           <Stack.Screen name="UploadPose" component={UploadPose} />
+          <Stack.Screen name="SelectPhotoStory" component={SelectPhotoStory} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>

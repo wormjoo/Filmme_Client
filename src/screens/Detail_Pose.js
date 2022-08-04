@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Image, ImageBackground, Dimensions } from 'react-native';
 import AntDesign from "react-native-vector-icons/AntDesign";
+import { UserContext } from "../contexts/User";
 import axios from "axios";
 
 export default function Detail_Pose({ route }) {
@@ -16,16 +17,20 @@ export default function Detail_Pose({ route }) {
   const [likeCnt, setLikeCnt] = useState();
   const [views, setViews] = useState();
   const [isLike, setIsLike] = useState(false);
+  const { dispatch, user } = useContext(UserContext);
 
   useEffect(() => {
     try {
       axios({
         method: "get",
+        headers: {
+          'x-access-token': `${user?.token}`
+        },
         url: `http://13.125.249.247/filme/pose/${idx}`,
       })
           .then(function (response) {
             const result = response.data;
-
+            console.log(result);
             setUserIdx(result[0].idx);
             setProfile(result[0].profileURL);
             setNickname(result[0].name);

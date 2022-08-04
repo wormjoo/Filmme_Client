@@ -76,7 +76,7 @@ export default function PhotoStory({ navigation }) {
               }
               onLongPress={() => setModalVisible(!modalVisible)}
             >
-              <Image source={{ url: item.img }} style={styles.img} />
+              <Image source={{ uri: item.img }} style={styles.img} />
             </TouchableOpacity>
           )}
           numColumns={3}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import {
     StyleSheet,
     Text,
@@ -9,11 +9,14 @@ import {
     ImageBackground,
     Modal,
     Dimensions,
-    Image
+    Image,
+    Alert
 } from 'react-native';
 import * as ImagePicker from "expo-image-picker";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionic from "react-native-vector-icons/Ionicons";
+import {UserContext} from "../contexts/User";
+import axios from "axios";
 
 export default function UploadPose({ navigation }) {
 
@@ -26,6 +29,7 @@ export default function UploadPose({ navigation }) {
 
     //업로드 이미지@
     const [image, setImage] = useState(null);
+    const {user} = useContext(UserContext);
 
     //이미지 가져오는 함수
     const pickImage = async () => {
@@ -49,6 +53,36 @@ export default function UploadPose({ navigation }) {
         setImage(null);
         setupload(false);
     };
+
+    //업로드 버튼
+    const pressUploadBtn = useCallback(async() => {
+        if (!image) {
+            Alert.alert("이미지를 포함하여 업로드해주세요.");
+            return;
+        }
+        const form = new FormData();
+        const filename = image.split("/").pop();
+
+        form.append("image", {uri: image, name: filename});
+        console.log("ㅎㅇ");
+        console.log(form);
+        axios
+            .patch("http://13.125.249.247/filme/poseGallery", form, {
+                headers: {
+                    "x-access-token": `${user?.token}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((res) => {
+                Alert.alert("업로드 되었습니다.");
+                navigation.navigate("Pose");
+            })
+            .catch((err) => {
+                console.log(err);
+                Alert.alert("포즈 업로드 중 에러 발생");
+                navigation.navigate("Pose");
+            });
+    }, [image]);
 
     return (
         <ScrollView style={styles.container}>
@@ -93,7 +127,7 @@ export default function UploadPose({ navigation }) {
             </View>
 
             <View style={styles.ButtonSection}>
-                <TouchableOpacity style={styles.ButtonBox}>
+                <TouchableOpacity style={styles.ButtonBox} onPress={pressUploadBtn}>
                     <Text style={{ fontSize: 15, color: "#505050" }}>
                         업로드
                     </Text>
@@ -171,7 +205,7 @@ export default function UploadPose({ navigation }) {
                                     갤러리
                                 </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => navigation.navigate("PhotoStory")}>
+                            <TouchableOpacity onPress={() => navigation.navigate("SelectPhotoStory")}>
                                 <Image
                                     source={require("../../assets/icon.png")}
                                     style={{ width: 55, height: 55, margin: 5 }}

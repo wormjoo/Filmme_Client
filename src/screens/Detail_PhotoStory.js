@@ -16,7 +16,7 @@ export default function Detail_PhotoStory({ route, navigation }) {
   const storyIdx = route.params.idx;
   const [content, setContent] = useState("");
   const [date, setDate] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState();
 
   const devWidth = Dimensions.get("window").width;
   const devHeight = Dimensions.get("window").height;
@@ -77,7 +77,7 @@ export default function Detail_PhotoStory({ route, navigation }) {
             justifyContent: "center",
           }}
         >
-          <Image source={{ url: image }} style={styles.img} />
+          <Image source={{ uri: image }} style={styles.img} />
           <View style={{ height: 70 }}></View>
           <Text style={{ color: "#505050" }}>{content}</Text>
         </ImageBackground>
