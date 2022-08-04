@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState  ,useContext,useEffect } from 'react';
 import {
     StyleSheet,
     Text,
@@ -13,36 +13,55 @@ import {
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionic from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
+import { UserContext } from "../contexts/User";
+import axios from 'axios';
 
-const Images = [
-    {
-        id: '1',
-        img: require("../../storage/images/photo-1.png"),
-    },
-    {
-        id: '2',
-        img: require("../../storage/images/photo-2.png"),
-    },
-    {
-        id: '3',
-        img: require("../../storage/images/photo-3.png"),
-    },
-    {
-        id: '4',
-        img: require("../../storage/images/photo-4.png"),
-    },
-];
 
 const devWidth = Dimensions.get("window").width;
 
 export default function MyPage_ProudPose({ navigation }) {
 
+    const { dispatch, user } = useContext(UserContext);
+
     //사진 있는지 여부
     const [hasImg, setHasImg] = useState(true);
+    const [proudPoses,setProudPoses] = useState([]);
 
     //modal
     const [modalVisible, setModalVisible] = useState(false);
     const devHeight = Dimensions.get("window").height;
+
+    useEffect(() => {
+        try {
+          axios({
+            method: "get",
+            url: "http://13.125.249.247/filme/mypage/pose",
+            headers: {
+                'x-access-token': `${user?.token}`,
+              },
+          })
+            .then(function (response) {
+                        const result = response.data;
+                        const list = [];
+                        for (let i = 0; i < result.length; i++) {
+                            list.push({
+                                id: result[i].poseIdx,
+                                img: result[i].poseImgUrl,
+                            });
+                        }
+                        setProudPoses(list);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            } catch (e) {
+                console.log(e);
+                alert("Error", e);
+            } finally {
+            }
+        }, [user]);
+
+    
 
     return (
         <View style={styles.container}>
@@ -54,7 +73,7 @@ export default function MyPage_ProudPose({ navigation }) {
 
             {hasImg ? (
                 <FlatList
-                    data={Images}
+                    data={proudPoses}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
                         <TouchableOpacity
@@ -64,7 +83,7 @@ export default function MyPage_ProudPose({ navigation }) {
                             })}
                             onLongPress={() => setModalVisible(!modalVisible)}
                         >
-                            <Image source={item.img} style={styles.img} />
+                            <Image source={{uri : item.img}} style={styles.img} />
                         </TouchableOpacity>
                     )}
                     numColumns={3}
