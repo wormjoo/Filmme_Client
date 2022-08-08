@@ -57,7 +57,7 @@ export default function Pose({ navigation }) {
         alert("Error", e);
       } finally {
       }
-    }, [setPopularPoses, user]);
+    }, [popularPoses, setPopularPoses, user]);
 
     return (
       <View>
@@ -126,7 +126,7 @@ export default function Pose({ navigation }) {
         alert("Error", e);
       } finally {
       }
-    }, [setRecentPoses, user]);
+    }, [recentPoses, setRecentPoses, user]);
 
     return (
       <View>

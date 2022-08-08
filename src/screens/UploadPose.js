@@ -63,11 +63,12 @@ export default function UploadPose({ navigation }) {
         const form = new FormData();
         const filename = image.split("/").pop();
 
-        form.append("image", {uri: image, name: filename});
+        form.append("image", {uri: image, name: filename, type:'multipart/form-data'});
         console.log("ㅎㅇ");
         console.log(form);
+        console.log(image);
         axios
-            .patch("http://13.125.249.247/filme/poseGallery", form, {
+            .post("http://13.125.249.247/filme/poseGallery", form, {
                 headers: {
                     "x-access-token": `${user?.token}`,
                     "Content-Type": "multipart/form-data",
