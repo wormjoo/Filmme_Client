@@ -17,6 +17,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionic from "react-native-vector-icons/Ionicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
+import Tooltip from 'react-native-walkthrough-tooltip';
 import { UserContext } from "../contexts/User";
 import axios from "axios";
 
@@ -69,6 +70,64 @@ const Stamp = [
     final: true,
   },
 ];
+
+const Item = ({ stamp, final, totalstamp }) => {
+  const [showTip, setTip] = useState(false);
+  return (
+    <Tooltip
+      isVisible={showTip}
+      content={
+        stamp ?
+          (
+            <View>
+              <Text>스탬프 적립이 완료되었습니다!</Text>
+            </View>
+          )
+          :
+          (
+            <View>
+              <Text> 다음 레벨까지 {9 - totalstamp}개 남았습니다! </Text>
+            </View>
+          )
+      }
+      onClose={() => setTip(false)}
+      placement="bottom"
+    //topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
+    >
+      <TouchableOpacity
+        style={{
+          margin: 7,
+          borderWidth: 2,
+          borderRadius: 100,
+          borderColor: stamp ? '#505050' : '#C8C8C8',
+          padding: 15,
+          justifyContent: 'center',
+        }}
+        onPress={() => setTip(true)}
+      >
+        {final ?
+          (<Text
+            style={{
+              textAlign: 'center',
+              color: stamp ? '#505050' : '#C8C8C8',
+              fontSize: 15,
+              fontWeight: '900',
+            }}>
+            Level {'\n'} UP
+          </Text>)
+          : (
+            <FontAwesome
+              name='hand-peace-o'
+              style={{
+                fontSize: devWidth * 0.11,
+                color: stamp ? '#505050' : '#C8C8C8'
+              }} />
+          )}
+      </TouchableOpacity>
+    </Tooltip>
+
+  );
+};
 
 export default function MyPage({ navigation }) {
   //이미지 업로드 여부
@@ -128,7 +187,9 @@ export default function MyPage({ navigation }) {
   //레벨
   const [level, setLevel] = useState("");
   //도장개수
-  const [stamp, setStamp] = useState(2);
+  const [totalstamp, setTotalstamp] = useState(2);
+
+  const renderItem = ({ item }) => <Item stamp={item.stamp} final={item.final} totalstamp={totalstamp} />;
 
   const { dispatch, user } = useContext(UserContext);
 
@@ -250,53 +311,74 @@ export default function MyPage({ navigation }) {
         <View style={styles.stampBox}>
           <View style={styles.stampText}>
             <Text style={{ fontSize: 15 }}>스탬프 적립</Text>
-            <Text style={{ fontSize: 12, color: '#505050' }}>{stamp}/9</Text>
+            <Text style={{ fontSize: 12, color: '#505050' }}>{totalstamp}/9</Text>
           </View>
           <View style={styles.stamp}>
             <FlatList
               data={Stamp}
               keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={{
-                    margin: 10,
-                    borderWidth: 2,
-                    borderRadius: 100,
-                    borderColor: item.stamp ? '#505050' : '#C8C8C8',
-                    padding: 15,
-                    justifyContent: 'center',
-                  }}
-                  onPress={() =>
-                    navigation.navigate("Detail_PhotoStory", { idx: item.id })
-                  }
-                >
-                  {item.final ?
-                    (<Text
-                      style={{
-                        textAlign: 'center',
-                        color: item.stamp ? '#505050' : '#C8C8C8',
-                        fontSize: 15,
-                        fontWeight: '900',
-                      }}>
-                      Level {'\n'} UP 
-                    </Text>)
-                    : (
-                      <FontAwesome
-                        name='hand-peace-o'
-                        style={{
-                          fontSize: devWidth * 0.11,
-                          color: item.stamp ? '#505050' : '#C8C8C8'
-                        }} />
-                    )}
-                  {/* <Image source={{ uri: item.img }} style={styles.img} /> */}
-                </TouchableOpacity>
-              )}
+              renderItem={renderItem}
+              // renderItem={({ item }) => (
+              //   <Tooltip
+              //     isVisible={showTip}
+              //     content={
+              //       <View>
+              //         <Text> 다음 레벨까지 {9-stamp}개 남았습니다! </Text>
+              //       </View>
+              //     }
+              //     onClose={() => setTip(false)}
+              //     placement="bottom"
+              //     // below is for the status bar of react navigation bar
+              //     topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
+              //   >
+              //     <TouchableOpacity
+              //     style={{
+              //       margin: 10,
+              //       borderWidth: 2,
+              //       borderRadius: 100,
+              //       borderColor: item.stamp ? '#505050' : '#C8C8C8',
+              //       padding: 15,
+              //       justifyContent: 'center',
+              //     }}
+              //     onPress={() => setTip(true)}
+              //   >
+              //     {item.final ?
+              //       (<Text
+              //         style={{
+              //           textAlign: 'center',
+              //           color: item.stamp ? '#505050' : '#C8C8C8',
+              //           fontSize: 15,
+              //           fontWeight: '900',
+              //         }}>
+              //         Level {'\n'} UP 
+              //       </Text>)
+              //       : (
+              //         <FontAwesome
+              //           name='hand-peace-o'
+              //           style={{
+              //             fontSize: devWidth * 0.11,
+              //             color: item.stamp ? '#505050' : '#C8C8C8'
+              //           }} />
+              //       )}
+              //     {/* <Image source={{ uri: item.img }} style={styles.img} /> */}
+              //   </TouchableOpacity>
+              //     {/* // <TouchableOpacity
+              //     //   style={[{ backgroundColor: 'yellow', width: '100%', marginTop: 20 }, styles.button]}
+              //     //   }
+              //     // >
+              //     //   <Text>Show ToolTip</Text>
+              //     // </TouchableOpacity> */}
+              //   </Tooltip>
+
+              // )}
               numColumns={3}
               showsVerticalScrollIndicator={false}
             />
           </View>
         </View>
       </View>
+
+
 
 
       <Modal
