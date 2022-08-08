@@ -10,15 +10,65 @@ import {
   Dimensions,
   TextInput,
   ScrollView,
+  FlatList,
 } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionic from "react-native-vector-icons/Ionicons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
 import { UserContext } from "../contexts/User";
 import axios from "axios";
 
 const devWidth = Dimensions.get("window").width;
+
+const Stamp = [
+  {
+    id: "1",
+    stamp: true,
+    final: false,
+  },
+  {
+    id: "2",
+    stamp: true,
+    final: false,
+  },
+  {
+    id: "3",
+    stamp: false,
+    final: false,
+  },
+  {
+    id: "4",
+    stamp: false,
+    final: false,
+  },
+  {
+    id: "5",
+    stamp: false,
+    final: false,
+  },
+  {
+    id: "6",
+    stamp: false,
+    final: false,
+  },
+  {
+    id: "7",
+    stamp: false,
+    final: false,
+  },
+  {
+    id: "8",
+    stamp: false,
+    final: false,
+  },
+  {
+    id: "9",
+    stamp: false,
+    final: true,
+  },
+];
 
 export default function MyPage({ navigation }) {
   //이미지 업로드 여부
@@ -73,10 +123,12 @@ export default function MyPage({ navigation }) {
 
   //닉네임 편집 버튼 클릭 여부
   const [editName, setEditName] = useState(false);
-
   //닉네임
   const [nickname, setNickname] = useState("");
+  //레벨
   const [level, setLevel] = useState("");
+  //도장개수
+  const [stamp, setStamp] = useState(2);
 
   const { dispatch, user } = useContext(UserContext);
 
@@ -108,7 +160,7 @@ export default function MyPage({ navigation }) {
   }, [user]);
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
 
       <View style={styles.profileSection}>
@@ -190,6 +242,58 @@ export default function MyPage({ navigation }) {
           </View>
           <View style={styles.levelBar}>
             <View style={styles.level}></View>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.stampSection}>
+        <View style={styles.stampBox}>
+          <View style={styles.stampText}>
+            <Text style={{ fontSize: 15 }}>스탬프 적립</Text>
+            <Text style={{ fontSize: 12, color: '#505050' }}>{stamp}/9</Text>
+          </View>
+          <View style={styles.stamp}>
+            <FlatList
+              data={Stamp}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={{
+                    margin: 10,
+                    borderWidth: 2,
+                    borderRadius: 100,
+                    borderColor: item.stamp ? '#505050' : '#C8C8C8',
+                    padding: 15,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() =>
+                    navigation.navigate("Detail_PhotoStory", { idx: item.id })
+                  }
+                >
+                  {item.final ?
+                    (<Text
+                      style={{
+                        textAlign: 'center',
+                        color: item.stamp ? '#505050' : '#C8C8C8',
+                        fontSize: 15,
+                        fontWeight: '900',
+                      }}>
+                      Level {'\n'} UP 
+                    </Text>)
+                    : (
+                      <FontAwesome
+                        name='hand-peace-o'
+                        style={{
+                          fontSize: devWidth * 0.11,
+                          color: item.stamp ? '#505050' : '#C8C8C8'
+                        }} />
+                    )}
+                  {/* <Image source={{ uri: item.img }} style={styles.img} /> */}
+                </TouchableOpacity>
+              )}
+              numColumns={3}
+              showsVerticalScrollIndicator={false}
+            />
           </View>
         </View>
       </View>
@@ -300,7 +404,7 @@ export default function MyPage({ navigation }) {
           </View>
         </View>
       </Modal>
-    </ScrollView>
+    </View>
   );
 }
 
@@ -367,5 +471,28 @@ const styles = StyleSheet.create({
     height: 10,
     backgroundColor: "#C8C8C8",
     borderRadius: 20,
+  },
+  stampSection: {
+    margin: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  stampBox: {
+    width: devWidth - 60, //350,
+    //backgroundColor: "#fff",
+    borderRadius: 20,
+    borderColor: '#E8E8E8',
+    borderWidth: 2,
+  },
+  stampText: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 15,
+    marginTop: 15,
+  },
+  stamp: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
   },
 });

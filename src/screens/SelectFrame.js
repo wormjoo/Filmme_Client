@@ -50,7 +50,7 @@ const Item = ({ frame, chk }) => {
   const navigation = useNavigation();
 
   return (
-    <View style={{ margin: 10 }}>
+    <View style={{ margin: 5 }}>
       <ImageBackground source={frame} style={styles.frame}>
         <TouchableOpacity
           onPress={() =>
@@ -115,8 +115,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   frame: {
-    width: 160,
-    height: 240,
+    width: devWidth/2.2, //160,
+    height: devWidth*(15/22), //240,
   },
   chkIcon: {
     margin: 5,
