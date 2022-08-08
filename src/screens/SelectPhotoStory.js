@@ -62,7 +62,7 @@ const Item = React.memo(
                             }}>
                             <AntDesign
                                 name={check ? "checkcircle" : "checkcircleo"}
-                                style={{fontSize: 20, color: '#ffbfbf'}}/>
+                                style={{fontSize: 20, color: '#C8C8C8'}}/>
                         </TouchableOpacity>
 
 

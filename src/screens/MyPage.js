@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import Fontisto from "react-native-vector-icons/Fontisto";
 import Ionic from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
 import { UserContext } from "../contexts/User";
@@ -32,12 +31,6 @@ export default function MyPage({ navigation }) {
   //업로드 이미지@
   const [image, setImage] = useState(null);
 
-  // 로그아웃
-  const _handleLogoutButtonPress = async () => {
-    dispatch({});
-    navigation.navigate("Login");
-  };
-
   //이미지 가져오는 함수
   const pickImage = async () => {
     setupload(true);
@@ -47,7 +40,6 @@ export default function MyPage({ navigation }) {
       allowsEditing: true,
       quality: 1,
     });
-
     if (!result.cancelled) {
       setImage(result.uri);
     } else if (result.cancelled) {
@@ -202,39 +194,6 @@ export default function MyPage({ navigation }) {
         </View>
       </View>
 
-      <View style={styles.menuSection}>
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => navigation.navigate("MyPage_ProudPose")}
-        >
-          <Fontisto
-            name="angelist"
-            style={[styles.menuFont, { fontSize: 21 }]}
-          />
-          <Text style={styles.menuFont}> 내가 자랑한 포즈</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => navigation.navigate("MyPage_LikedPose")}
-        >
-          <Fontisto name="heart-alt" style={styles.menuFont} />
-          <Text style={styles.menuFont}> 좋아요한 포즈</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <AntDesign name="notification" style={styles.menuFont} />
-          <Text style={styles.menuFont}> 공지사항</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <AntDesign name="questioncircleo" style={styles.menuFont} />
-          <Text style={styles.menuFont}> 문의하기</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={_handleLogoutButtonPress}
-          style={{ margin: 10 }}
-        >
-          <Text style={{ fontSize: 13, color: "#A8A8A8" }}>로그아웃</Text>
-        </TouchableOpacity>
-      </View>
 
       <Modal
         animationType="fade"
@@ -408,22 +367,5 @@ const styles = StyleSheet.create({
     height: 10,
     backgroundColor: "#C8C8C8",
     borderRadius: 20,
-  },
-  menuSection: {
-    margin: 10,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  menuItem: {
-    alignItems: "center",
-    width: devWidth - 60, //350,
-    padding: 15,
-    borderBottomColor: "#E8E8E8",
-    borderBottomWidth: 1,
-    flexDirection: "row",
-  },
-  menuFont: {
-    fontSize: 18,
-    marginHorizontal: 5,
   },
 });

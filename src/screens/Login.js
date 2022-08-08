@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   logoSection: {
-    margin: 50,
+    margin: 70,
     alignItems: "center",
   },
   inputSection: {

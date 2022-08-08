@@ -22,6 +22,7 @@ import MyPage_ProudPose from "./src/screens/MyPage_ProudPose";
 import MyPage_LikedPose from "./src/screens/MyPage_LikedPose";
 import UploadPose from "./src/screens/UploadPose";
 import SelectPhotoStory from "./src/screens/SelectPhotoStory";
+import Menu from "./src/screens/Menu";
 import { UserContext, UserProvider } from "./src/contexts/User";
 
 export default function App() {
@@ -73,7 +74,8 @@ export default function App() {
             title: "포토스토리",
             headerShown: true,
             headerTitleStyle: {
-              fontSize: 17,
+              fontSize: 22,
+              fontWeight: 'bold',
             },
             headerRight: () => (
               <TouchableOpacity onPress={() => navigation.navigate("Upload")}>
@@ -83,6 +85,7 @@ export default function App() {
                 />
               </TouchableOpacity>
             ),
+            headerTitleAlign: 'center',
           }}
         />
         <Tab.Screen
@@ -93,7 +96,8 @@ export default function App() {
             headerShown: true,
             headerShadowVisible: false,
             headerTitleStyle: {
-              fontSize: 17,
+              fontSize: 22,
+              fontWeight: 'bold',
             },
             headerRight: () => (
               <TouchableOpacity
@@ -105,6 +109,7 @@ export default function App() {
                 />
               </TouchableOpacity>
             ),
+            headerTitleAlign: 'center',
           }}
         />
         <Tab.Screen
@@ -114,8 +119,10 @@ export default function App() {
             title: "프레임선택",
             headerShown: true,
             headerTitleStyle: {
-              fontSize: 17,
+              fontSize: 22,
+              fontWeight: 'bold',
             },
+            headerTitleAlign: 'center',
           }}
         />
         <Tab.Screen
@@ -125,8 +132,10 @@ export default function App() {
             title: "포토부스위치",
             headerShown: true,
             headerTitleStyle: {
-              fontSize: 17,
+              fontSize: 22,
+              fontWeight: 'bold',
             },
+            headerTitleAlign: 'center',
           }}
         />
         <Tab.Screen
@@ -136,16 +145,20 @@ export default function App() {
             title: "마이페이지",
             headerShown: true,
             headerTitleStyle: {
-              fontSize: 17,
+              fontSize: 22,
+              fontWeight: 'bold',
             },
             headerRight: () => (
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Menu")}
+              >
                 <Feather
                   name="menu"
                   style={{ fontSize: 22, marginRight: 15 }}
                 />
               </TouchableOpacity>
             ),
+            headerTitleAlign: 'center',
           }}
         />
       </Tab.Navigator>
@@ -160,14 +173,14 @@ export default function App() {
           <Stack.Screen
             name="Login"
             component={Login}
-            options={{
-              title: "로그인",
-              headerShown: true,
-              headerBackTitleVisible: false,
-              headerTitleStyle: {
-                fontSize: 17,
-              },
-            }}
+          // options={{
+          //   title: "로그인",
+          //   headerShown: true,
+          //   headerBackTitleVisible: false,
+          //   headerTitleStyle: {
+          //     fontSize: 17,
+          //   },
+          // }}
           />
           <Stack.Screen
             name="Signup"
@@ -177,23 +190,35 @@ export default function App() {
               headerShown: true,
               headerBackTitleVisible: false,
               headerTitleStyle: {
-                fontSize: 17,
+                fontSize: 20,
+                fontWeight: 'bold',
               },
+              headerTitleAlign: 'center',
             }}
           />
           <Stack.Screen name="Bottom" component={BottomTabScreen} />
           <Stack.Screen name="Upload" component={Upload} />
           <Stack.Screen name="TakePic" component={TakePic} />
-          <Stack.Screen
-            name="Detail_PhotoStory"
-            component={Detail_PhotoStory}
-          />
+          <Stack.Screen name="Detail_PhotoStory" component={Detail_PhotoStory} />
           <Stack.Screen name="Detail_Pose" component={Detail_Pose} />
           <Stack.Screen name="Photo" component={Photo} />
           <Stack.Screen name="MyPage_ProudPose" component={MyPage_ProudPose} />
           <Stack.Screen name="MyPage_LikedPose" component={MyPage_LikedPose} />
           <Stack.Screen name="UploadPose" component={UploadPose} />
           <Stack.Screen name="SelectPhotoStory" component={SelectPhotoStory} />
+          <Stack.Screen
+            name="Menu"
+            component={Menu}
+            options={{
+              title: "메뉴",
+              headerShown: true,
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: 'bold',
+              },
+              headerTitleAlign: 'center',
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>
