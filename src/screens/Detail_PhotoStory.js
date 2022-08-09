@@ -1,4 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useContext,
+  useCallback,
+} from "react";
 import {
   StyleSheet,
   Text,
@@ -8,8 +14,10 @@ import {
   ImageBackground,
   Image,
   Dimensions,
+  Alert,
 } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
+import { UserContext } from "../contexts/User";
 import axios from "axios";
 
 export default function Detail_PhotoStory({ route, navigation }) {
@@ -18,8 +26,7 @@ export default function Detail_PhotoStory({ route, navigation }) {
   const [date, setDate] = useState("");
   const [image, setImage] = useState();
 
-  const devWidth = Dimensions.get("window").width;
-  const devHeight = Dimensions.get("window").height;
+  const { user, dispatch } = useContext(UserContext);
 
   useEffect(() => {
     try {
@@ -44,13 +51,35 @@ export default function Detail_PhotoStory({ route, navigation }) {
     }
   }, [storyIdx]);
 
-  return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
+  const _handleDeletePress = useCallback(async () => {
+    try {
+      axios({
+        method: "patch",
+        url: "http://13.125.249.247/filme/story/" + storyIdx,
+      })
+        .then(function (response) {
+          dispatch({
+            userIdx: user.userIdx,
+            identification: user.identification,
+            token: user.token,
+          });
+          alert("삭제되었습니다.");
+          navigation.navigate("PhotoStory");
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert("Error", e);
+    } finally {
+    }
+  }, [user, dispatch, storyIdx]);
 
-      <View style={styles.header}>
-        <View style={{ width: 40 }}></View>
-        <Text style={{ fontSize: 22, fontWeight: "bold" }}>{date}</Text>
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             onPress={() =>
@@ -67,15 +96,19 @@ export default function Detail_PhotoStory({ route, navigation }) {
               style={{ fontSize: 22, marginRight: 15, color: "#505050" }}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={_handleDeletePress}>
             <Feather
               name="trash-2"
               style={{ fontSize: 22, marginRight: 15, color: "#505050" }}
             />
           </TouchableOpacity>
         </View>
-      </View>
+      ),
+    });
+  }, [navigation]);
 
+  return (
+    <View style={styles.container}>
       <View style={styles.content}>
         <ImageBackground
           source={require("../../storage/images/detail-photoStory.png")}

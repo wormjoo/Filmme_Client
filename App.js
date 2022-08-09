@@ -75,7 +75,7 @@ export default function App() {
             headerShown: true,
             headerTitleStyle: {
               fontSize: 22,
-              fontWeight: 'bold',
+              fontWeight: "bold",
             },
             headerRight: () => (
               <TouchableOpacity onPress={() => navigation.navigate("Upload")}>
@@ -85,7 +85,7 @@ export default function App() {
                 />
               </TouchableOpacity>
             ),
-            headerTitleAlign: 'center',
+            headerTitleAlign: "center",
           }}
         />
         <Tab.Screen
@@ -97,7 +97,7 @@ export default function App() {
             headerShadowVisible: false,
             headerTitleStyle: {
               fontSize: 22,
-              fontWeight: 'bold',
+              fontWeight: "bold",
             },
             headerRight: () => (
               <TouchableOpacity
@@ -109,7 +109,7 @@ export default function App() {
                 />
               </TouchableOpacity>
             ),
-            headerTitleAlign: 'center',
+            headerTitleAlign: "center",
           }}
         />
         <Tab.Screen
@@ -120,9 +120,9 @@ export default function App() {
             headerShown: true,
             headerTitleStyle: {
               fontSize: 22,
-              fontWeight: 'bold',
+              fontWeight: "bold",
             },
-            headerTitleAlign: 'center',
+            headerTitleAlign: "center",
           }}
         />
         <Tab.Screen
@@ -133,9 +133,9 @@ export default function App() {
             headerShown: true,
             headerTitleStyle: {
               fontSize: 22,
-              fontWeight: 'bold',
+              fontWeight: "bold",
             },
-            headerTitleAlign: 'center',
+            headerTitleAlign: "center",
           }}
         />
         <Tab.Screen
@@ -146,26 +146,23 @@ export default function App() {
             headerShown: true,
             headerTitleStyle: {
               fontSize: 22,
-              fontWeight: 'bold',
+              fontWeight: "bold",
             },
             headerRight: () => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate("Menu")}
-              >
+              <TouchableOpacity onPress={() => navigation.navigate("Menu")}>
                 <Feather
                   name="menu"
                   style={{ fontSize: 22, marginRight: 15 }}
                 />
               </TouchableOpacity>
             ),
-            headerTitleAlign: 'center',
+            headerTitleAlign: "center",
           }}
         />
       </Tab.Navigator>
     );
   };
 
-  const { user } = useContext(UserContext);
   return (
     <UserProvider>
       <NavigationContainer>
@@ -173,14 +170,14 @@ export default function App() {
           <Stack.Screen
             name="Login"
             component={Login}
-          // options={{
-          //   title: "로그인",
-          //   headerShown: true,
-          //   headerBackTitleVisible: false,
-          //   headerTitleStyle: {
-          //     fontSize: 17,
-          //   },
-          // }}
+            // options={{
+            //   title: "로그인",
+            //   headerShown: true,
+            //   headerBackTitleVisible: false,
+            //   headerTitleStyle: {
+            //     fontSize: 17,
+            //   },
+            // }}
           />
           <Stack.Screen
             name="Signup"
@@ -191,15 +188,29 @@ export default function App() {
               headerBackTitleVisible: false,
               headerTitleStyle: {
                 fontSize: 20,
-                fontWeight: 'bold',
+                fontWeight: "bold",
               },
-              headerTitleAlign: 'center',
+              headerTitleAlign: "center",
             }}
           />
           <Stack.Screen name="Bottom" component={BottomTabScreen} />
           <Stack.Screen name="Upload" component={Upload} />
           <Stack.Screen name="TakePic" component={TakePic} />
-          <Stack.Screen name="Detail_PhotoStory" component={Detail_PhotoStory} />
+          <Stack.Screen
+            name="Detail_PhotoStory"
+            component={Detail_PhotoStory}
+            options={({ route }) => ({
+              title: route.params.date,
+              headerShown: true,
+              headerBackTitleVisible: false,
+              headerShadowVisible: false,
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: "bold",
+              },
+              headerTitleAlign: "center",
+            })}
+          />
           <Stack.Screen name="Detail_Pose" component={Detail_Pose} />
           <Stack.Screen name="Photo" component={Photo} />
           <Stack.Screen name="MyPage_ProudPose" component={MyPage_ProudPose} />
@@ -214,9 +225,9 @@ export default function App() {
               headerShown: true,
               headerTitleStyle: {
                 fontSize: 20,
-                fontWeight: 'bold',
+                fontWeight: "bold",
               },
-              headerTitleAlign: 'center',
+              headerTitleAlign: "center",
             }}
           />
         </Stack.Navigator>
