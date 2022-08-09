@@ -23,6 +23,7 @@ import MyPage_LikedPose from "./src/screens/MyPage_LikedPose";
 import UploadPose from "./src/screens/UploadPose";
 import SelectPhotoStory from "./src/screens/SelectPhotoStory";
 import Menu from "./src/screens/Menu";
+import FriendProfile from "./src/screens/FriendProfile";
 import { UserContext, UserProvider } from "./src/contexts/User";
 
 export default function App() {
@@ -170,14 +171,14 @@ export default function App() {
           <Stack.Screen
             name="Login"
             component={Login}
-            // options={{
-            //   title: "로그인",
-            //   headerShown: true,
-            //   headerBackTitleVisible: false,
-            //   headerTitleStyle: {
-            //     fontSize: 17,
-            //   },
-            // }}
+          // options={{
+          //   title: "로그인",
+          //   headerShown: true,
+          //   headerBackTitleVisible: false,
+          //   headerTitleStyle: {
+          //     fontSize: 17,
+          //   },
+          // }}
           />
           <Stack.Screen
             name="Signup"
@@ -229,6 +230,20 @@ export default function App() {
               },
               headerTitleAlign: "center",
             }}
+          />
+          <Stack.Screen
+            name="FriendProfile"
+            component={FriendProfile}
+            options={({ route }) => ({
+              title: route.params.nickname + "님의 포토스토리",
+              headerShown: true,
+              headerBackTitleVisible: false,
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: "bold",
+              },
+              headerTitleAlign: "center",
+            })}
           />
         </Stack.Navigator>
       </NavigationContainer>

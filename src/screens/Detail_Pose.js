@@ -13,7 +13,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { UserContext } from "../contexts/User";
 import axios from "axios";
 
-export default function Detail_Pose({ route }) {
+export default function Detail_Pose({ route, navigation }) {
   const devWidth = Dimensions.get("window").width;
   const devHeight = Dimensions.get("window").height;
 
@@ -87,6 +87,34 @@ export default function Detail_Pose({ route }) {
     }
   }, [user, idx, setIsLike, isLike, setLikeCnt, likeCnt]);
 
+  /////////
+  const [userNickname, setUserNickname] = useState("");
+  useEffect(() => {
+    try {
+      axios({
+        method: "get",
+        url: "http://13.125.249.247/filme/mypage/myinfo",
+        headers: {
+          "x-access-token": `${user?.token}`,
+        },
+      })
+        .then(function (response) {
+          const result = response.data[0];
+
+          setUserNickname(result.nickname);
+
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+    }
+  }, [user]);
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
@@ -96,7 +124,16 @@ export default function Detail_Pose({ route }) {
       </View>
 
       <View style={styles.profileSection}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={
+            userNickname === nickname ?
+              () => navigation.navigate("MyPage")
+              :
+              () => navigation.navigate("FriendProfile", {
+                nickname: nickname,
+                profile: profile,
+              })}
+        >
           <Image source={{ uri: `${profile}` }} style={styles.profile} />
         </TouchableOpacity>
         <Text style={styles.nickname}>{nickname}</Text>
