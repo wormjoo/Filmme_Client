@@ -15,32 +15,32 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 const Frames = [
   {
     id: "1",
-    frame: require("../../storage/images/photois-red.png"),
+    frame: require("../../storage/images/frame1.png"),
     chk: false,
   },
   {
     id: "2",
-    frame: require("../../storage/images/photois-orange.png"),
+    frame: require("../../storage/images/frame2.png"),
     chk: false,
   },
   {
     id: "3",
-    frame: require("../../storage/images/photois-yw.png"),
+    frame: require("../../storage/images/frame3.png"),
     chk: false,
   },
   {
     id: "4",
-    frame: require("../../storage/images/photois-mint.png"),
+    frame: require("../../storage/images/frame4.png"),
     chk: false,
   },
   {
     id: "5",
-    frame: require("../../storage/images/photois-skyblue.png"),
+    frame: require("../../storage/images/frame5.png"),
     chk: false,
   },
   {
     id: "6",
-    frame: require("../../storage/images/photois-blue.png"),
+    frame: require("../../storage/images/frame6.png"),
     chk: false,
   },
 ];
@@ -115,8 +115,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   frame: {
-    width: devWidth/2.2, //160,
-    height: devWidth*(15/22), //240,
+    width: devWidth / 2.2, //160,
+    height: devWidth * (15 / 22), //240,
   },
   chkIcon: {
     margin: 5,

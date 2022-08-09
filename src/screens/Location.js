@@ -20,9 +20,10 @@ export default function App() {
   };
 
   const mApiKey = "AIzaSyBCIAtcRlEpIlXq1Rv9xYlsXz_Xav5mq0I";
+
   useEffect(() => {
     (async () => {
-      if (Platform.OS === "android" && !Constants.isDevice) {
+      if (Platform.OS === "android") {
         setErrorMsg(
           "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
         );
@@ -38,42 +39,41 @@ export default function App() {
       setLocation(location);
       setLatitude(Number(location.coords.latitude));
       setLongitude(Number(location.coords.longitude));
-    })();
-    try {
-      axios({
-        method: "get",
-        url:
-          "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
-          "key=" +
-          mApiKey +
-          "&location=" +
-          latitude +
-          "," +
-          longitude +
-          "&radius=5000" +
-          "&name=인생네컷",
-      })
-        .then(function (response) {
-          console.log(response.data.results[0].geometry.location.lat);
-          const result = response.data.results;
+      console.log(longitude, latitude);
+
+      await axios
+        .get(
+          "https://dapi.kakao.com/v2/local/search/keyword?query=즉석사진" +
+            "&x=" +
+            longitude +
+            "&y=" +
+            latitude +
+            "&radius=5000",
+          {
+            headers: {
+              Authorization: "KakaoAK 593cba0bc3ea7f52024615b72630d3ee",
+            },
+          }
+        )
+        .then((res) => {
+          const result = res.data.documents;
           const list = [];
           for (let i = 0; i < result.length; i++) {
             list.push({
-              lat: result[i].geometry.location.lat,
-              lng: result[i].geometry.location.lng,
+              id: i,
+              lat: result[i].y,
+              lng: result[i].x,
+              name: result[i].place_name,
             });
           }
           setLocList(list);
+          console.log(list);
         })
-        .catch(function (error) {
-          console.log(error);
-          alert(error);
+        .catch((err) => {
+          Alert.alert(err);
         });
-    } catch (e) {
-      alert(e);
-    } finally {
-    }
-  }, []);
+    })();
+  }, [longitude, latitude]);
 
   let text = "Waiting..";
   if (errorMsg) {
@@ -81,20 +81,22 @@ export default function App() {
   } else if (location) {
     text = JSON.stringify(location);
   }
-  const mark = (locList) => {
-    for (let i = 0; i < locList.length; i++) {
-      <Marker
-        pinColor="#1E90FF"
-        coordinate={{ latitude: locList[i].lat, longitude: locList[i].lng }}
-      />;
-    }
-  };
+  // const mark = (locList) => {
+  //   for (let i = 0; i < locList.length; i++) {
+  //     <Marker
+  //       pinColor="#1E90FF"
+  //       coordinate={{ latitude: locList[i].lat, longitude: locList[i].lng }}
+  //     />;
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}
+        showsMyLocationButton={true}
+        showsUserLocation={true}
         region={{
           latitude: latitude,
           longitude: longitude,
@@ -102,12 +104,17 @@ export default function App() {
           longitudeDelta: 0.001, //경도 확대
         }}
       >
-        {locList.map((data, index) => {
+        {locList.map((marker) => {
           return (
             <Marker
-              key={index}
+              key={marker.id}
               pinColor="#1E90FF"
-              coordinate={{ latitude: data.lat, longitude: data.lng }}
+              coordinate={{
+                latitude: marker.lat,
+                longitude: marker.lng,
+              }}
+              title={marker.name}
+              description={marker.name + "입니다"}
             />
           );
         })}
