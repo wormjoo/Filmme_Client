@@ -112,7 +112,7 @@ export default function Upload({ route, navigation }) {
     showMode("date");
   };
 
-  //업로드버튼 클릭시
+  // 업로드버튼 클릭시
   const uploadButton = useCallback(async () => {
     try {
       if (!image) {
@@ -148,6 +148,11 @@ export default function Upload({ route, navigation }) {
           },
         })
         .then(function (response) {
+          dispatch({
+            userIdx: user.userIdx,
+            identification: user.identification,
+            token: user.token,
+          });
           navigation.dispatch(CommonActions.navigate("PhotoStory"));
           return response.data;
         })
@@ -160,6 +165,44 @@ export default function Upload({ route, navigation }) {
     } finally {
     }
   }, [image, content, date, user, dispatch]);
+
+  // 수정버튼 클릭시
+  const editButton = useCallback(async () => {
+    try {
+      axios
+        .put("http://13.125.249.247/filme/story/" + storyIdx, {
+          imageURL: `${image}`,
+          content: `${content}`,
+          date: `${
+            date.getFullYear() +
+            "-" +
+            (date.getMonth() + 1 > 9
+              ? (date.getMonth() + 1).toString()
+              : "0" + (date.getMonth() + 1)) +
+            "-" +
+            (date.getDate() > 9
+              ? date.getDate().toString()
+              : "0" + date.getDate().toString())
+          }`,
+        })
+        .then(function (response) {
+          dispatch({
+            userIdx: user.userIdx,
+            identification: user.identification,
+            token: user.token,
+          });
+          navigation.dispatch(CommonActions.navigate("PhotoStory"));
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert("Error", error);
+        });
+    } catch (e) {
+      alert(e);
+    } finally {
+    }
+  }, [image, content, date, user, dispatch, storyIdx]);
 
   if (storyIdx > 0) {
     return (
@@ -241,7 +284,7 @@ export default function Upload({ route, navigation }) {
         </View>
 
         <View style={styles.ButtonSection}>
-          <TouchableOpacity style={styles.ButtonBox}>
+          <TouchableOpacity style={styles.ButtonBox} onPress={editButton}>
             <Text style={{ fontSize: 15, color: "#505050" }}>수정</Text>
           </TouchableOpacity>
         </View>
