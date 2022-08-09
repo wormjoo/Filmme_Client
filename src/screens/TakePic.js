@@ -246,7 +246,11 @@ const TakePic = ({ route }) => {
           <View style={{ flex: 1, justifyContent: "center", marginTop: 20 }}>
             <Image
               source={frame}
-              style={{ width: devWidth, height: devWidth * 1.5 }}
+              style={{
+                width: devWidth,
+                height: devWidth * 1.5,
+                backgroundColor: "#f5f5f5",
+              }}
             />
           </View>
 

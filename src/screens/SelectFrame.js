@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   frame: {
+    backgroundColor: "#f5f5f5",
     width: devWidth / 2.2, //160,
     height: devWidth * (15 / 22), //240,
   },
