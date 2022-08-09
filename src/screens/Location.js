@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { Platform, Text, View, StyleSheet, Alert } from "react-native";
+import { Platform, Text, View, StyleSheet, Alert, Image } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
+import MapStyle from "../components/MarkerStyle";
 import axios from "axios";
 
 export default function App() {
@@ -40,7 +41,9 @@ export default function App() {
       setLatitude(Number(location.coords.latitude));
       setLongitude(Number(location.coords.longitude));
       console.log(longitude, latitude);
-
+      console.log(status);
+      let list = [];
+      let length = 0;
       await axios
         .get(
           "https://dapi.kakao.com/v2/local/search/keyword?query=즉석사진" +
@@ -57,23 +60,52 @@ export default function App() {
         )
         .then((res) => {
           const result = res.data.documents;
-          const list = [];
           for (let i = 0; i < result.length; i++) {
             list.push({
               id: i,
-              lat: result[i].y,
-              lng: result[i].x,
+              lat: Number(result[i].y),
+              lng: Number(result[i].x),
+              name: result[i].place_name,
+            });
+          }
+          length = result.length;
+        })
+        .catch((err) => {
+          Alert.alert(err);
+        });
+
+      await axios
+        .get(
+          "https://dapi.kakao.com/v2/local/search/keyword?query=대여사진관" +
+            "&x=" +
+            longitude +
+            "&y=" +
+            latitude +
+            "&radius=5000",
+          {
+            headers: {
+              Authorization: "KakaoAK 593cba0bc3ea7f52024615b72630d3ee",
+            },
+          }
+        )
+        .then((res) => {
+          const result = res.data.documents;
+          for (let i = 0; i < result.length; i++) {
+            list.push({
+              id: length + i,
+              lat: Number(result[i].y),
+              lng: Number(result[i].x),
               name: result[i].place_name,
             });
           }
           setLocList(list);
-          console.log(list);
+          console.log(locList);
         })
         .catch((err) => {
           Alert.alert(err);
         });
     })();
-  }, [longitude, latitude]);
+  }, []);
 
   let text = "Waiting..";
   if (errorMsg) {
@@ -97,6 +129,7 @@ export default function App() {
         provider={PROVIDER_GOOGLE}
         showsMyLocationButton={true}
         showsUserLocation={true}
+        customMapStyle={MapStyle}
         region={{
           latitude: latitude,
           longitude: longitude,
@@ -115,7 +148,12 @@ export default function App() {
               }}
               title={marker.name}
               description={marker.name + "입니다"}
-            />
+            >
+              <Image
+                source={require("../../storage/images/marker6.png")}
+                style={{ height: 30, width: 23 }}
+              />
+            </Marker>
           );
         })}
       </MapView>
@@ -127,6 +165,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+    marginBottom: 20,
   },
   paragraph: {
     fontSize: 18,
