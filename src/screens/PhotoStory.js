@@ -39,7 +39,6 @@ export default function PhotoStory({ navigation }) {
         },
       })
         .then(function (response) {
-          console.log(response.data);
           const result = response.data;
           const list = [];
           for (let i = 0; i < result.length; i++) {
