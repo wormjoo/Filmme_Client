@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,15 +15,20 @@ import * as ImagePicker from "expo-image-picker";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionic from "react-native-vector-icons/Ionicons";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { UserContext } from "../contexts/User";
+import { CommonActions } from "@react-navigation/native";
 import axios from "axios";
 
 export default function Upload({ route, navigation }) {
   //이미지 업로드 여부
   const [upload, setupload] = useState(false);
+
   let storyIdx;
   if (route.params != undefined) {
     storyIdx = route.params.idx;
   }
+  const { user, dispatch } = useContext(UserContext);
+
   //modal
   const [modalVisible, setModalVisible] = useState(false);
   const devHeight = Dimensions.get("window").height;
@@ -71,7 +76,6 @@ export default function Upload({ route, navigation }) {
     setModalVisible(!modalVisible);
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
       quality: 1,
     });
 
@@ -108,7 +112,7 @@ export default function Upload({ route, navigation }) {
     showMode("date");
   };
 
-  //업로드버튼 클릭시
+  // 업로드버튼 클릭시
   const uploadButton = useCallback(async () => {
     try {
       if (!image) {
@@ -121,20 +125,35 @@ export default function Upload({ route, navigation }) {
       const match = /\.(\w+)$/.exec(filename ?? "");
       const type = match ? `image/${match[1]}` : `image`;
 
-      form.append("date", date);
+      form.append(
+        "date",
+        date.getFullYear() +
+          "-" +
+          (date.getMonth() + 1 > 9
+            ? (date.getMonth() + 1).toString()
+            : "0" + (date.getMonth() + 1)) +
+          "-" +
+          (date.getDate() > 9
+            ? date.getDate().toString()
+            : "0" + date.getDate().toString())
+      );
       form.append("content", content);
-      form.append("imageFileList", { uri: image, name: filename, type });
+      form.append("image", { uri: image, name: filename, type });
 
-      console.log(form);
       axios
-        .post("http://133.186.228.218:8080/posts/write", form, {
+        .post("http://13.125.249.247/filme/story/", form, {
           headers: {
-            "x-auth-token": `${user?.accessToken}`,
+            "x-access-token": `${user?.token}`,
             "Content-Type": "multipart/form-data",
           },
         })
         .then(function (response) {
-          navigation.dispatch(CommonActions.navigate("Home"));
+          dispatch({
+            userIdx: user.userIdx,
+            identification: user.identification,
+            token: user.token,
+          });
+          navigation.dispatch(CommonActions.navigate("PhotoStory"));
           return response.data;
         })
         .catch(function (error) {
@@ -145,7 +164,45 @@ export default function Upload({ route, navigation }) {
       alert(e);
     } finally {
     }
-  }, [image, content, date]);
+  }, [image, content, date, user, dispatch]);
+
+  // 수정버튼 클릭시
+  const editButton = useCallback(async () => {
+    try {
+      axios
+        .put("http://13.125.249.247/filme/story/" + storyIdx, {
+          imageURL: `${image}`,
+          content: `${content}`,
+          date: `${
+            date.getFullYear() +
+            "-" +
+            (date.getMonth() + 1 > 9
+              ? (date.getMonth() + 1).toString()
+              : "0" + (date.getMonth() + 1)) +
+            "-" +
+            (date.getDate() > 9
+              ? date.getDate().toString()
+              : "0" + date.getDate().toString())
+          }`,
+        })
+        .then(function (response) {
+          dispatch({
+            userIdx: user.userIdx,
+            identification: user.identification,
+            token: user.token,
+          });
+          navigation.dispatch(CommonActions.navigate("PhotoStory"));
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert("Error", error);
+        });
+    } catch (e) {
+      alert(e);
+    } finally {
+    }
+  }, [image, content, date, user, dispatch, storyIdx]);
 
   if (storyIdx > 0) {
     return (
@@ -227,7 +284,7 @@ export default function Upload({ route, navigation }) {
         </View>
 
         <View style={styles.ButtonSection}>
-          <TouchableOpacity style={styles.ButtonBox}>
+          <TouchableOpacity style={styles.ButtonBox} onPress={editButton}>
             <Text style={{ fontSize: 15, color: "#505050" }}>수정</Text>
           </TouchableOpacity>
         </View>
@@ -426,7 +483,7 @@ export default function Upload({ route, navigation }) {
         </View>
 
         <View style={styles.ButtonSection}>
-          <TouchableOpacity style={styles.ButtonBox}>
+          <TouchableOpacity style={styles.ButtonBox} onPress={uploadButton}>
             <Text style={{ fontSize: 15, color: "#505050" }}>업로드</Text>
           </TouchableOpacity>
         </View>
