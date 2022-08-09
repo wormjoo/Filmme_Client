@@ -17,59 +17,11 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionic from "react-native-vector-icons/Ionicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
-import Tooltip from 'react-native-walkthrough-tooltip';
+import Tooltip from "react-native-walkthrough-tooltip";
 import { UserContext } from "../contexts/User";
 import axios from "axios";
 
 const devWidth = Dimensions.get("window").width;
-
-const Stamp = [
-  {
-    id: "1",
-    stamp: true,
-    final: false,
-  },
-  {
-    id: "2",
-    stamp: true,
-    final: false,
-  },
-  {
-    id: "3",
-    stamp: false,
-    final: false,
-  },
-  {
-    id: "4",
-    stamp: false,
-    final: false,
-  },
-  {
-    id: "5",
-    stamp: false,
-    final: false,
-  },
-  {
-    id: "6",
-    stamp: false,
-    final: false,
-  },
-  {
-    id: "7",
-    stamp: false,
-    final: false,
-  },
-  {
-    id: "8",
-    stamp: false,
-    final: false,
-  },
-  {
-    id: "9",
-    stamp: false,
-    final: true,
-  },
-];
 
 const Item = ({ stamp, final, totalstamp }) => {
   const [showTip, setTip] = useState(false);
@@ -77,55 +29,53 @@ const Item = ({ stamp, final, totalstamp }) => {
     <Tooltip
       isVisible={showTip}
       content={
-        stamp ?
-          (
-            <View>
-              <Text>스탬프 적립이 완료되었습니다!</Text>
-            </View>
-          )
-          :
-          (
-            <View>
-              <Text> 다음 레벨까지 {9 - totalstamp}개 남았습니다! </Text>
-            </View>
-          )
+        stamp ? (
+          <View>
+            <Text>스탬프 적립이 완료되었습니다!</Text>
+          </View>
+        ) : (
+          <View>
+            <Text> 다음 레벨까지 {9 - totalstamp}개 남았습니다! </Text>
+          </View>
+        )
       }
       onClose={() => setTip(false)}
       placement="bottom"
-    //topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
+      //topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
     >
       <TouchableOpacity
         style={{
           margin: 7,
           borderWidth: 2,
           borderRadius: 100,
-          borderColor: stamp ? '#505050' : '#C8C8C8',
+          borderColor: stamp ? "#505050" : "#C8C8C8",
           padding: 15,
-          justifyContent: 'center',
+          justifyContent: "center",
         }}
         onPress={() => setTip(true)}
       >
-        {final ?
-          (<Text
+        {final ? (
+          <Text
             style={{
-              textAlign: 'center',
-              color: stamp ? '#505050' : '#C8C8C8',
+              textAlign: "center",
+              color: stamp ? "#505050" : "#C8C8C8",
               fontSize: 15,
-              fontWeight: '900',
-            }}>
-            Level {'\n'} UP
-          </Text>)
-          : (
-            <FontAwesome
-              name='hand-peace-o'
-              style={{
-                fontSize: devWidth * 0.11,
-                color: stamp ? '#505050' : '#C8C8C8'
-              }} />
-          )}
+              fontWeight: "900",
+            }}
+          >
+            Level {"\n"} UP
+          </Text>
+        ) : (
+          <FontAwesome
+            name="hand-peace-o"
+            style={{
+              fontSize: devWidth * 0.11,
+              color: stamp ? "#505050" : "#C8C8C8",
+            }}
+          />
+        )}
       </TouchableOpacity>
     </Tooltip>
-
   );
 };
 
@@ -187,9 +137,13 @@ export default function MyPage({ navigation }) {
   //레벨
   const [level, setLevel] = useState("");
   //도장개수
-  const [totalstamp, setTotalstamp] = useState(2);
+  const [totalstamp, setTotalstamp] = useState(0);
 
-  const renderItem = ({ item }) => <Item stamp={item.stamp} final={item.final} totalstamp={totalstamp} />;
+  const [stamp, setStamp] = useState([]);
+
+  const renderItem = ({ item }) => (
+    <Item stamp={item.stamp} final={item.final} totalstamp={totalstamp} />
+  );
 
   const { dispatch, user } = useContext(UserContext);
 
@@ -208,6 +162,21 @@ export default function MyPage({ navigation }) {
           setNickname(result.nickname);
           setImage(result.profileURL);
           setLevel(result.level);
+          setTotalstamp(result.totalStamp);
+          let list = [];
+
+          for (let i = 0; i < 9; i++) {
+            let status = false;
+            if (totalstamp > i) {
+              status = true;
+            }
+            list.push({
+              id: i + 1,
+              stamp: status,
+              final: i == 8,
+            });
+          }
+          setStamp(list);
         })
         .catch(function (error) {
           console.log(error);
@@ -218,7 +187,7 @@ export default function MyPage({ navigation }) {
       alert(e);
     } finally {
     }
-  }, [user]);
+  }, [user, totalstamp]);
 
   return (
     <View style={styles.container}>
@@ -245,6 +214,11 @@ export default function MyPage({ navigation }) {
           </TouchableOpacity>
         </ImageBackground>
         <View style={styles.nickname}>
+          <View style={{ marginRight: 10 }}>
+            <Text style={{ fontSize: 18, color: "#505050", fontWeight: "600" }}>
+              Lv {level}
+            </Text>
+          </View>
           {editName ? (
             <View
               style={{ borderBottomColor: "#C8C8C8", borderBottomWidth: 2 }}
@@ -287,7 +261,7 @@ export default function MyPage({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-
+      {/* 
       <View style={styles.levelSection}>
         <View style={styles.levelBox}>
           <View style={styles.levelText}>
@@ -305,17 +279,19 @@ export default function MyPage({ navigation }) {
             <View style={styles.level}></View>
           </View>
         </View>
-      </View>
+      </View> */}
 
       <View style={styles.stampSection}>
         <View style={styles.stampBox}>
           <View style={styles.stampText}>
             <Text style={{ fontSize: 15 }}>스탬프 적립</Text>
-            <Text style={{ fontSize: 12, color: '#505050' }}>{totalstamp}/9</Text>
+            <Text style={{ fontSize: 12, color: "#505050" }}>
+              {totalstamp}/9
+            </Text>
           </View>
           <View style={styles.stamp}>
             <FlatList
-              data={Stamp}
+              data={stamp}
               keyExtractor={(item) => item.id}
               renderItem={renderItem}
               // renderItem={({ item }) => (
@@ -350,7 +326,7 @@ export default function MyPage({ navigation }) {
               //           fontSize: 15,
               //           fontWeight: '900',
               //         }}>
-              //         Level {'\n'} UP 
+              //         Level {'\n'} UP
               //       </Text>)
               //       : (
               //         <FontAwesome
@@ -377,9 +353,6 @@ export default function MyPage({ navigation }) {
           </View>
         </View>
       </View>
-
-
-
 
       <Modal
         animationType="fade"
@@ -563,7 +536,7 @@ const styles = StyleSheet.create({
     width: devWidth - 60, //350,
     //backgroundColor: "#fff",
     borderRadius: 20,
-    borderColor: '#E8E8E8',
+    borderColor: "#E8E8E8",
     borderWidth: 2,
   },
   stampText: {
@@ -573,8 +546,8 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   stamp: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     margin: 10,
   },
 });
