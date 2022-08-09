@@ -45,6 +45,7 @@ export default function PhotoStory({ navigation }) {
             list.push({
               id: result[i].idx,
               img: result[i].imageURL,
+              date: result[i].date,
             });
           }
           setStory(list);
@@ -71,7 +72,10 @@ export default function PhotoStory({ navigation }) {
             <TouchableOpacity
               style={{ margin: 1 }}
               onPress={() =>
-                navigation.navigate("Detail_PhotoStory", { idx: item.id })
+                navigation.navigate("Detail_PhotoStory", {
+                  idx: item.id,
+                  date: item.date,
+                })
               }
               onLongPress={() => setModalVisible(!modalVisible)}
             >

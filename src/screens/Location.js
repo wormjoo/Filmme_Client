@@ -11,16 +11,7 @@ export default function App() {
   const [errorMsg, setErrorMsg] = useState(null);
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
-  const [disabled, setDisabled] = useState(true);
-  const [address, setAddress] = useState("");
-  const [detailAddress, setDetailAddress] = useState("");
   const [locList, setLocList] = useState([]);
-
-  const _handleDetailAddressChange = (address) => {
-    setDetailAddress(address);
-  };
-
-  const mApiKey = "AIzaSyBCIAtcRlEpIlXq1Rv9xYlsXz_Xav5mq0I";
 
   useEffect(() => {
     (async () => {
@@ -113,14 +104,6 @@ export default function App() {
   } else if (location) {
     text = JSON.stringify(location);
   }
-  // const mark = (locList) => {
-  //   for (let i = 0; i < locList.length; i++) {
-  //     <Marker
-  //       pinColor="#1E90FF"
-  //       coordinate={{ latitude: locList[i].lat, longitude: locList[i].lng }}
-  //     />;
-  //   }
-  // };
 
   return (
     <View style={styles.container}>

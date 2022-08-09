@@ -24,6 +24,75 @@ export default function Pose({ navigation }) {
   const Tab = createMaterialTopTabNavigator();
   const { user } = useContext(UserContext);
 
+  const RecommendPose = () => {
+    //사진 있는지 여부
+    const [hasImg, setHasImg] = useState(true);
+    const [recommendPoses, setRecommendPoses] = useState([]);
+
+    useEffect(() => {
+      try {
+        axios({
+          method: "get",
+          url: "http://13.125.249.247/filme/pose?filter=3",
+          headers: {
+            "x-access-token": `${user?.token}`,
+          },
+        })
+          .then(function (response) {
+            const result = response.data;
+            const list = [];
+            for (let i = 0; i < result.length; i++) {
+              list.push({
+                id: result[i].idx,
+                img: result[i].imageURL,
+              });
+            }
+            setRecommendPoses(list);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } catch (e) {
+        console.log(e);
+        alert("Error", e);
+      } finally {
+      }
+    }, [user]);
+
+    return (
+      <View>
+        {hasImg ? (
+          <View style={styles.content_hasImg}>
+            <FlatList
+              data={recommendPoses}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={{ margin: 1 }}
+                  onPress={() =>
+                    navigation.navigate("Detail_Pose", {
+                      idx: item.id,
+                    })
+                  }
+                  onLongPress={popup}
+                >
+                  <Image source={{ uri: item.img }} style={styles.img} />
+                </TouchableOpacity>
+              )}
+              numColumns={3}
+              showsVerticalScrollIndicator={false}
+            />
+          </View>
+        ) : (
+          <View style={styles.content_noImg}>
+            <AntDesign name="camerao" style={{ fontSize: 85 }} />
+            <Text style={{ fontSize: 22 }}>사진 없음</Text>
+          </View>
+        )}
+      </View>
+    );
+  };
+
   const PopularPose = () => {
     //사진 있는지 여부
     const [hasImg, setHasImg] = useState(true);
@@ -33,7 +102,7 @@ export default function Pose({ navigation }) {
       try {
         axios({
           method: "get",
-          url: "http://13.125.249.247/filme/pose?filter=3",
+          url: "http://13.125.249.247/filme/pose?filter=2",
           headers: {
             "x-access-token": `${user?.token}`,
           },
@@ -57,7 +126,7 @@ export default function Pose({ navigation }) {
         alert("Error", e);
       } finally {
       }
-    }, [popularPoses, setPopularPoses, user]);
+    }, [user]);
 
     return (
       <View>
@@ -126,7 +195,7 @@ export default function Pose({ navigation }) {
         alert("Error", e);
       } finally {
       }
-    }, [recentPoses, setRecentPoses, user]);
+    }, [user]);
 
     return (
       <View>
@@ -189,6 +258,7 @@ export default function Pose({ navigation }) {
           },
         })}
       >
+        <Tab.Screen name="추천 포즈" component={RecommendPose} />
         <Tab.Screen name="인기 포즈" component={PopularPose} />
         <Tab.Screen name="최근 포즈" component={RecentPose} />
       </Tab.Navigator>
