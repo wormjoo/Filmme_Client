@@ -47,9 +47,9 @@ export default function App() {
           "key=" +
           mApiKey +
           "&location=" +
-          "37.5653102" +
+          latitude +
           "," +
-          "126.921972" +
+          longitude +
           "&radius=5000" +
           "&name=인생네컷",
       })
