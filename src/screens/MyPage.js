@@ -9,7 +9,6 @@ import {
   Modal,
   Dimensions,
   TextInput,
-  ScrollView,
   FlatList,
   Alert,
 } from "react-native";
@@ -19,6 +18,7 @@ import Ionic from "react-native-vector-icons/Ionicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
 import Tooltip from "react-native-walkthrough-tooltip";
+import LottieView from 'lottie-react-native';
 import { UserContext } from "../contexts/User";
 import axios from "axios";
 
@@ -42,7 +42,7 @@ const Item = ({ stamp, final, totalstamp }) => {
       }
       onClose={() => setTip(false)}
       placement="bottom"
-      //topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
+    //topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
     >
       <TouchableOpacity
         style={{
@@ -50,6 +50,7 @@ const Item = ({ stamp, final, totalstamp }) => {
           borderWidth: 2,
           borderRadius: 100,
           borderColor: stamp ? "#505050" : "#C8C8C8",
+          backgroundColor: stamp ? "#E8E8E8" : "#FFFFFF",
           padding: 15,
           justifyContent: "center",
         }}
@@ -81,12 +82,16 @@ const Item = ({ stamp, final, totalstamp }) => {
 };
 
 export default function MyPage({ navigation }) {
+
   //이미지 업로드 여부
   const [upload, setupload] = useState(false);
 
   //modal
   const [modalVisible, setModalVisible] = useState(false);
   const devHeight = Dimensions.get("window").height;
+
+  //좋아요,조회수 modal
+  const [todayModalVisible, setTodayModalVisible] = useState(true);
 
   //업로드 이미지@
   const [updateImage, setUpdateImage] = useState(null);
@@ -180,6 +185,11 @@ export default function MyPage({ navigation }) {
   const [totalstamp, setTotalstamp] = useState(0);
 
   const [stamp, setStamp] = useState([]);
+
+  //오늘의 조회수
+  const [todayView, setTodayView] = useState(17);
+  //오늘의 좋아요수
+  const [todayLikes, setTodayLikes] = useState(103);
 
   const renderItem = ({ item }) => (
     <Item stamp={item.stamp} final={item.final} totalstamp={totalstamp} />
@@ -301,6 +311,7 @@ export default function MyPage({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
+
       {/* 
       <View style={styles.levelSection}>
         <View style={styles.levelBox}>
@@ -334,59 +345,6 @@ export default function MyPage({ navigation }) {
               data={stamp}
               keyExtractor={(item) => item.id}
               renderItem={renderItem}
-              // renderItem={({ item }) => (
-              //   <Tooltip
-              //     isVisible={showTip}
-              //     content={
-              //       <View>
-              //         <Text> 다음 레벨까지 {9-stamp}개 남았습니다! </Text>
-              //       </View>
-              //     }
-              //     onClose={() => setTip(false)}
-              //     placement="bottom"
-              //     // below is for the status bar of react navigation bar
-              //     topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
-              //   >
-              //     <TouchableOpacity
-              //     style={{
-              //       margin: 10,
-              //       borderWidth: 2,
-              //       borderRadius: 100,
-              //       borderColor: item.stamp ? '#505050' : '#C8C8C8',
-              //       padding: 15,
-              //       justifyContent: 'center',
-              //     }}
-              //     onPress={() => setTip(true)}
-              //   >
-              //     {item.final ?
-              //       (<Text
-              //         style={{
-              //           textAlign: 'center',
-              //           color: item.stamp ? '#505050' : '#C8C8C8',
-              //           fontSize: 15,
-              //           fontWeight: '900',
-              //         }}>
-              //         Level {'\n'} UP
-              //       </Text>)
-              //       : (
-              //         <FontAwesome
-              //           name='hand-peace-o'
-              //           style={{
-              //             fontSize: devWidth * 0.11,
-              //             color: item.stamp ? '#505050' : '#C8C8C8'
-              //           }} />
-              //       )}
-              //     {/* <Image source={{ uri: item.img }} style={styles.img} /> */}
-              //   </TouchableOpacity>
-              //     {/* // <TouchableOpacity
-              //     //   style={[{ backgroundColor: 'yellow', width: '100%', marginTop: 20 }, styles.button]}
-              //     //   }
-              //     // >
-              //     //   <Text>Show ToolTip</Text>
-              //     // </TouchableOpacity> */}
-              //   </Tooltip>
-
-              // )}
               numColumns={3}
               showsVerticalScrollIndicator={false}
             />
@@ -499,6 +457,85 @@ export default function MyPage({ navigation }) {
           </View>
         </View>
       </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={todayModalVisible}
+        onRequestClose={() => {
+          setTodayModalVisible(!todayModalVisible);
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: "#000000AA",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              width: devWidth - 90,
+              height: devHeight * 0.33,
+              borderRadius: 20,
+            }}
+          >
+            <TouchableOpacity onPress={() => setTodayModalVisible(!todayModalVisible)}>
+              <Ionic
+                name="close"
+                style={{
+                  fontSize: 20,
+                  color: "#505050",
+                  textAlign: "right",
+                  padding: 5,
+                }}
+              />
+            </TouchableOpacity>
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <LottieView
+                source={require("../../storage/images/11272-party-popper.json")}
+                style={{ width: devWidth * 0.3, }}
+                autoPlay
+                loop
+              />
+              <Text
+                style={{
+                  fontSize: 17,
+                  fontWeight: 'bold',
+                }}
+              >
+                <Text style={{color:'red'}}>C</Text>
+                <Text style={{color:'orange'}}>o</Text>
+                <Text style={{color:'gold'}}>n</Text>
+                <Text style={{color:'green'}}>g</Text>
+                <Text style={{color:'skyblue'}}>r</Text>
+                <Text style={{color:'navy'}}>a</Text>
+                <Text style={{color:'purple'}}>t</Text>
+                <Text style={{color:'red'}}>u</Text>
+                <Text style={{color:'orange'}}>l</Text>
+                <Text style={{color:'gold'}}>a</Text>
+                <Text style={{color:'green'}}>t</Text>
+                <Text style={{color:'skyblue'}}>i</Text>
+                <Text style={{color:'navy'}}>o</Text>
+                <Text style={{color:'purple'}}>n</Text>
+                <Text style={{color:'red'}}>s</Text>
+                <Text style={{color:'orange'}}>!</Text>
+                {'\n'}
+              </Text>
+              <Text style={{color:'#505050',fontSize:15}}>오늘의 조회 수: {todayView}</Text>
+              <Text style={{color:'#505050',fontSize:15}}>오늘의 좋아요 수: {todayLikes}</Text>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
     </View>
   );
 }
@@ -569,6 +606,7 @@ const styles = StyleSheet.create({
   },
   stampSection: {
     margin: 10,
+    marginTop: 30,
     alignItems: "center",
     justifyContent: "center",
   },
