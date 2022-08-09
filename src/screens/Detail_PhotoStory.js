@@ -51,8 +51,17 @@ export default function Detail_PhotoStory({ route, navigation }) {
       <View style={styles.header}>
         <View style={{ width: 40 }}></View>
         <Text style={{ fontSize: 22, fontWeight: "bold" }}>{date}</Text>
-        <View style={{ flexDirection: 'row' }}>
-          <TouchableOpacity onPress={() => navigation.navigate("Upload")}>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Upload", {
+                idx: storyIdx,
+                img: image,
+                memo: content,
+                date: date,
+              })
+            }
+          >
             <Feather
               name="edit-2"
               style={{ fontSize: 22, marginRight: 15, color: "#505050" }}
@@ -71,14 +80,14 @@ export default function Detail_PhotoStory({ route, navigation }) {
         <ImageBackground
           source={require("../../storage/images/detail-photoStory.png")}
           style={{
-            height: devHeight - 60,
-            width: devWidth - 30,
+            position: "fixed",
+            height: 620,
+            width: 350,
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Image source={{ uri: image }} style={styles.img} />
-          <View style={{ height: 70 }}></View>
+          <Image source={{ url: image }} style={styles.img} />
           <Text style={{ color: "#505050" }}>{content}</Text>
         </ImageBackground>
       </View>
@@ -93,7 +102,8 @@ const styles = StyleSheet.create({
   },
   header: {
     width: "100%",
-    height: 50,
+    marginTop: 30,
+    height: 30,
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
@@ -103,7 +113,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   img: {
-    width: 150,
-    height: 380,
+    resizeMode: "contain",
+    position: "relative",
+    top: -50,
+    width: 230,
+    height: 350,
   },
 });
