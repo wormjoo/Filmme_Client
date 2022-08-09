@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useCallback, useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,6 +11,7 @@ import {
   TextInput,
   ScrollView,
   FlatList,
+  Alert,
 } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -88,6 +89,7 @@ export default function MyPage({ navigation }) {
   const devHeight = Dimensions.get("window").height;
 
   //업로드 이미지@
+  const [updateImage, setUpdateImage] = useState(null);
   const [image, setImage] = useState(null);
 
   //이미지 가져오는 함수
@@ -100,7 +102,8 @@ export default function MyPage({ navigation }) {
       quality: 1,
     });
     if (!result.cancelled) {
-      setImage(result.uri);
+      setUpdateImage(result.uri);
+      updateProfileImage(updateImage);
     } else if (result.cancelled) {
       setupload(false);
     }
@@ -117,10 +120,47 @@ export default function MyPage({ navigation }) {
     });
 
     if (!result.cancelled) {
-      setImage(result.uri);
-    } else if (result.cancelled) {
-      setupload(false);
+      setUpdateImage(result.uri);
     }
+  };
+
+  //수정 발생 시
+  const updateProfileImage = async (updateImage) => {
+    console.log(updateImage);
+
+    const form = new FormData();
+    const filename = updateImage.split("/").pop();
+
+    form.append("image", {
+      uri: updateImage,
+      name: filename,
+      type: "multipart/form-data",
+    });
+    console.log(form);
+    console.log(updateImage);
+
+    axios
+      .post("http://13.125.249.247/filme/mypage/edit-image", form, {
+        headers: {
+          "x-access-token": `${user?.token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+
+      .then((res) => {
+        Alert.alert("변경 완료!");
+        dispatch({
+          userIdx: user.userIdx,
+          identification: user.identification,
+          token: user.token,
+        });
+        navigation.navigate("MyPage");
+      })
+      .catch((err) => {
+        console.log(err);
+        Alert.alert("포즈 업로드 중 에러 발생");
+        navigation.navigate("MyPage");
+      });
   };
 
   //이미지 삭제 함수
