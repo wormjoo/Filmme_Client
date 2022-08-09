@@ -36,7 +36,7 @@ export default function MyPage_LikedPose({ navigation }) {
         try {
           axios({
             method: "get",
-            url: "http://13.125.249.247/filme/mypage/pose",
+            url: "http://13.125.249.247/filme/mypage/like-pose",
             headers: {
                 'x-access-token': `${user?.token}`,
               },
