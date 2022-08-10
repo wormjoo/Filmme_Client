@@ -259,7 +259,7 @@ export default function MyPage({navigation}) {
             alert(e);
         } finally {
         }
-    }, [user, totalstamp]);
+    }, [user, stamp, setStamp, totalstamp]);
 
     return (
         <View style={styles.container}>
