@@ -38,7 +38,6 @@ const TakePic = ({ route }) => {
   const __startCamera = async () => {
     //setStartCamera(true)
     const { status } = await Camera.requestCameraPermissionsAsync();
-    console.log(status);
     if (status === "granted") {
       setStartCamera(true);
     } else {

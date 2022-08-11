@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Platform, Text, View, StyleSheet, Alert, Image } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import Constants from "expo-constants";
 import * as Location from "expo-location";
 import MapStyle from "../components/MarkerStyle";
 import axios from "axios";
@@ -9,8 +8,8 @@ import axios from "axios";
 export default function App() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [latitude, setLatitude] = useState();
-  const [longitude, setLongitude] = useState();
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
   const [locList, setLocList] = useState([]);
 
   useEffect(() => {
@@ -27,12 +26,14 @@ export default function App() {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getCurrentPositionAsync({
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+      });
       setLocation(location);
-      setLatitude(Number(location.coords.latitude));
-      setLongitude(Number(location.coords.longitude));
+      setLatitude(location.coords.latitude);
+      setLongitude(location.coords.longitude);
       console.log(longitude, latitude);
-      console.log(status);
       let list = [];
       let length = 0;
       await axios
@@ -90,13 +91,12 @@ export default function App() {
             });
           }
           setLocList(list);
-          console.log(locList);
         })
         .catch((err) => {
           Alert.alert(err);
         });
     })();
-  }, []);
+  }, [location]);
 
   let text = "Waiting..";
   if (errorMsg) {
@@ -113,7 +113,7 @@ export default function App() {
         showsMyLocationButton={true}
         showsUserLocation={true}
         customMapStyle={MapStyle}
-        region={{
+        initialRegion={{
           latitude: latitude,
           longitude: longitude,
           latitudeDelta: 0.005, //위도 확대(1에 가까워질 수록 zoom out)
