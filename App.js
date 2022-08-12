@@ -17,7 +17,6 @@ import Login from "./src/screens/Login";
 import Signup from "./src/screens/Signup";
 import Detail_PhotoStory from "./src/screens/Detail_PhotoStory";
 import Detail_Pose from "./src/screens/Detail_Pose";
-import Detail_Location from "./src/screens/Detail_Location";
 import Photo from "./src/screens/Photo";
 import MyPage_ProudPose from "./src/screens/MyPage_ProudPose";
 import MyPage_LikedPose from "./src/screens/MyPage_LikedPose";
@@ -25,7 +24,7 @@ import UploadPose from "./src/screens/UploadPose";
 import SelectPhotoStory from "./src/screens/SelectPhotoStory";
 import Menu from "./src/screens/Menu";
 import FriendProfile from "./src/screens/FriendProfile";
-import { UserProvider } from "./src/contexts/User";
+import { UserContext, UserProvider } from "./src/contexts/User";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -169,7 +168,18 @@ export default function App() {
     <UserProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            // options={{
+            //   title: "로그인",
+            //   headerShown: true,
+            //   headerBackTitleVisible: false,
+            //   headerTitleStyle: {
+            //     fontSize: 17,
+            //   },
+            // }}
+          />
           <Stack.Screen
             name="Signup"
             component={Signup}
@@ -202,20 +212,7 @@ export default function App() {
               headerTitleAlign: "center",
             })}
           />
-          <Stack.Screen
-            name="Detail_Pose"
-            component={Detail_Pose}
-            options={{
-              title: "포즈자랑",
-              headerShown: true,
-              headerBackTitleVisible: false,
-              headerTitleStyle: {
-                fontSize: 20,
-                fontWeight: "bold",
-              },
-              headerTitleAlign: "center",
-            }}
-          />
+          <Stack.Screen name="Detail_Pose" component={Detail_Pose} />
           <Stack.Screen name="Photo" component={Photo} />
           <Stack.Screen name="MyPage_ProudPose" component={MyPage_ProudPose} />
           <Stack.Screen name="MyPage_LikedPose" component={MyPage_LikedPose} />
@@ -249,8 +246,6 @@ export default function App() {
               headerTitleAlign: "center",
             })}
           />
-          <Stack.Screen name="Detail_Location" component={Detail_Location} />
-          <Stack.Screen name="Location" component={Location} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>
