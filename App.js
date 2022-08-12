@@ -17,6 +17,7 @@ import Login from "./src/screens/Login";
 import Signup from "./src/screens/Signup";
 import Detail_PhotoStory from "./src/screens/Detail_PhotoStory";
 import Detail_Pose from "./src/screens/Detail_Pose";
+import Detail_Location from "./src/screens/Detail_Location";
 import Photo from "./src/screens/Photo";
 import MyPage_ProudPose from "./src/screens/MyPage_ProudPose";
 import MyPage_LikedPose from "./src/screens/MyPage_LikedPose";
@@ -258,6 +259,8 @@ export default function App() {
               headerTitleAlign: "center",
             })}
           />
+          <Stack.Screen name="Detail_Location" component={Detail_Location} />
+          <Stack.Screen name="Location" component={Location} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>
