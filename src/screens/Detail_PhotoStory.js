@@ -113,7 +113,6 @@ export default function Detail_PhotoStory({ route, navigation }) {
         <ImageBackground
           source={require("../../storage/images/detail-photoStory.png")}
           style={{
-            position: "fixed",
             height: 620,
             width: 350,
             alignItems: "center",
