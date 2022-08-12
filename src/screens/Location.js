@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F8F8FF",
   },
   locBtnText: {
-    fontSize: "18",
+    fontSize: 18,
     fontWeight: "bold",
   },
 });
