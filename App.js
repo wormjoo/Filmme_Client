@@ -235,12 +235,13 @@ export default function App() {
             name="FriendProfile"
             component={FriendProfile}
             options={({ route }) => ({
-              title: route.params.nickname + "님의 포토스토리",
+              title: route.params.nickname + "'s pose",
               headerShown: true,
               headerBackTitleVisible: false,
               headerTitleStyle: {
                 fontSize: 20,
                 fontWeight: "bold",
+                  color:"#636363"
               },
               headerTitleAlign: "center",
             })}

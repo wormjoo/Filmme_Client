@@ -17,37 +17,45 @@ const devWidth = Dimensions.get("window").width;
 
 export default function FriendProfile({ route }) {
 
-    const { nickname, profile } = route.params;
+    const { memberIdx } = route.params;
 
     //레벨
     const [level, setLevel] = useState(1);
+    const [name, setName] = useState();
+    const [profile, setProfile] = useState();
 
     //사진 있는지 여부
     const [hasImg, setHasImg] = useState(true);
 
-    const [story, setStory] = useState([]);
+    const [pose, setPose] = useState([]);
     const { user } = useContext(UserContext);
+
     //임시
     useEffect(() => {
         try {
             axios({
                 method: "get",
-                url: "http://13.125.249.247/filme/story",
+                url: `http://13.125.249.247/filme/mypage/otherInfo/${memberIdx}`,
                 headers: {
                     "x-access-token": `${user?.token}`,
                 },
             })
                 .then(function (response) {
                     const result = response.data;
+                    setProfile(result[0][0].profileURL);
+                    setName(result[0][0].name);
+                    setLevel(result[0][0].level);
+
+                    console.log(result);
+
                     const list = [];
-                    for (let i = 0; i < result.length; i++) {
+                    for (let i = 0; i < result[1].length; i++) {
                         list.push({
-                            id: result[i].idx,
-                            img: result[i].imageURL,
-                            date: result[i].date,
+                            poseIdx: result[1][i].idx,
+                            img: result[1][i].imageURL,
                         });
                     }
-                    setStory(list);
+                    setPose(list);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -70,29 +78,31 @@ export default function FriendProfile({ route }) {
                 />
                 <View style={styles.nickname}>
                     <View style={{ marginRight: 10 }}>
-                        <Text style={{ fontSize: 18, color: "#505050", fontWeight: "600" }}>
+                        <Text style={{ fontSize: 20, color: "pink", fontWeight: "600" }}>
                             Lv {level}
                         </Text>
                     </View>
                     <View>
-                        <Text style={{ fontSize: 22, color: "#505050", fontWeight: "bold" }}>
-                            {nickname}
+                        <Text style={{ fontSize: 22, color: "#505050", fontWeight: "bold"}}>
+                            {name}
                         </Text>
                     </View>
+                </View>
+                <View style={{flexDirection: 'row', alignItems: 'center', margin:10}}>
+                    <View style={{flex: 1, height: 1, backgroundColor: '#B9B9B9'}} />
                 </View>
             </View>
 
             {hasImg ? (
                 <FlatList
-                    data={story}
+                    data={pose}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             style={{ margin: 1 }}
                             onPress={() =>
-                                navigation.navigate("Detail_PhotoStory", {
+                                navigation.navigate("Detail_Pose", {
                                     idx: item.id,
-                                    date: item.date,
                                 })
                             }
                             onLongPress={() => setModalVisible(!modalVisible)}
