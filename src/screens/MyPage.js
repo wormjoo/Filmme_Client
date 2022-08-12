@@ -338,7 +338,7 @@ export default function MyPage({ navigation }) {
         </ImageBackground>
         <View style={styles.nickname}>
           <View style={{ marginRight: 10 }}>
-            <Text style={{ fontSize: 18, color: "#505050", fontWeight: "600" }}>
+            <Text style={{ fontSize: 20, color: "pink", fontWeight: "600" }}>
               Lv {level}
             </Text>
           </View>

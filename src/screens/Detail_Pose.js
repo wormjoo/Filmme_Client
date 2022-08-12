@@ -38,7 +38,6 @@ export default function Detail_Pose({ route, navigation }) {
       })
         .then(function (response) {
           const result = response.data;
-          console.log(result);
           setUserIdx(result[0].idx);
           setProfile(result[0].profileURL);
           setNickname(result[0].name);
@@ -123,8 +122,8 @@ export default function Detail_Pose({ route, navigation }) {
               ? () => navigation.navigate("MyPage")
               : () =>
                   navigation.navigate("FriendProfile", {
+                    memberIdx: userIdx,
                     nickname: nickname,
-                    profile: profile,
                   })
           }
         >
