@@ -136,6 +136,8 @@ export default function App({ navigation }) {
               lat: Number(result[i].y),
               lng: Number(result[i].x),
               name: result[i].place_name,
+              address: result[i].road_address_name,
+              url: result[i].place_url,
             });
           }
           length = result.length;
@@ -166,6 +168,8 @@ export default function App({ navigation }) {
               lat: Number(result[i].y),
               lng: Number(result[i].x),
               name: result[i].place_name,
+              address: result[i].road_address_name,
+              url: result[i].place_url,
             });
           }
           setLocList(list);
@@ -197,6 +201,8 @@ export default function App({ navigation }) {
               lat: Number(result[i].y),
               lng: Number(result[i].x),
               name: result[i].place_name,
+              address: result[i].road_address_name,
+              url: result[i].place_url,
             });
           }
           setLocList(list);
