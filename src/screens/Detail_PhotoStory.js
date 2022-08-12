@@ -113,14 +113,13 @@ export default function Detail_PhotoStory({ route, navigation }) {
         <ImageBackground
           source={require("../../storage/images/detail-photoStory.png")}
           style={{
-            position: "fixed",
             height: 620,
             width: 350,
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Image source={{ url: image }} style={styles.img} />
+          <Image source={{ uri: image }} style={styles.img} />
           <Text style={{ color: "#505050" }}>{content}</Text>
         </ImageBackground>
       </View>

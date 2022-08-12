@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,41 +14,44 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionic from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import { UserContext } from "../contexts/User";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 const devWidth = Dimensions.get("window").width;
+const devHeight = Dimensions.get("window").height;
 
-export default function PhotoStory({ navigation }) {
-  //사진 있는지 여부
-  const [hasImg, setHasImg] = useState(true);
-
+const Item = React.memo(({ item: { id, img, date, content } }) => {
   //modal
   const [modalVisible, setModalVisible] = useState(false);
-  const devHeight = Dimensions.get("window").height;
 
-  const [story, setStory] = useState([]);
-  const { user } = useContext(UserContext);
+  const { user, dispatch } = useContext(UserContext);
 
-  useEffect(() => {
+  const navigation = useNavigation();
+
+  const _handleEditPress = useCallback(() => {
+    navigation.navigate("Upload", {
+      idx: id,
+      img: img,
+      memo: content,
+      date: date,
+    });
+  }, []);
+
+  const _handleDeletePress = useCallback(() => {
     try {
       axios({
-        method: "get",
-        url: "http://13.125.249.247/filme/story",
-        headers: {
-          "x-access-token": `${user?.token}`,
-        },
+        method: "patch",
+        url: "http://13.125.249.247/filme/story/" + id,
       })
         .then(function (response) {
-          const result = response.data;
-          const list = [];
-          for (let i = 0; i < result.length; i++) {
-            list.push({
-              id: result[i].idx,
-              img: result[i].imageURL,
-              date: result[i].date,
-            });
-          }
-          setStory(list);
+          dispatch({
+            userIdx: user.userIdx,
+            identification: user.identification,
+            token: user.token,
+          });
+          setModalVisible(!modalVisible);
+          alert("삭제되었습니다.");
+          return response.data;
         })
         .catch(function (error) {
           console.log(error);
@@ -58,39 +61,22 @@ export default function PhotoStory({ navigation }) {
       alert("Error", e);
     } finally {
     }
-  }, [user]);
+  }, [user, dispatch]);
 
   return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
-
-      {hasImg ? (
-        <FlatList
-          data={story}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={{ margin: 1 }}
-              onPress={() =>
-                navigation.navigate("Detail_PhotoStory", {
-                  idx: item.id,
-                  date: item.date,
-                })
-              }
-              onLongPress={() => setModalVisible(!modalVisible)}
-            >
-              <Image source={{ uri: item.img }} style={styles.img} />
-            </TouchableOpacity>
-          )}
-          numColumns={3}
-          showsVerticalScrollIndicator={false}
-        />
-      ) : (
-        <View style={styles.content_noImg}>
-          <AntDesign name="camerao" style={{ fontSize: 85 }} />
-          <Text style={{ fontSize: 22 }}>사진 없음</Text>
-        </View>
-      )}
+    <View style={{ backgroundColor: "#fff" }}>
+      <TouchableOpacity
+        style={{ margin: 1 }}
+        onPress={() =>
+          navigation.navigate("Detail_PhotoStory", {
+            idx: id,
+            date: date,
+          })
+        }
+        onLongPress={() => setModalVisible(!modalVisible)}
+      >
+        <Image source={{ uri: img }} style={styles.img} />
+      </TouchableOpacity>
 
       <Modal
         animationType="fade"
@@ -148,7 +134,7 @@ export default function PhotoStory({ navigation }) {
                 marginVertical: 20,
               }}
             >
-              <TouchableOpacity>
+              <TouchableOpacity onPress={_handleEditPress}>
                 <Feather
                   name="edit-2"
                   style={{ fontSize: 60, color: "#505050" }}
@@ -163,7 +149,7 @@ export default function PhotoStory({ navigation }) {
                   수정
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={_handleDeletePress}>
                 <Feather
                   name="trash-2"
                   style={{ fontSize: 60, color: "#505050" }}
@@ -182,6 +168,68 @@ export default function PhotoStory({ navigation }) {
           </View>
         </View>
       </Modal>
+    </View>
+  );
+});
+
+export default function PhotoStory({ navigation }) {
+  //사진 있는지 여부
+  const [hasImg, setHasImg] = useState(true);
+
+  const [story, setStory] = useState([]);
+  const { user, dispatch } = useContext(UserContext);
+
+  useEffect(() => {
+    try {
+      axios({
+        method: "get",
+        url: "http://13.125.249.247/filme/story",
+        headers: {
+          "x-access-token": `${user?.token}`,
+        },
+      })
+        .then(function (response) {
+          const result = response.data;
+          const list = [];
+          for (let i = 0; i < result.length; i++) {
+            list.push({
+              id: result[i].idx,
+              img: result[i].imageURL,
+              content: result[i].content,
+              date: result[i].date,
+              memberIdx: result[i].memberIdx,
+            });
+          }
+          setStory(list);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert("Error", e);
+    } finally {
+    }
+  }, [user]);
+
+  return (
+    <View style={styles.container}>
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
+
+      {hasImg ? (
+        <FlatList
+          data={story}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <Item item={item} />}
+          numColumns={3}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <View style={styles.content_noImg}>
+          <AntDesign name="camerao" style={{ fontSize: 85 }} />
+          <Text style={{ fontSize: 22 }}>사진 없음</Text>
+        </View>
+      )}
     </View>
   );
 }
