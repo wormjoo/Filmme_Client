@@ -171,14 +171,14 @@ export default function App() {
           <Stack.Screen
             name="Login"
             component={Login}
-          // options={{
-          //   title: "로그인",
-          //   headerShown: true,
-          //   headerBackTitleVisible: false,
-          //   headerTitleStyle: {
-          //     fontSize: 17,
-          //   },
-          // }}
+            // options={{
+            //   title: "로그인",
+            //   headerShown: true,
+            //   headerBackTitleVisible: false,
+            //   headerTitleStyle: {
+            //     fontSize: 17,
+            //   },
+            // }}
           />
           <Stack.Screen
             name="Signup"
@@ -212,7 +212,20 @@ export default function App() {
               headerTitleAlign: "center",
             })}
           />
-          <Stack.Screen name="Detail_Pose" component={Detail_Pose} />
+          <Stack.Screen
+            name="Detail_Pose"
+            component={Detail_Pose}
+            options={{
+              title: "포즈자랑",
+              headerShown: true,
+              headerBackTitleVisible: false,
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: "bold",
+              },
+              headerTitleAlign: "center",
+            }}
+          />
           <Stack.Screen name="Photo" component={Photo} />
           <Stack.Screen name="MyPage_ProudPose" component={MyPage_ProudPose} />
           <Stack.Screen name="MyPage_LikedPose" component={MyPage_LikedPose} />
