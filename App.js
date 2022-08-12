@@ -25,7 +25,7 @@ import UploadPose from "./src/screens/UploadPose";
 import SelectPhotoStory from "./src/screens/SelectPhotoStory";
 import Menu from "./src/screens/Menu";
 import FriendProfile from "./src/screens/FriendProfile";
-import { UserContext, UserProvider } from "./src/contexts/User";
+import { UserProvider } from "./src/contexts/User";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -169,18 +169,7 @@ export default function App() {
     <UserProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            // options={{
-            //   title: "로그인",
-            //   headerShown: true,
-            //   headerBackTitleVisible: false,
-            //   headerTitleStyle: {
-            //     fontSize: 17,
-            //   },
-            // }}
-          />
+          <Stack.Screen name="Login" component={Login} />
           <Stack.Screen
             name="Signup"
             component={Signup}
@@ -249,12 +238,13 @@ export default function App() {
             name="FriendProfile"
             component={FriendProfile}
             options={({ route }) => ({
-              title: route.params.nickname + "님의 포토스토리",
+              title: route.params.nickname + "'s pose",
               headerShown: true,
               headerBackTitleVisible: false,
               headerTitleStyle: {
                 fontSize: 20,
                 fontWeight: "bold",
+                color: "#636363",
               },
               headerTitleAlign: "center",
             })}
