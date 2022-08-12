@@ -117,12 +117,22 @@ export default function MyPage({ navigation }) {
   const camera = async () => {
     setupload(true);
     setModalVisible(!modalVisible);
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
-
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    let result;
+    if (status === "granted") {
+      result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
+    } else {
+      Alert.alert("Access denied");
+    }
+    // let result = await ImagePicker.launchCameraAsync({
+    //   mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //   allowsEditing: true,
+    //   quality: 1,
+    // });
     if (!result.cancelled) {
       setUpdateImage(result.uri);
     }
