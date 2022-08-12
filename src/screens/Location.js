@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Platform, Text, View, StyleSheet, Alert, Image } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import SelectDropdown from "react-native-select-dropdown";
 import * as Location from "expo-location";
 import MapStyle from "../components/MarkerStyle";
 import axios from "axios";
@@ -8,10 +9,10 @@ import axios from "axios";
 export default function App() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
+  const [latitude, setLatitude] = useState(37.3229201258147);
+  const [longitude, setLongitude] = useState(127.12706581005759);
   const [locList, setLocList] = useState([]);
-
+  const photobox = ["전체", "인생네컷", "포토이즘", "하루필름", "포토시그니처"];
   useEffect(() => {
     (async () => {
       if (Platform.OS === "android") {
@@ -96,7 +97,7 @@ export default function App() {
           Alert.alert(err);
         });
     })();
-  }, [location]);
+  }, []);
 
   let text = "Waiting..";
   if (errorMsg) {
@@ -104,6 +105,104 @@ export default function App() {
   } else if (location) {
     text = JSON.stringify(location);
   }
+
+  const getPhotoBox = async (photoName) => {
+    let list = [];
+    let length = 0;
+    if (photoName == "전체") {
+      await axios
+        .get(
+          "https://dapi.kakao.com/v2/local/search/keyword?query=즉석사진" +
+            "&x=" +
+            longitude +
+            "&y=" +
+            latitude +
+            "&radius=5000",
+          {
+            headers: {
+              Authorization: "KakaoAK 593cba0bc3ea7f52024615b72630d3ee",
+            },
+          }
+        )
+        .then((res) => {
+          const result = res.data.documents;
+          for (let i = 0; i < result.length; i++) {
+            list.push({
+              id: i,
+              lat: Number(result[i].y),
+              lng: Number(result[i].x),
+              name: result[i].place_name,
+            });
+          }
+          length = result.length;
+        })
+        .catch((err) => {
+          Alert.alert(err);
+        });
+
+      await axios
+        .get(
+          "https://dapi.kakao.com/v2/local/search/keyword?query=대여사진관" +
+            "&x=" +
+            longitude +
+            "&y=" +
+            latitude +
+            "&radius=5000",
+          {
+            headers: {
+              Authorization: "KakaoAK 593cba0bc3ea7f52024615b72630d3ee",
+            },
+          }
+        )
+        .then((res) => {
+          const result = res.data.documents;
+          for (let i = 0; i < result.length; i++) {
+            list.push({
+              id: length + i,
+              lat: Number(result[i].y),
+              lng: Number(result[i].x),
+              name: result[i].place_name,
+            });
+          }
+          setLocList(list);
+        })
+        .catch((err) => {
+          Alert.alert(err);
+        });
+    } else {
+      await axios
+        .get(
+          "https://dapi.kakao.com/v2/local/search/keyword?query=" +
+            photoName +
+            "&x=" +
+            longitude +
+            "&y=" +
+            latitude +
+            "&radius=5000",
+          {
+            headers: {
+              Authorization: "KakaoAK 593cba0bc3ea7f52024615b72630d3ee",
+            },
+          }
+        )
+        .then((res) => {
+          const result = res.data.documents;
+          for (let i = 0; i < result.length; i++) {
+            list.push({
+              id: length + i,
+              lat: Number(result[i].y),
+              lng: Number(result[i].x),
+              name: result[i].place_name,
+            });
+          }
+          setLocList(list);
+        })
+        .catch((err) => {
+          Alert.alert(err);
+        });
+    }
+    console.log(list);
+  };
 
   return (
     <View style={styles.container}>
@@ -120,6 +219,15 @@ export default function App() {
           longitudeDelta: 0.001, //경도 확대
         }}
       >
+        <SelectDropdown
+          data={photobox}
+          onSelect={(selectedItem, index) => {
+            getPhotoBox(selectedItem);
+          }}
+          defaultValue={"전체"}
+          buttonStyle={styles.locBtn}
+          buttonTextStyle={styles.locBtnText}
+        />
         {locList.map((marker) => {
           return (
             <Marker
@@ -159,5 +267,12 @@ const styles = StyleSheet.create({
     top: 20,
     width: "100%",
     height: "100%",
+  },
+  locBtn: {
+    backgroundColor: "#F8F8FF",
+  },
+  locBtnText: {
+    fontSize: "18",
+    fontWeight: "bold",
   },
 });
