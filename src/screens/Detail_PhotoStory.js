@@ -119,7 +119,7 @@ export default function Detail_PhotoStory({ route, navigation }) {
             justifyContent: "center",
           }}
         >
-          <Image source={{ url: image }} style={styles.img} />
+          <Image source={{ uri: image }} style={styles.img} />
           <Text style={{ color: "#505050" }}>{content}</Text>
         </ImageBackground>
       </View>
