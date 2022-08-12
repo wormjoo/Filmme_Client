@@ -38,7 +38,6 @@ export default function Detail_Pose({ route, navigation }) {
       })
         .then(function (response) {
           const result = response.data;
-
           setUserIdx(result[0].idx);
           setProfile(result[0].profileURL);
           setNickname(result[0].name);
@@ -102,7 +101,6 @@ export default function Detail_Pose({ route, navigation }) {
           const result = response.data[0];
 
           setUserNickname(result.nickname);
-
         })
         .catch(function (error) {
           console.log(error);
@@ -117,22 +115,17 @@ export default function Detail_Pose({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
-
-      <View style={styles.header}>
-        <Text style={{ fontSize: 22, fontWeight: "bold" }}>포즈자랑</Text>
-      </View>
-
       <View style={styles.profileSection}>
         <TouchableOpacity
           onPress={
-            userNickname === nickname ?
-              () => navigation.navigate("MyPage")
-              :
-              () => navigation.navigate("FriendProfile", {
-                memberIdx : userIdx,
-                nickname : nickname,
-              })}
+            userNickname === nickname
+              ? () => navigation.navigate("MyPage")
+              : () =>
+                  navigation.navigate("FriendProfile", {
+                    memberIdx: userIdx,
+                    nickname: nickname,
+                  })
+          }
         >
           <Image source={{ uri: `${profile}` }} style={styles.profile} />
         </TouchableOpacity>
@@ -143,7 +136,7 @@ export default function Detail_Pose({ route, navigation }) {
         <ImageBackground
           source={require("../../storage/images/detail-pose.png")}
           style={{
-            height: devHeight - 270,
+            height: devHeight - 230,
             width: devWidth - 20,
             alignItems: "center",
             justifyContent: "center",
@@ -203,8 +196,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   img: {
-    width: 150,
-    height: 360,
+    resizeMode: "contain",
+    position: "relative",
+    width: 220,
+    height: 330,
     marginTop: 30,
   },
   likesSection: {

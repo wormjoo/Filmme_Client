@@ -171,14 +171,14 @@ export default function App() {
           <Stack.Screen
             name="Login"
             component={Login}
-          // options={{
-          //   title: "로그인",
-          //   headerShown: true,
-          //   headerBackTitleVisible: false,
-          //   headerTitleStyle: {
-          //     fontSize: 17,
-          //   },
-          // }}
+            // options={{
+            //   title: "로그인",
+            //   headerShown: true,
+            //   headerBackTitleVisible: false,
+            //   headerTitleStyle: {
+            //     fontSize: 17,
+            //   },
+            // }}
           />
           <Stack.Screen
             name="Signup"
@@ -241,7 +241,7 @@ export default function App() {
               headerTitleStyle: {
                 fontSize: 20,
                 fontWeight: "bold",
-                  color:"#636363"
+                color: "#636363",
               },
               headerTitleAlign: "center",
             })}

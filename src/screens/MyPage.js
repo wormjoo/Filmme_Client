@@ -117,12 +117,22 @@ export default function MyPage({ navigation }) {
   const camera = async () => {
     setupload(true);
     setModalVisible(!modalVisible);
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
-
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    let result;
+    if (status === "granted") {
+      result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
+    } else {
+      Alert.alert("Access denied");
+    }
+    // let result = await ImagePicker.launchCameraAsync({
+    //   mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //   allowsEditing: true,
+    //   quality: 1,
+    // });
     if (!result.cancelled) {
       setUpdateImage(result.uri);
     }
@@ -338,7 +348,7 @@ export default function MyPage({ navigation }) {
         </ImageBackground>
         <View style={styles.nickname}>
           <View style={{ marginRight: 10 }}>
-            <Text style={{ fontSize: 18, color: "#505050", fontWeight: "600" }}>
+            <Text style={{ fontSize: 20, color: "pink", fontWeight: "600" }}>
               Lv {level}
             </Text>
           </View>

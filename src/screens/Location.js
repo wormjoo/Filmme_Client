@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Platform, Text, View, StyleSheet, Alert, Image } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import SelectDropdown from "react-native-select-dropdown";
@@ -6,7 +6,7 @@ import * as Location from "expo-location";
 import MapStyle from "../components/MarkerStyle";
 import axios from "axios";
 
-export default function App() {
+export default function App({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [latitude, setLatitude] = useState(37.3229201258147);
@@ -59,6 +59,8 @@ export default function App() {
               lat: Number(result[i].y),
               lng: Number(result[i].x),
               name: result[i].place_name,
+              address: result[i].road_address_name,
+              url: result[i].place_url,
             });
           }
           length = result.length;
@@ -89,6 +91,8 @@ export default function App() {
               lat: Number(result[i].y),
               lng: Number(result[i].x),
               name: result[i].place_name,
+              address: result[i].road_address_name,
+              url: result[i].place_url,
             });
           }
           setLocList(list);
@@ -232,13 +236,17 @@ export default function App() {
           return (
             <Marker
               key={marker.id}
-              pinColor="#1E90FF"
               coordinate={{
                 latitude: marker.lat,
                 longitude: marker.lng,
               }}
               title={marker.name}
-              description={marker.name + "입니다"}
+              description={marker.address}
+              onPress={() =>
+                navigation.navigate("Detail_Location", {
+                  url: marker.url,
+                })
+              }
             >
               <Image
                 source={require("../../storage/images/marker6.png")}
