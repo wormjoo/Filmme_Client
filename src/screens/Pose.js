@@ -66,6 +66,7 @@ const Item = React.memo(({ item: { id, img, memberIdx } }) => {
       console.log(e);
       alert("Error", e);
     } finally {
+      setModalVisible(false);
     }
   }, [user, dispatch]);
 
