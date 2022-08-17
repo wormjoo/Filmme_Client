@@ -158,11 +158,13 @@ export default function MyPage({ navigation }) {
           identification: user.identification,
           token: user.token,
         });
+        setEditName(!editName);
         navigation.navigate("MyPage");
       })
       .catch((err) => {
         console.log(err);
-        Alert.alert("포즈 업로드 중 에러 발생");
+        Alert.alert("닉네임 변경 중 에러 발생");
+        setEditName(!editName);
         navigation.navigate("MyPage");
       });
   };
@@ -378,10 +380,7 @@ export default function MyPage({ navigation }) {
               </Text>
             </View>
           )}
-          <TouchableOpacity
-            onPress={() => setEditName(!editName)}
-            style={styles.editIcon}
-          >
+          <TouchableOpacity style={styles.editIcon}>
             {editName ? (
               <Feather
                 name="check"
@@ -392,6 +391,7 @@ export default function MyPage({ navigation }) {
               <Feather
                 name="edit-2"
                 style={{ fontSize: 12, color: "#505050" }}
+                onPress={() => setEditName(!editName)}
               />
             )}
           </TouchableOpacity>
@@ -563,9 +563,11 @@ export default function MyPage({ navigation }) {
           <View
             style={{
               backgroundColor: "white",
-              width: devWidth - 90,
-              height: devHeight * 0.33,
+              width: devWidth - 80,
+              height: devHeight * 0.35,
               borderRadius: 20,
+              marginTop: 10,
+              marginRight: 10,
             }}
           >
             <TouchableOpacity

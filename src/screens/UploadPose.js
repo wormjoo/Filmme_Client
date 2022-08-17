@@ -90,12 +90,6 @@ export default function UploadPose({ navigation }) {
 
   return (
     <ScrollView style={styles.container}>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
-
-      <View style={styles.header}>
-        <Text style={{ fontSize: 22, fontWeight: "bold" }}>New Pose</Text>
-      </View>
-
       <View style={styles.photoSection}>
         <View style={styles.photoBox}>
           {upload ? null : (
@@ -235,12 +229,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-  header: {
-    width: "100%",
-    height: 120,
-    alignItems: "center",
-    justifyContent: "center",
   },
   photoSection: {
     margin: 10,

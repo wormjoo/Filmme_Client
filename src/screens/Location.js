@@ -251,6 +251,7 @@ export default function App({ navigation }) {
               onPress={() =>
                 navigation.navigate("Detail_Location", {
                   url: marker.url,
+                  name: marker.name,
                 })
               }
             >

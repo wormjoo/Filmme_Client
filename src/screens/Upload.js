@@ -167,7 +167,7 @@ export default function Upload({ route, navigation }) {
   }, [image, content, date, user, dispatch]);
 
   // 수정버튼 클릭시
-  const editButton = useCallback(async () => {
+  const editButton = useCallback(() => {
     try {
       axios
         .put("http://13.125.249.247/filme/story/" + storyIdx, {
@@ -207,12 +207,6 @@ export default function Upload({ route, navigation }) {
   if (storyIdx > 0) {
     return (
       <ScrollView style={styles.container}>
-        <StatusBar backgroundColor="white" barStyle="dark-content" />
-
-        <View style={styles.header}>
-          <Text style={{ fontSize: 22, fontWeight: "bold" }}>New Photo</Text>
-        </View>
-
         <View style={styles.photoSection}>
           <View style={styles.photoBox}>
             {upload ? null : (
@@ -392,12 +386,6 @@ export default function Upload({ route, navigation }) {
   } else {
     return (
       <ScrollView style={styles.container}>
-        <StatusBar backgroundColor="white" barStyle="dark-content" />
-
-        <View style={styles.header}>
-          <Text style={{ fontSize: 22, fontWeight: "bold" }}>New Photo</Text>
-        </View>
-
         <View style={styles.photoSection}>
           <View style={styles.photoBox}>
             {upload ? null : (
