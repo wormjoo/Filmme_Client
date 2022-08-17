@@ -136,8 +136,8 @@ export default function Detail_Pose({ route, navigation }) {
         <ImageBackground
           source={require("../../storage/images/detail-pose.png")}
           style={{
-            height: devHeight - 230,
-            width: devWidth - 20,
+            height: 450,
+            width: 340,
             alignItems: "center",
             justifyContent: "center",
           }}
@@ -168,24 +168,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  header: {
-    width: "100%",
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   profileSection: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 25,
-    height: 120,
+    height: 90,
+    marginTop: 15,
   },
   profile: {
     width: 50,
     height: 50,
     borderRadius: 100,
     borderColor: "#AAAAAA",
-    borderWidth: 3,
+    borderWidth: 1,
   },
   nickname: {
     fontSize: 15,

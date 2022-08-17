@@ -196,7 +196,21 @@ export default function App() {
             }}
           />
           <Stack.Screen name="Bottom" component={BottomTabScreen} />
-          <Stack.Screen name="Upload" component={Upload} />
+          <Stack.Screen
+            name="Upload"
+            component={Upload}
+            options={{
+              title: "New Photo",
+              headerShown: true,
+              headerBackTitleVisible: false,
+              headerShadowVisible: false,
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: "bold",
+              },
+              headerTitleAlign: "center",
+            }}
+          />
           <Stack.Screen name="TakePic" component={TakePic} />
           <Stack.Screen
             name="Detail_PhotoStory"
@@ -213,11 +227,61 @@ export default function App() {
               headerTitleAlign: "center",
             })}
           />
-          <Stack.Screen name="Detail_Pose" component={Detail_Pose} />
+          <Stack.Screen
+            name="Detail_Pose"
+            component={Detail_Pose}
+            options={{
+              title: " ",
+              headerShown: true,
+              headerBackTitleVisible: false,
+              headerShadowVisible: false,
+            }}
+          />
           <Stack.Screen name="Photo" component={Photo} />
-          <Stack.Screen name="MyPage_ProudPose" component={MyPage_ProudPose} />
-          <Stack.Screen name="MyPage_LikedPose" component={MyPage_LikedPose} />
-          <Stack.Screen name="UploadPose" component={UploadPose} />
+          <Stack.Screen
+            name="MyPage_ProudPose"
+            component={MyPage_ProudPose}
+            options={{
+              title: "내가 자랑한 포즈",
+              headerShown: true,
+              headerShadowVisible: false,
+              headerTitleStyle: {
+                fontSize: 18,
+                fontWeight: "bold",
+              },
+              headerTitleAlign: "center",
+            }}
+          />
+          <Stack.Screen
+            name="MyPage_LikedPose"
+            component={MyPage_LikedPose}
+            options={{
+              title: "좋아요한 포즈",
+              headerShown: true,
+              headerShadowVisible: false,
+              headerTitleStyle: {
+                fontSize: 18,
+                fontWeight: "bold",
+              },
+
+              headerTitleAlign: "center",
+            }}
+          />
+          <Stack.Screen
+            name="UploadPose"
+            component={UploadPose}
+            options={{
+              title: "New Pose",
+              headerShown: true,
+              headerBackTitleVisible: false,
+              headerShadowVisible: false,
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: "bold",
+              },
+              headerTitleAlign: "center",
+            }}
+          />
           <Stack.Screen name="SelectPhotoStory" component={SelectPhotoStory} />
           <Stack.Screen
             name="Menu"
@@ -225,8 +289,9 @@ export default function App() {
             options={{
               title: "메뉴",
               headerShown: true,
+              headerBackTitleVisible: false,
               headerTitleStyle: {
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: "bold",
               },
               headerTitleAlign: "center",
@@ -247,7 +312,21 @@ export default function App() {
               headerTitleAlign: "center",
             })}
           />
-          <Stack.Screen name="Detail_Location" component={Detail_Location} />
+          <Stack.Screen
+            name="Detail_Location"
+            component={Detail_Location}
+            options={({ route }) => ({
+              title: route.params.name,
+              headerShown: true,
+              headerBackTitleVisible: false,
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: "bold",
+                color: "#636363",
+              },
+              headerTitleAlign: "center",
+            })}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>
