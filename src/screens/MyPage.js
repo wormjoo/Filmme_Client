@@ -93,8 +93,9 @@ export default function MyPage({ navigation }) {
   const [todayModalVisible, setTodayModalVisible] = useState(true);
 
   //업로드 이미지@
-  const [updateImage, setUpdateImage] = useState(null);
+
   const [image, setImage] = useState(null);
+  const [updateImage, setUpdateImage] = useState(null);
 
   //이미지 가져오는 함수
   const pickImage = async () => {
@@ -106,8 +107,7 @@ export default function MyPage({ navigation }) {
       quality: 1,
     });
     if (!result.cancelled) {
-      setUpdateImage(result.uri);
-      updateProfileImage(updateImage);
+      await updateProfileImage(result.uri);
     } else if (result.cancelled) {
       setupload(false);
     }
@@ -128,14 +128,10 @@ export default function MyPage({ navigation }) {
     } else {
       Alert.alert("Access denied");
     }
-    // let result = await ImagePicker.launchCameraAsync({
-    //   mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //   allowsEditing: true,
-    //   quality: 1,
-    // });
+
     if (!result.cancelled) {
-      setUpdateImage(result.uri);
-      updateProfileImage(updateImage);
+      console.log(result.uri);
+      await updateProfileImage(result.uri);
     }
   };
   // 닉네임 변경 발생
@@ -144,7 +140,7 @@ export default function MyPage({ navigation }) {
     const body = {
       nickname: updateNickname,
     };
-    axios
+    await axios
       .post("http://13.125.249.247/filme/mypage/edit-nickname", body, {
         headers: {
           "x-access-token": `${user?.token}`,
@@ -171,8 +167,6 @@ export default function MyPage({ navigation }) {
 
   //수정 발생 시
   const updateProfileImage = async (updateImage) => {
-    console.log(updateImage);
-
     const form = new FormData();
     const filename = updateImage.split("/").pop();
 
@@ -181,10 +175,8 @@ export default function MyPage({ navigation }) {
       name: filename,
       type: "multipart/form-data",
     });
-    console.log(form);
-    console.log(updateImage);
 
-    axios
+    await axios
       .post("http://13.125.249.247/filme/mypage/edit-image", form, {
         headers: {
           "x-access-token": `${user?.token}`,
@@ -199,11 +191,12 @@ export default function MyPage({ navigation }) {
           identification: user.identification,
           token: user.token,
         });
+
         navigation.navigate("MyPage");
       })
       .catch((err) => {
         console.log(err);
-        Alert.alert("포즈 업로드 중 에러 발생");
+        Alert.alert("프로필 변경 중 에러 발생");
         navigation.navigate("MyPage");
       });
   };
