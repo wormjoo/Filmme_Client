@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 25,
+    height: 120,
   },
   profile: {
     width: 50,
