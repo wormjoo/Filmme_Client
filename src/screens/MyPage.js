@@ -135,6 +135,7 @@ export default function MyPage({ navigation }) {
     // });
     if (!result.cancelled) {
       setUpdateImage(result.uri);
+      updateProfileImage(updateImage);
     }
   };
   // 닉네임 변경 발생
@@ -165,6 +166,7 @@ export default function MyPage({ navigation }) {
         navigation.navigate("MyPage");
       });
   };
+
   //수정 발생 시
   const updateProfileImage = async (updateImage) => {
     console.log(updateImage);
