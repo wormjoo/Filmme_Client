@@ -45,6 +45,7 @@ export default function Upload({ route, navigation }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    let isMount = true;
     try {
       if (storyIdx > 0) {
         axios({
@@ -52,12 +53,14 @@ export default function Upload({ route, navigation }) {
           url: "http://13.125.249.247/filme/story/" + storyIdx,
         })
           .then(function (response) {
-            const result = response.data;
-            console.log(result);
-            setDate(new Date(result[0].date.replace(/[.]/g, "-")));
-            setImage(result[0].imageURL);
-            setContent(result[0].content);
-            setupload(true);
+            if (isMount) {
+              const result = response.data;
+              console.log(result);
+              setDate(new Date(result[0].date.replace(/[.]/g, "-")));
+              setImage(result[0].imageURL);
+              setContent(result[0].content);
+              setupload(true);
+            }
           })
           .catch(function (error) {
             console.log(error);
@@ -67,6 +70,9 @@ export default function Upload({ route, navigation }) {
       console.log(e);
       alert("Error", e);
     } finally {
+      return () => {
+        isMount = false;
+      };
     }
   }, [storyIdx]);
 

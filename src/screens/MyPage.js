@@ -239,6 +239,7 @@ export default function MyPage({ navigation }) {
   const { dispatch, user } = useContext(UserContext);
 
   useEffect(() => {
+    let isMount = true;
     try {
       // 마이페이지 정보 조회 API 사용
       axios({
@@ -250,8 +251,9 @@ export default function MyPage({ navigation }) {
       })
         .then(function (response) {
           const result = response.data[0];
-
-          setNickname(result.nickname);
+          if (isMount) {
+            setNickname(result.nickname);
+          }
         })
         .catch(function (error) {
           console.log(error);
@@ -261,10 +263,14 @@ export default function MyPage({ navigation }) {
       console.log(e);
       alert(e);
     } finally {
+      return () => {
+        isMount = false;
+      };
     }
   }, []);
 
   useEffect(() => {
+    let isMount = true;
     try {
       // 마이페이지 정보 조회 API 사용
       axios({
@@ -275,26 +281,28 @@ export default function MyPage({ navigation }) {
         },
       })
         .then(function (response) {
-          const result = response.data[0];
+          if (isMount) {
+            const result = response.data[0];
 
-          //setNickname(result.nickname);
-          setImage(result.profileURL);
-          setLevel(result.level);
-          setTotalstamp(result.totalStamp);
-          let list = [];
+            //setNickname(result.nickname);
+            setImage(result.profileURL);
+            setLevel(result.level);
+            setTotalstamp(result.totalStamp);
+            let list = [];
 
-          for (let i = 0; i < 9; i++) {
-            let status = false;
-            if (totalstamp > i) {
-              status = true;
+            for (let i = 0; i < 9; i++) {
+              let status = false;
+              if (totalstamp > i) {
+                status = true;
+              }
+              list.push({
+                id: i + 1,
+                stamp: status,
+                final: i == 8,
+              });
             }
-            list.push({
-              id: i + 1,
-              stamp: status,
-              final: i == 8,
-            });
+            setStamp(list);
           }
-          setStamp(list);
         })
         .catch(function (error) {
           console.log(error);
@@ -310,10 +318,12 @@ export default function MyPage({ navigation }) {
         },
       })
         .then(function (response) {
-          const result = response.data[0];
+          if (isMount) {
+            const result = response.data[0];
 
-          setTodayView(result.viewCount);
-          setTodayLikes(result.likeCount);
+            setTodayView(result.viewCount);
+            setTodayLikes(result.likeCount);
+          }
         })
         .catch(function (error) {
           console.log(error);
@@ -323,6 +333,9 @@ export default function MyPage({ navigation }) {
       console.log(e);
       alert(e);
     } finally {
+      return () => {
+        isMount = false;
+      };
     }
   }, [user, stamp, setStamp, totalstamp]);
 

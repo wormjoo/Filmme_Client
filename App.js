@@ -282,7 +282,20 @@ export default function App() {
               headerTitleAlign: "center",
             }}
           />
-          <Stack.Screen name="SelectPhotoStory" component={SelectPhotoStory} />
+          <Stack.Screen
+            name="SelectPhotoStory"
+            component={SelectPhotoStory}
+            options={{
+              title: "스토리 선택",
+              headerShown: true,
+              headerBackTitleVisible: false,
+              headerTitleStyle: {
+                fontSize: 18,
+                fontWeight: "bold",
+              },
+              headerTitleAlign: "center",
+            }}
+          />
           <Stack.Screen
             name="Menu"
             component={Menu}

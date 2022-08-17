@@ -28,7 +28,7 @@ export default function UploadPose({ navigation }) {
 
   //업로드 이미지@
   const [image, setImage] = useState(null);
-  const { user } = useContext(UserContext);
+  const { user, dispatch } = useContext(UserContext);
 
   //이미지 가져오는 함수
   const pickImage = async () => {
@@ -36,7 +36,6 @@ export default function UploadPose({ navigation }) {
     setModalVisible(!modalVisible);
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
       quality: 1,
     });
 
@@ -78,6 +77,11 @@ export default function UploadPose({ navigation }) {
         },
       })
       .then((res) => {
+        dispatch({
+          userIdx: user.userIdx,
+          identification: user.identification,
+          token: user.token,
+        });
         Alert.alert("업로드 되었습니다.");
         navigation.navigate("Pose");
       })
@@ -86,7 +90,7 @@ export default function UploadPose({ navigation }) {
         Alert.alert("포즈 업로드 중 에러 발생");
         navigation.navigate("Pose");
       });
-  }, [image]);
+  }, [image, user, dispatch]);
 
   return (
     <ScrollView style={styles.container}>
@@ -201,7 +205,10 @@ export default function UploadPose({ navigation }) {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => navigation.navigate("SelectPhotoStory")}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  navigation.navigate("SelectPhotoStory");
+                }}
               >
                 <Image
                   source={require("../../assets/icon.png")}

@@ -30,6 +30,7 @@ export default function MyPage_ProudPose({ navigation }) {
   const devHeight = Dimensions.get("window").height;
 
   useEffect(() => {
+    let isMount = true;
     try {
       axios({
         method: "get",
@@ -47,7 +48,9 @@ export default function MyPage_ProudPose({ navigation }) {
               img: result[i].poseImgUrl,
             });
           }
-          setProudPoses(list);
+          if (isMount) {
+            setProudPoses(list);
+          }
         })
         .catch(function (error) {
           console.log(error);
@@ -56,6 +59,9 @@ export default function MyPage_ProudPose({ navigation }) {
       console.log(e);
       alert("Error", e);
     } finally {
+      return () => {
+        isMount = false;
+      };
     }
   }, [user]);
 
@@ -193,8 +199,11 @@ const styles = StyleSheet.create({
     marginBottom: 65,
   },
   img: {
-    width: devWidth / 3.1,
-    height: 150,
+    flex: 1,
+    resizeMode: "cover",
+    width: devWidth / 3.2,
+    height: devWidth / 3.2,
+    position: "relative",
   },
   content_noImg: {
     //height: '100%',

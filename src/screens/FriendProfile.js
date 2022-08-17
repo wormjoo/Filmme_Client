@@ -30,6 +30,7 @@ export default function FriendProfile({ route, navigation }) {
 
   //임시
   useEffect(() => {
+    let isMount = true;
     try {
       axios({
         method: "get",
@@ -39,19 +40,21 @@ export default function FriendProfile({ route, navigation }) {
         },
       })
         .then(function (response) {
-          const result = response.data;
-          setProfile(result[0][0].profileURL);
-          setName(result[0][0].name);
-          setLevel(result[0][0].level);
-          console.log(result);
-          const list = [];
-          for (let i = 0; i < result[1].length; i++) {
-            list.push({
-              poseIdx: result[1][i].idx,
-              img: result[1][i].imageURL,
-            });
+          if (isMount) {
+            const result = response.data;
+            setProfile(result[0][0].profileURL);
+            setName(result[0][0].name);
+            setLevel(result[0][0].level);
+            console.log(result);
+            const list = [];
+            for (let i = 0; i < result[1].length; i++) {
+              list.push({
+                poseIdx: result[1][i].idx,
+                img: result[1][i].imageURL,
+              });
+            }
+            setPose(list);
           }
-          setPose(list);
         })
         .catch(function (error) {
           console.log(error);
@@ -60,6 +63,9 @@ export default function FriendProfile({ route, navigation }) {
       console.log(e);
       alert("Error", e);
     } finally {
+      return () => {
+        isMount = false;
+      };
     }
   }, [user]);
 

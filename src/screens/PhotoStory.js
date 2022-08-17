@@ -180,6 +180,7 @@ export default function PhotoStory({ navigation }) {
   const { user, dispatch } = useContext(UserContext);
 
   useEffect(() => {
+    let isMount = true;
     try {
       axios({
         method: "get",
@@ -200,7 +201,9 @@ export default function PhotoStory({ navigation }) {
               memberIdx: result[i].memberIdx,
             });
           }
-          setStory(list);
+          if (isMount) {
+            setStory(list);
+          }
         })
         .catch(function (error) {
           console.log(error);
@@ -209,6 +212,9 @@ export default function PhotoStory({ navigation }) {
       console.log(e);
       alert("Error", e);
     } finally {
+      return () => {
+        isMount = false;
+      };
     }
   }, [user]);
 

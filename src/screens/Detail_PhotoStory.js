@@ -29,6 +29,7 @@ export default function Detail_PhotoStory({ route, navigation }) {
   const { user, dispatch } = useContext(UserContext);
 
   useEffect(() => {
+    let isMount = true;
     try {
       axios({
         method: "get",
@@ -37,9 +38,11 @@ export default function Detail_PhotoStory({ route, navigation }) {
         .then(function (response) {
           const result = response.data;
           console.log(result);
-          setDate(result[0].date);
-          setImage(result[0].imageURL);
-          setContent(result[0].content);
+          if (isMount) {
+            setDate(result[0].date);
+            setImage(result[0].imageURL);
+            setContent(result[0].content);
+          }
         })
         .catch(function (error) {
           console.log(error);
@@ -48,6 +51,9 @@ export default function Detail_PhotoStory({ route, navigation }) {
       console.log(e);
       alert("Error", e);
     } finally {
+      return () => {
+        isMount = false;
+      };
     }
   }, [storyIdx]);
 

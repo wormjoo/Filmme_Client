@@ -40,6 +40,7 @@ const Item = React.memo(({ item: { id, img, memberIdx } }) => {
   };
 
   const _handleDeletePress = useCallback(() => {
+    let isMount = true;
     try {
       axios({
         method: "patch",
@@ -49,15 +50,18 @@ const Item = React.memo(({ item: { id, img, memberIdx } }) => {
         },
       })
         .then(function (response) {
-          console.log(response.data);
-          dispatch({
-            userIdx: user.userIdx,
-            identification: user.identification,
-            token: user.token,
-          });
-          setModalVisible(!modalVisible);
-          Alert.alert("삭제", "완료되었습니다.");
-          return response.data;
+          if (isMount) {
+            console.log(response.data);
+            dispatch({
+              userIdx: user.userIdx,
+              identification: user.identification,
+              token: user.token,
+            });
+            setModalVisible(!modalVisible);
+
+            Alert.alert("삭제", "완료되었습니다.");
+            return response.data;
+          }
         })
         .catch(function (error) {
           console.log(error);
@@ -66,7 +70,10 @@ const Item = React.memo(({ item: { id, img, memberIdx } }) => {
       console.log(e);
       alert("Error", e);
     } finally {
-      setModalVisible(false);
+      return () => {
+        isMount = false;
+        setModalVisible(false);
+      };
     }
   }, [user, dispatch]);
 
@@ -284,6 +291,7 @@ export default function Pose({ navigation }) {
     const [recommendPoses, setRecommendPoses] = useState([]);
 
     useEffect(() => {
+      let isMount = true;
       try {
         axios({
           method: "get",
@@ -302,7 +310,9 @@ export default function Pose({ navigation }) {
                 memberIdx: result[i].memberIdx,
               });
             }
-            setRecommendPoses(list);
+            if (isMount) {
+              setRecommendPoses(list);
+            }
           })
           .catch(function (error) {
             console.log(error);
@@ -311,6 +321,10 @@ export default function Pose({ navigation }) {
         console.log(e);
         alert("Error", e);
       } finally {
+        return () => {
+          isMount = false;
+          setRecommendPoses([]);
+        };
       }
     }, [user]);
 
@@ -342,6 +356,7 @@ export default function Pose({ navigation }) {
     const [popularPoses, setPopularPoses] = useState([]);
 
     useEffect(() => {
+      let isMount = true;
       try {
         axios({
           method: "get",
@@ -357,9 +372,12 @@ export default function Pose({ navigation }) {
               list.push({
                 id: result[i].idx,
                 img: result[i].imageURL,
+                memberIdx: result[i].memberIdx,
               });
             }
-            setPopularPoses(list);
+            if (isMount) {
+              setPopularPoses(list);
+            }
           })
           .catch(function (error) {
             console.log(error);
@@ -368,6 +386,10 @@ export default function Pose({ navigation }) {
         console.log(e);
         alert("Error", e);
       } finally {
+        return () => {
+          setPopularPoses([]);
+          isMount = false;
+        };
       }
     }, [user]);
 
@@ -399,6 +421,7 @@ export default function Pose({ navigation }) {
     const [recentPoses, setRecentPoses] = useState([]);
 
     useEffect(() => {
+      let isMount = true;
       try {
         axios({
           method: "get",
@@ -414,9 +437,12 @@ export default function Pose({ navigation }) {
               list.push({
                 id: result[i].idx,
                 img: result[i].imageURL,
+                memberIdx: result[i].memberIdx,
               });
             }
-            setRecentPoses(list);
+            if (isMount) {
+              setRecentPoses(list);
+            }
           })
           .catch(function (error) {
             console.log(error);
@@ -425,6 +451,10 @@ export default function Pose({ navigation }) {
         console.log(e);
         alert("Error", e);
       } finally {
+        return () => {
+          setRecentPoses([]);
+          isMount = false;
+        };
       }
     }, [user]);
 

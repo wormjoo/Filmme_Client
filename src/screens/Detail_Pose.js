@@ -28,6 +28,7 @@ export default function Detail_Pose({ route, navigation }) {
   const { dispatch, user } = useContext(UserContext);
 
   useEffect(() => {
+    let isMount = true;
     try {
       axios({
         method: "get",
@@ -38,14 +39,16 @@ export default function Detail_Pose({ route, navigation }) {
       })
         .then(function (response) {
           const result = response.data;
-          setUserIdx(result[0].idx);
-          setProfile(result[0].profileURL);
-          setNickname(result[0].name);
-          setImg(result[0].imageURL);
-          setLikeCnt(result[0].likeCnt);
-          setViews(result[0].views);
-          setIsLike(result[0].isLike);
-          console.log(isLike);
+          if (isMount) {
+            setUserIdx(result[0].idx);
+            setProfile(result[0].profileURL);
+            setNickname(result[0].name);
+            setImg(result[0].imageURL);
+            setLikeCnt(result[0].likeCnt);
+            setViews(result[0].views);
+            setIsLike(result[0].isLike);
+            console.log(isLike);
+          }
         })
         .catch(function (error) {
           console.log(error);
@@ -54,6 +57,9 @@ export default function Detail_Pose({ route, navigation }) {
       console.log(e);
       alert("Error", e);
     } finally {
+      return () => {
+        isMount = false;
+      };
     }
   }, []);
 
@@ -89,6 +95,7 @@ export default function Detail_Pose({ route, navigation }) {
   /////////
   const [userNickname, setUserNickname] = useState("");
   useEffect(() => {
+    let isMount = true;
     try {
       axios({
         method: "get",
@@ -99,8 +106,9 @@ export default function Detail_Pose({ route, navigation }) {
       })
         .then(function (response) {
           const result = response.data[0];
-
-          setUserNickname(result.nickname);
+          if (isMount) {
+            setUserNickname(result.nickname);
+          }
         })
         .catch(function (error) {
           console.log(error);
@@ -110,6 +118,9 @@ export default function Detail_Pose({ route, navigation }) {
       console.log(e);
       alert(e);
     } finally {
+      return () => {
+        isMount = false;
+      };
     }
   }, [user]);
 
