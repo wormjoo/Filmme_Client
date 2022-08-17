@@ -95,7 +95,7 @@ export default function FriendProfile({ route, navigation }) {
 
       {hasImg ? (
         <FlatList
-          data={story}
+          data={pose}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity
