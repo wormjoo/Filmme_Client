@@ -49,6 +49,7 @@ export default function FriendProfile({ route, navigation }) {
             const list = [];
             for (let i = 0; i < result[1].length; i++) {
               list.push({
+                id: i,
                 poseIdx: result[1][i].idx,
                 img: result[1][i].imageURL,
               });
@@ -108,7 +109,7 @@ export default function FriendProfile({ route, navigation }) {
               style={{ margin: 1 }}
               onPress={() =>
                 navigation.navigate("Detail_Pose", {
-                  idx: item.id,
+                  idx: item.poseIdx,
                 })
               }
               onLongPress={() => setModalVisible(!modalVisible)}
