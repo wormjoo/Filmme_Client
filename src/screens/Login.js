@@ -60,7 +60,6 @@ export default function Login({ navigation }) {
             const token = response.data.result.token;
             const identification = inputs.id;
             dispatch({ userIdx, identification, token });
-            navigation.navigate("Bottom");
           } else {
             Alert.alert("Error", response.data.message);
           }
