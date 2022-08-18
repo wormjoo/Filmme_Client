@@ -43,6 +43,26 @@ const Frames = [
     frame: require("../../storage/images/frame6.png"),
     chk: false,
   },
+  {
+    id: "7",
+    frame: require("../../storage/images/frame7.png"),
+    chk: false,
+  },
+  {
+    id: "8",
+    frame: require("../../storage/images/frame8.png"),
+    chk: false,
+  },
+  {
+    id: "9",
+    frame: require("../../storage/images/frame9.png"),
+    chk: false,
+  },
+  {
+    id: "10",
+    frame: require("../../storage/images/frame10.png"),
+    chk: false,
+  },
 ];
 
 const Item = ({ frame, chk }) => {
