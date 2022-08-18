@@ -61,7 +61,7 @@ export default function Detail_Pose({ route, navigation }) {
         isMount = false;
       };
     }
-  }, []);
+  }, [idx]);
 
   const _handleLikePress = useCallback(async () => {
     try {
