@@ -1,5 +1,11 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
-import {
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+  useRef,
+} from "react";
+import ReactNative, {
   StyleSheet,
   Text,
   View,
@@ -10,6 +16,11 @@ import {
   TextInput,
   Modal,
   Dimensions,
+  KeyboardAvoidingView,
+  Keyboard,
+  findNodeHandle,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -17,6 +28,7 @@ import Ionic from "react-native-vector-icons/Ionicons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { UserContext } from "../contexts/User";
 import { CommonActions } from "@react-navigation/native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import axios from "axios";
 
 export default function Upload({ route, navigation }) {
@@ -43,6 +55,13 @@ export default function Upload({ route, navigation }) {
   const [date, setDate] = useState(new Date()); //날짜@
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+
+  const textInputRef = useRef(null);
+  const scrollViewRef = useRef(null);
+
+  const setFocus = () => {
+    textInputRef.current?.focus();
+  };
 
   useEffect(() => {
     let isMount = true;
@@ -212,7 +231,7 @@ export default function Upload({ route, navigation }) {
 
   if (storyIdx > 0) {
     return (
-      <ScrollView style={styles.container}>
+      <KeyboardAwareScrollView style={styles.container}>
         <View style={styles.photoSection}>
           <View style={styles.photoBox}>
             {upload ? null : (
@@ -231,27 +250,28 @@ export default function Upload({ route, navigation }) {
             )}
           </View>
         </View>
-
-        <View style={styles.memoSection}>
-          <Text
-            style={{
-              alignSelf: "flex-start",
-              marginLeft: 15,
-              color: "#505050",
-            }}
-          >
-            Memo
-          </Text>
-          <View style={styles.memoBox}>
-            <TextInput
-              style={{ width: "95%", margin: 10 }}
-              value={content}
-              multiline
-              numberOfLines={8}
-              onChangeText={_handleContent}
-            />
+        <KeyboardAvoidingView behavior="padding">
+          <View style={styles.memoSection}>
+            <Text
+              style={{
+                alignSelf: "flex-start",
+                marginLeft: 15,
+                color: "#505050",
+              }}
+            >
+              Memo
+            </Text>
+            <View style={styles.memoBox}>
+              <TextInput
+                style={{ width: "95%", margin: 10 }}
+                value={content}
+                multiline
+                numberOfLines={8}
+                onChangeText={_handleContent}
+              />
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
 
         <View style={styles.dateSection}>
           <Text
@@ -288,7 +308,6 @@ export default function Upload({ route, navigation }) {
             <Text style={{ fontSize: 15, color: "#505050" }}>수정</Text>
           </TouchableOpacity>
         </View>
-
         <Modal
           animationType="fade"
           transparent={true}
@@ -387,11 +406,11 @@ export default function Upload({ route, navigation }) {
             </View>
           </View>
         </Modal>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     );
   } else {
     return (
-      <ScrollView style={styles.container}>
+      <KeyboardAwareScrollView style={styles.container} ref={textInputRef}>
         <View style={styles.photoSection}>
           <View style={styles.photoBox}>
             {upload ? null : (
@@ -424,27 +443,30 @@ export default function Upload({ route, navigation }) {
             )}
           </View>
         </View>
-
-        <View style={styles.memoSection}>
-          <Text
-            style={{
-              alignSelf: "flex-start",
-              marginLeft: 15,
-              color: "#505050",
-            }}
-          >
-            Memo
-          </Text>
-          <View style={styles.memoBox}>
-            <TextInput
-              style={{ width: "95%", margin: 10 }}
-              value={content}
-              multiline
-              numberOfLines={8}
-              onChangeText={_handleContent}
-            />
+        <KeyboardAvoidingView behavior="padding" ref={scrollViewRef}>
+          <View style={styles.memoSection}>
+            <Text
+              style={{
+                alignSelf: "flex-start",
+                marginLeft: 15,
+                color: "#505050",
+              }}
+              onPress={setFocus}
+            >
+              Memo
+            </Text>
+            <View style={styles.memoBox}>
+              <TextInput
+                style={{ width: "95%", margin: 10 }}
+                value={content}
+                multiline
+                numberOfLines={8}
+                onChangeText={_handleContent}
+                ref={textInputRef}
+              />
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
 
         <View style={styles.dateSection}>
           <Text
@@ -481,7 +503,6 @@ export default function Upload({ route, navigation }) {
             <Text style={{ fontSize: 15, color: "#505050" }}>업로드</Text>
           </TouchableOpacity>
         </View>
-
         <Modal
           animationType="fade"
           transparent={true}
@@ -580,7 +601,7 @@ export default function Upload({ route, navigation }) {
             </View>
           </View>
         </Modal>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     );
   }
 }
