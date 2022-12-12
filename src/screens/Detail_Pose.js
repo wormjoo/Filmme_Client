@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  useCallback,
+  useLayoutEffect,
+} from "react";
 import {
   StyleSheet,
   Text,
@@ -10,14 +16,12 @@ import {
   Dimensions,
 } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import Feather from "react-native-vector-icons/Feather";
 import { UserContext } from "../contexts/User";
 import axios from "axios";
 
 export default function Detail_Pose({ route, navigation }) {
-  const devWidth = Dimensions.get("window").width;
-  const devHeight = Dimensions.get("window").height;
-
-  const { idx } = route.params;
+  const { idx, memberIdx } = route.params;
   const [userIdx, setUserIdx] = useState();
   const [profile, setProfile] = useState();
   const [nickname, setNickname] = useState();
@@ -123,6 +127,54 @@ export default function Detail_Pose({ route, navigation }) {
       };
     }
   }, [user]);
+
+  const _handleDeletePress = useCallback(async () => {
+    try {
+      axios({
+        method: "patch",
+        url: "http://13.125.249.247/filme/pose/" + idx,
+        headers: {
+          "x-access-token": `${user?.token}`,
+        },
+      })
+        .then(function (response) {
+          dispatch({
+            userIdx: user.userIdx,
+            identification: user.identification,
+            token: user.token,
+          });
+          alert("삭제되었습니다.");
+          navigation.navigate("Pose");
+          return response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert("Error", e);
+    } finally {
+    }
+  }, [user, dispatch, idx]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions(
+      user.userIdx === memberIdx
+        ? {
+            headerRight: () => (
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity onPress={_handleDeletePress}>
+                  <Feather
+                    name="trash-2"
+                    style={{ fontSize: 22, marginRight: 15, color: "#505050" }}
+                  />
+                </TouchableOpacity>
+              </View>
+            ),
+          }
+        : {}
+    );
+  }, [navigation]);
 
   return (
     <View style={styles.container}>

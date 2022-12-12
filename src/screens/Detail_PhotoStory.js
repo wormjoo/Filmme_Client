@@ -9,12 +9,9 @@ import {
   StyleSheet,
   Text,
   View,
-  StatusBar,
   TouchableOpacity,
   ImageBackground,
   Image,
-  Dimensions,
-  Alert,
 } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import { UserContext } from "../contexts/User";

@@ -84,6 +84,7 @@ const Item = React.memo(({ item: { id, img, memberIdx } }) => {
         onPress={() =>
           navigation.navigate("Detail_Pose", {
             idx: id,
+            memberIdx: memberIdx,
           })
         }
         onLongPress={popup}
