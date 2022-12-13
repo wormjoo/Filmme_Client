@@ -235,8 +235,11 @@ export default function App({ navigation }) {
             getPhotoBox(selectedItem);
           }}
           defaultValue={"전체"}
+          dropdownIconPosition={"right"}
           buttonStyle={styles.locBtn}
           buttonTextStyle={styles.locBtnText}
+          rowTextStyle={styles.rowText}
+          rowStyle={styles.row}
         />
         {locList.map((marker) => {
           return (
@@ -284,10 +287,15 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   locBtn: {
+    width: 150,
+    height: 40,
     backgroundColor: "#F8F8FF",
+    borderRadius: 10,
+    margin: 10,
   },
   locBtnText: {
-    fontSize: 18,
+    alignItems: "center",
+    fontSize: 15,
     fontWeight: "bold",
   },
 });
