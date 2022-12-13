@@ -3,6 +3,7 @@ import { Platform, Text, View, StyleSheet, Alert, Image } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import SelectDropdown from "react-native-select-dropdown";
 import * as Location from "expo-location";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import MapStyle from "../components/MarkerStyle";
 import axios from "axios";
 
@@ -13,6 +14,7 @@ export default function App({ navigation }) {
   const [longitude, setLongitude] = useState(127.12706581005759);
   const [locList, setLocList] = useState([]);
   const photobox = ["전체", "인생네컷", "포토이즘", "하루필름", "포토시그니처"];
+
   useEffect(() => {
     (async () => {
       if (Platform.OS === "android") {
@@ -34,7 +36,7 @@ export default function App({ navigation }) {
       setLocation(location);
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
-      console.log(longitude, latitude);
+
       let list = [];
       let length = 0;
       await axios
@@ -211,7 +213,6 @@ export default function App({ navigation }) {
           Alert.alert(err);
         });
     }
-    console.log(list);
   };
 
   return (
@@ -239,7 +240,14 @@ export default function App({ navigation }) {
           buttonStyle={styles.locBtn}
           buttonTextStyle={styles.locBtnText}
           rowTextStyle={styles.rowText}
-          rowStyle={styles.row}
+          renderDropdownIcon={() => (
+            <AntDesign
+              name="caretdown"
+              style={styles.icon}
+              color={"grey"}
+              size={12}
+            />
+          )}
         />
         {locList.map((marker) => {
           return (
@@ -289,13 +297,19 @@ const styles = StyleSheet.create({
   locBtn: {
     width: 150,
     height: 40,
-    backgroundColor: "#F8F8FF",
     borderRadius: 10,
-    margin: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#e8e8e8",
   },
   locBtnText: {
-    alignItems: "center",
     fontSize: 15,
     fontWeight: "bold",
+  },
+  icon: {
+    marginRight: 5,
+  },
+  rowText: {
+    fontSize: 15,
   },
 });
